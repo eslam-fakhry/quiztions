@@ -2,18 +2,16 @@
   <v-app>
 
     <v-content>
-      <Question/>
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Question from './components/Question'
 
 export default {
   name: 'App',
   components: {
-    Question
   },
   data () {
     return {

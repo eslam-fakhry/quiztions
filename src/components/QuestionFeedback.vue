@@ -1,7 +1,8 @@
 <template>
     <v-alert
+
             :type="uiState.ANSWERED_CORRECTLY?'success':uiState.ANSWERED_WRONG?'error':'info'"
-            :value="uiState.ANSWER_CHECKED"
+            v-if="uiState.ANSWER_CHECKED"
     >
         <span>{{feedback}}</span>
     </v-alert>

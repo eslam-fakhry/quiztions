@@ -1,6 +1,6 @@
 <template>
     <div @input="update">
-        <p class="mt-3 mb-2 text-xs-center grey--text body-1" ><span>Already registered? </span>
+        <p class="mt-4 mb-2 text-center grey--text body-1" ><span>Already registered? </span>
             <router-link class="light-blue--text " :to="{name:'login'}">login</router-link>
         </p>
 
@@ -9,7 +9,7 @@
 
             <v-text-field
                     class="my-2 form-text-input"
-                    outline
+                    outlined
                     single-line
                     label="username"
                     v-model.lazy="$v.form.username.$model"
@@ -33,7 +33,7 @@
             <v-label class="">Email</v-label>
             <v-text-field
                     class="my-2 form-text-input"
-                    outline
+                    outlined
                     single-line
                     label="email"
                     v-model.lazy="$v.form.email.$model"
@@ -59,7 +59,7 @@
             <v-label class="">password</v-label>
             <v-text-field
                     class="my-2 form-text-input"
-                    outline
+                    outlined
                     single-line
                     label="password"
                     v-model.lazy="$v.form.password1.$model"
@@ -83,7 +83,7 @@
             <v-label class="">confirm password</v-label>
             <v-text-field
                     class="my-2 form-text-input"
-                    outline
+                    outlined
                     single-line
                     label="confirm password"
                     v-model.lazy="$v.form.password2.$model"

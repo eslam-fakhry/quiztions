@@ -1,10 +1,10 @@
 <template>
     <v-layout
             column
-            class=" justify-center align-center"
+            class=" justify-center align-center "
             style="height: 100%"
     >
-        <div class="text-xs-center pb-4 mt-6">{{question.body}}</div>
+        <div class="text-center pb-6 mt-6">{{question.body}}</div>
         <v-flex>
             <component
                     :is="answerComponentName"

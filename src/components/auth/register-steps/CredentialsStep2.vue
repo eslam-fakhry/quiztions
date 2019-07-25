@@ -23,7 +23,7 @@
         </p>
 
         <v-text-field password
-                      outline
+                      outlined
                       single-line
                       label="password"
                       v-model.lazy="$v.form.password1.$model"

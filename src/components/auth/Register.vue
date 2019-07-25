@@ -18,9 +18,9 @@
                     ref="InformationStep"
                     @checkValidation="setValidationFunction($event,'information')"
             />
-            <v-card-actions class="pa-3">
+            <v-card-actions class="pa-4">
                 <v-btn
-                        outline
+                        outlined
                         @click="goNext"
                         :disabled="! canGoToNext"
                 >{{isLastStep?'Finish':'Next'}}</v-btn>
@@ -33,6 +33,7 @@
     import CredentialsStep from './register-steps/CredentialsStep'
     import InformationStep from './register-steps/InformationStep'
 
+    // todo: use stepper from vuetify
     export default {
         name: "Register",
         components: {

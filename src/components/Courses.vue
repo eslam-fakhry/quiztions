@@ -1,10 +1,15 @@
 <template>
     <v-container>
-        <h1 class="text-xs-center">Courses</h1>
+        <h1 class="text-center">Courses</h1>
         <v-layout wrap>
 
             <v-flex xs12 sm6 md4 lg3 v-for="course in courses" :key="`course--${course.id}`">
-                <v-card class="mx-3 my-3">
+                <v-card
+                        :elevation="0"
+                        outlined
+                        flat
+                        class="mx-4 my-4"
+                >
                     <v-img
                             class="white--text"
                             height="200px"
@@ -26,7 +31,7 @@
                         </div>
                     </v-card-title>
                     <v-card-actions>
-                        <v-btn flat color="orange" :to="{name:'course',params:{course_id:course.id}}">Enter</v-btn>
+                        <v-btn text color="orange" :to="{name:'course',params:{course_id:course.id}}">Enter</v-btn>
                     </v-card-actions>
                 </v-card>
                 <!--<router-link  :to="{name:'course',params:{course_id:course.id}}"-->

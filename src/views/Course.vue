@@ -1,6 +1,6 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <v-container class="">
-        <h1 class="text-xs-center">Lessons</h1>
+        <h1 class="text-center">Lessons</h1>
         <v-layout wrap v-if="! loading">
             <v-flex class="child-flex" v-for="lesson in course.lessons" :key="lesson.id">
                 <!--v-model="value"-->
@@ -23,7 +23,7 @@
                             >
                                 <v-icon>home</v-icon>
                             </v-avatar>
-                            <v-label class="text-xs-center py-1" v-on="on" >{{lesson.name}}</v-label>
+                            <v-label class="text-center py-1" v-on="on" >{{lesson.name}}</v-label>
                         </v-layout>
                     </template>
                     <v-card>

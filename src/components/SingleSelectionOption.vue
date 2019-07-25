@@ -1,5 +1,5 @@
 <template>
-    <div class="py-3 my-3 option text-xs-center"
+    <div class="py-4 my-4 option text-center"
          v-on="$listeners"
          :class="classes"
     >{{option}}

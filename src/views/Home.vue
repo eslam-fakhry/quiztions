@@ -2,7 +2,7 @@
     <div>
          <Courses ></Courses>
         <div>
-            <div  class="ma-5 " style="width: 300px;">
+            <div  class="ma-12 " style="width: 300px;">
             </div>
         </div>
     </div>

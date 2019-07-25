@@ -2,11 +2,11 @@
     <v-layout column style="height: 100%" >
         <v-flex shrink>
             <v-layout justify-space-between class="lesson-nav align-center" v-if="canNavigate">
-                <v-btn icon small grey round @click="prevQuestion" :disabled="prevDisabled">
+                <v-btn icon small grey rounded @click="prevQuestion" :disabled="prevDisabled">
                     <v-icon>chevron_left</v-icon>
                 </v-btn>
                 <v-progress-linear :value="progressPercentage"></v-progress-linear>
-                <v-btn icon small grey round @click="nextQuestion" :disabled="nextDisabled">
+                <v-btn icon small grey rounded @click="nextQuestion" :disabled="nextDisabled">
                     <v-icon>chevron_right</v-icon>
                 </v-btn>
             </v-layout>

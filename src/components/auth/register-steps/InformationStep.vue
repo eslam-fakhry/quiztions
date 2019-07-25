@@ -5,7 +5,7 @@
 
             <v-text-field
                     class="my-2 form-text-input"
-                    outline
+                    outlined
                     single-line
                     label="first name"
                     v-model.lazy="$v.form.firstName.$model"
@@ -30,7 +30,7 @@
 
             <v-text-field
                     class="my-2 form-text-input"
-                    outline
+                    outlined
                     single-line
                     placeholder="last name"
                     v-model.lazy="$v.form.lastName.$model"

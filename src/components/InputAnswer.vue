@@ -5,7 +5,7 @@
                     autofocus
                     class="form-text-input"
                     style="width: 100vw;max-width: 300px;"
-                    outline
+                    outlined
                     v-model="userAnswer[0]"
                     :disabled="uiState.ANSWER_CHECKED"
                     :success="uiState.ANSWERED_CORRECTLY"
@@ -16,9 +16,9 @@
         <v-flex grow class="d-flex justify-center align-center">
             <QuestionFeedback :ui-state="uiState" :feedback="feedback"/>
         </v-flex>
-        <v-flex  shrink class="text-xs-center" >
+        <v-flex  shrink class="text-center" >
         <v-btn
-                outline
+                outlined
                 @click="answer"
                :disabled="uiState.NOT_ANSWERED"
                :loading="loading"

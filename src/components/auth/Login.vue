@@ -4,7 +4,7 @@
         <v-card
                 style="width: 100%; max-width: 400px;"
         >
-            <p class="mt-3 mb-2 text-xs-center grey--text body-1" ><span>Not registered? </span>
+            <p class="mt-4 mb-2 text-center grey--text body-1" ><span>Not registered? </span>
                 <router-link class="light-blue--text " :to="{name:'register'}">register</router-link>
             </p>
 
@@ -13,7 +13,7 @@
 
                 <v-text-field
                         class="my-2 form-text-input"
-                        outline
+                        outlined
                         single-line
                         placeholder="email@example.com"
                         v-model="$v.form.email.$model"
@@ -36,8 +36,8 @@
             <v-card-text class="form-group">
                 <v-label class="mb-2">Password</v-label>
                 <v-text-field
-                        class="my-2 form-text-input"
-                        outline
+                        class="my-2 "
+                        outlined
                         single-line
                         placeholder="enter password here"
                         hide-details
@@ -62,9 +62,9 @@
                             </span>
                 </p>
             </v-card-text>
-            <v-card-actions class="pa-3">
+            <v-card-actions class="pa-4">
                 <v-btn
-                        outline
+                        outlined
                         @click="login"
                 >
                     Login
@@ -120,8 +120,4 @@
 </script>
 
 <style scoped>
-    /*noinspection CssUnusedSymbol*/
-    .form-text-input /deep/ .v-input__slot {
-        border-width:1px!important;
-    }
 </style>

@@ -14,9 +14,9 @@
         <v-flex grow class="d-flex justify-center align-center">
             <QuestionFeedback :ui-state="uiState" :feedback="feedback"/>
         </v-flex>
-        <v-flex shrink class="text-xs-center">
+        <v-flex shrink class="text-center">
             <v-btn
-                    outline
+                    outlined
                     @click="answer"
                     :disabled="uiState.NOT_ANSWERED"
                     :loading="loading"

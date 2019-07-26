@@ -14,18 +14,16 @@ export default {
     methods: {
         async answer() {
             if (!this.notAnswered && !this.answerChecked) {
-                console.log('validating');
                 await this.validate()
             } else if (!this.notAnswered && this.answerChecked) {
-                console.log('continue');
                 this.continueNext()
             }
         },
         async validate() {
-            this.loading = true
+            this.loading = true;
             this.correct = await questionValidator.validate(this.userAnswer, this.question, this.question.serverValidate)
             this.$emit('result', this.correct ? 'right' : 'wrong');
-            this.answerChecked = true
+            this.answerChecked = true;
             this.setFeedback();
             this.loading = false
         },
@@ -65,15 +63,13 @@ export default {
             if (event.key === 'Enter') {
                 event.preventDefault()
                 this.answer();
-                // console.log(_this.question);
 
             }
-        }
-        document.addEventListener('keypress', enterPressHandler)
+        };
+        document.addEventListener('keypress', enterPressHandler);
 
         this.$once('hook:deactivated', ()=> {
             document.removeEventListener('keypress', enterPressHandler)
-            console.log('event removed');
         })
 
     },

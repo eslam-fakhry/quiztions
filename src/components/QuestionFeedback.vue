@@ -1,10 +1,14 @@
 <template>
     <v-alert
-
+            prominent
             :type="uiState.ANSWERED_CORRECTLY?'success':uiState.ANSWERED_WRONG?'error':'info'"
             v-if="uiState.ANSWER_CHECKED"
+            :icon="false"
     >
-        <span>{{feedback}}</span>
+        <div
+                class="text-wrap"
+                style="max-width: 300px"
+        >{{feedback}}</div>
     </v-alert>
 </template>
 <script>

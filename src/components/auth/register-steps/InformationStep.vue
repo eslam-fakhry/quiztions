@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-card-text class="form-group">
+        <div class="form-group py-3">
             <v-label class="">First Name</v-label>
 
             <v-text-field
@@ -11,7 +11,7 @@
                     v-model.lazy="$v.form.firstName.$model"
                     hide-details
                     :error="$v.form.firstName.$dirty && $v.form.firstName.$invalid"
-                    :success="! $v.form.firstName.$invalid"
+                    :success="$v.form.firstName.$dirty && ! $v.form.firstName.$invalid"
             ></v-text-field>
             <p class="mb-0 ">
                 <!--<span class="error&#45;&#45;text" v-if="! $v.form.firstName.required && $v.form.firstName.$dirty">-->
@@ -24,8 +24,8 @@
                     <!--firstName is already taken-->
                 <!--</span>-->
             </p>
-        </v-card-text>
-        <v-card-text class="form-group">
+        </div>
+        <div class="form-group py-3">
             <v-label class="">Last Name</v-label>
 
             <v-text-field
@@ -36,7 +36,7 @@
                     v-model.lazy="$v.form.lastName.$model"
                     hide-details
                     :error="$v.form.lastName.$dirty && $v.form.lastName.$invalid"
-                    :success="! $v.form.lastName.$invalid"
+                    :success="$v.form.lastName.$dirty && ! $v.form.lastName.$invalid"
             ></v-text-field>
             <p class="mb-0 ">
                 <!--<span class="error&#45;&#45;text" v-if="! $v.form.lastName.required && $v.form.lastName.$dirty">-->
@@ -49,7 +49,7 @@
                     <!--lastName is already taken-->
                 <!--</span>-->
             </p>
-        </v-card-text>
+        </div>
     </div>
 </template>
 

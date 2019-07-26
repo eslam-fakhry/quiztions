@@ -6,7 +6,7 @@
         <v-flex grow class="d-flex justify-center align-center">
             <QuestionFeedback :ui-state="uiState" :feedback="feedback"/>
         </v-flex>
-        <v-flex shrink class="text-center">
+        <v-flex shrink class="text-center pb-4">
             <v-btn
                     outlined
                     @click="answer"
@@ -19,7 +19,6 @@
 </template>
 <script>
     import QuestionMixin from "./mixins/Question"
-
     import QuestionFeedback from "./QuestionFeedback";
 
     export default {
@@ -45,7 +44,6 @@
         },
 
         created() {
-            console.log(this.question);
         },
 
     }

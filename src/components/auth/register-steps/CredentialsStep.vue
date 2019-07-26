@@ -4,7 +4,7 @@
             <router-link class="light-blue--text " :to="{name:'login'}">login</router-link>
         </p>
 
-        <v-card-text class="form-group">
+        <div class="form-group py-3">
             <v-label class="">Username</v-label>
 
             <v-text-field
@@ -28,8 +28,8 @@
                 username is already taken
             </span>
             </p>
-        </v-card-text>
-        <v-card-text class="form-group">
+        </div>
+        <div class="form-group py-3">
             <v-label class="">Email</v-label>
             <v-text-field
                     class="my-2 form-text-input"
@@ -54,8 +54,8 @@
             <router-link :to="{name:'login',params:{init_email: form.email} }">login instead</router-link>
         </span>
             </p>
-        </v-card-text>
-        <v-card-text class="form-group">
+        </div>
+        <div class="form-group py-3">
             <v-label class="">password</v-label>
             <v-text-field
                     class="my-2 form-text-input"
@@ -78,8 +78,8 @@
                 password must contain a letter, a number, a special characters, and minimum length of 8 characters
             </span>
             </p>
-        </v-card-text>
-        <v-card-text class="form-group">
+        </div>
+        <div class="form-group py-3">
             <v-label class="">confirm password</v-label>
             <v-text-field
                     class="my-2 form-text-input"
@@ -100,7 +100,7 @@
                 passwords must match
             </span>
             </p>
-        </v-card-text>
+        </div>
     </div>
 </template>
 
@@ -209,7 +209,7 @@
                     isUsernameUnique(username) {
 
                         // todo: add debounce
-                        console.log('isUsernameUnique called');
+                        // console.log('isUsernameUnique called');
 
                         return username !== this.existingUsername
                     },
@@ -219,11 +219,11 @@
                     email,
                     async isEmailUnique(value) {
                         // todo: add debounce
-                        console.log('isEmailUnique called');
+                        // console.log('isEmailUnique called');
 
                         // standalone validator ideally should not assume a field is required
                         if (value === '') return true
-                        console.log('isEmailUnique called after');
+                        // console.log('isEmailUnique called after');
 
 
                         // simulate async call, fail for all logins with even length

@@ -36,7 +36,10 @@ export default {
         },
         continueNext() {
             this.$emit('continue')
-        }
+        },
+        updateAnswer(e){
+            this.userAnswer = e
+        },
     },
     computed: {
         uiState() {

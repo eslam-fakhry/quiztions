@@ -1,9 +1,9 @@
-<template>
-    <v-layout column style="height: 100%">
-        <v-flex  shrink>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
+
+    <Answer :question="question" v-on="$listeners">
+        <template v-slot:default="{userAnswer,uiState}">
             <v-textarea
                     autofocus
-                    class="form-text-input"
                     style="width: 100vw;max-width: 300px;"
                     outlined
                     v-model="userAnswer[0]"
@@ -11,45 +11,20 @@
                     :success="uiState.ANSWERED_CORRECTLY"
                     :error="uiState.ANSWERED_WRONG"
             ></v-textarea>
-        </v-flex>
+        </template>
+    </Answer>
 
-        <v-flex grow class="d-flex justify-center align-center">
-            <QuestionFeedback :ui-state="uiState" :feedback="feedback"/>
-        </v-flex>
-        <v-flex  shrink class="text-center" >
-        <v-btn
-                outlined
-                @click="answer"
-               :disabled="uiState.NOT_ANSWERED"
-               :loading="loading"
-               v-text="submitBtnText"
-        />
-        </v-flex>
-    </v-layout>
 </template>
 <script>
-    import QuestionMixin from "./mixins/Question"
-    import QuestionFeedback from "./QuestionFeedback";
+    import Answer from "./Answer";
 
     export default {
         name: 'InputAnswer',
+
         props: {
             question: {type: Object, required: true},
         },
-        mixins: [QuestionMixin,],
-        components: {QuestionFeedback,},
-        methods: {
-            setFeedback() {
-                this.feedback = this.correct?`you were right, "${this.userAnswer}" is the answer`:`sorry
-            but "${this.question.rightAnswer}" is the right answer`
 
-            }
-        },
+        components: {Answer,},
     }
 </script>
-<style scoped>
-    /*noinspection CssUnusedSymbol*/
-    .form-text-input /deep/ .v-input__slot {
-        border-width:1px!important;
-    }
-</style>

@@ -1,6 +1,10 @@
 <template>
     <v-container>
         <h1 class="text-center">Courses</h1>
+        <LogoutBtn>
+            <v-btn>logout</v-btn>
+        </LogoutBtn>
+
         <v-layout wrap>
 
             <v-flex xs12 sm6 md4 lg3 v-for="course in courses" :key="`course--${course.id}`">
@@ -34,11 +38,6 @@
                         <v-btn text color="orange" :to="{name:'course',params:{course_id:course.id}}">Enter</v-btn>
                     </v-card-actions>
                 </v-card>
-                <!--<router-link  :to="{name:'course',params:{course_id:course.id}}"-->
-                <!--class=""-->
-                <!--&gt;-->
-                <!--<v-card height="150">{{course.name}}</v-card>-->
-                <!--</router-link>-->
 
             </v-flex>
         </v-layout>
@@ -48,11 +47,14 @@
 <script>
     import {mapGetters} from 'vuex'
 
+    import LogoutBtn from './auth/LogoutBtn'
+
     export default {
         name: "Courses",
+        components: {LogoutBtn},
         computed: {
             // todo add loading state
             ...mapGetters(['courses']),
-        }
+        },
     }
 </script>

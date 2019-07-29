@@ -2,10 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // import getters from './getters'
+import auth from './auth'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+    modules: {
+        auth,
+    },
+
     state: {
         questions: [
             {
@@ -132,8 +137,12 @@ export default new Vuex.Store({
         ],
 
     },
+
     mutations: {},
+
     actions: {
+
+        // eslint-disable-next-line no-unused-vars
         async fetchUserCourse({getters}, {id}) {
             // fetch from server
 
@@ -177,6 +186,7 @@ export default new Vuex.Store({
         },
 
     },
+
     getters: {
         courses(state) {
             return state.courses

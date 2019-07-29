@@ -15,39 +15,29 @@
                 <v-stepper-content step="1" class="pa-4" >
                             <!--v-if="currentStep === 0"-->
                     <CredentialsStep
-                            ref="CredentialsStep"
-                            @checkValidation="setValidationFunction($event,'credentials')"
+                            :init_email="init_email"
+                            @continue="goNext"
 
                     />
 
-                    <div class="py-3">
-                        <v-btn
-                                outlined
-                                @click="goNext"
-                                :disabled="! canGoToNext"
-                        >{{isLastStep?'Finish':'Next'}}
-                        </v-btn>
+                    <!--<div class="py-3">-->
+                        <!--<v-btn-->
+                                <!--outlined-->
+                                <!--@click="goNext"-->
+                                <!--:disabled="! canGoToNext"-->
+                        <!--&gt;{{isLastStep?'Finish':'Next'}}-->
+                        <!--</v-btn>-->
 
-                        <v-btn text>Cancel</v-btn>
-                    </div>
+                        <!--<v-btn text>Cancel</v-btn>-->
+                    <!--</div>-->
 
                 </v-stepper-content>
 
                 <v-stepper-content step="2" class="pa-4">
                     <InformationStep
-                            ref="InformationStep"
-                            @checkValidation="setValidationFunction($event,'information')"
-                    />
-                    <div class="py-3">
-                        <v-btn
-                                outlined
-                                @click="goNext"
-                                :disabled="! canGoToNext"
-                        >{{isLastStep?'Finish':'Next'}}
-                        </v-btn>
+                            @continue="goNext"
 
-                        <v-btn text>Cancel</v-btn>
-                    </div>
+                    />
                 </v-stepper-content>
 
             </v-stepper-items>
@@ -89,28 +79,29 @@
     // todo: use stepper from vuetify
     export default {
         name: "Register",
+
+        props:{
+            init_email:{
+                type:String,
+                default:'',
+            }
+        },
+
         components: {
             CredentialsStep,
             InformationStep,
         },
         data() {
             return {
-                currentStep: 1,
-                stepValidation: {
-                    credentials: false,
-                    information: false,
-                },
+                currentStep: 2,
+                loading:false,
             }
         },
         methods: {
-            setValidationFunction(event) {
-                this.stepValidation.credentials = event
-            },
             goNext() {
                 if (this.isLastStep) return this.$router.push('/');
-                // if(this.stepValidation.credentials())
-                this.currentStep++;
-            }
+                this.currentStep++
+            },
         },
         computed: {
             steps() {
@@ -123,14 +114,10 @@
                 return this.currentStep === this.steps.length ;
             },
             canGoToNext() {
-                // return this.stepValidation.credentials
                 return true
             }
         },
 
-        mounted() {
-            this.stepValidation.credentials = !this.$refs.CredentialsStep.$v.$invalid
-        },
     }
 </script>
 

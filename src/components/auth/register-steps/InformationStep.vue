@@ -2,7 +2,6 @@
     <div>
         <div class="form-group py-3">
             <v-label class="">First Name</v-label>
-
             <v-text-field
                     class="my-2 form-text-input"
                     outlined
@@ -10,24 +9,17 @@
                     label="first name"
                     v-model.lazy="$v.form.firstName.$model"
                     hide-details
-                    :error="$v.form.firstName.$dirty && $v.form.firstName.$invalid"
-                    :success="$v.form.firstName.$dirty && ! $v.form.firstName.$invalid"
+                    :error="showFirstNameError"
+                    :success="! $v.form.firstName.$invalid"
             ></v-text-field>
-            <p class="mb-0 ">
-                <!--<span class="error&#45;&#45;text" v-if="! $v.form.firstName.required && $v.form.firstName.$dirty">-->
-                    <!--firstName field is required-->
-                <!--</span>-->
-                    <!--<span class="error&#45;&#45;text" v-else-if="! $v.form.firstName.minLength && $v.form.firstName.$dirty">-->
-                    <!--firstName must be a least 3 characters-->
-                <!--</span>-->
-                    <!--<span class="error&#45;&#45;text" v-else-if="! $v.form.firstName.isUsernameUnique && $v.form.firstName.$dirty">-->
-                    <!--firstName is already taken-->
-                <!--</span>-->
-            </p>
+            <form-input-error
+                    :active="showFirstNameError"
+                    :message="firstNameError"
+            />
         </div>
+
         <div class="form-group py-3">
             <v-label class="">Last Name</v-label>
-
             <v-text-field
                     class="my-2 form-text-input"
                     outlined
@@ -38,26 +30,35 @@
                     :error="$v.form.lastName.$dirty && $v.form.lastName.$invalid"
                     :success="$v.form.lastName.$dirty && ! $v.form.lastName.$invalid"
             ></v-text-field>
-            <p class="mb-0 ">
-                <!--<span class="error&#45;&#45;text" v-if="! $v.form.lastName.required && $v.form.lastName.$dirty">-->
-                    <!--lastName field is required-->
-                <!--</span>-->
-                    <!--<span class="error&#45;&#45;text" v-else-if="! $v.form.lastName.minLength && $v.form.lastName.$dirty">-->
-                    <!--lastName must be a least 3 characters-->
-                <!--</span>-->
-                    <!--<span class="error&#45;&#45;text" v-else-if="! $v.form.lastName.isUsernameUnique && $v.form.lastName.$dirty">-->
-                    <!--lastName is already taken-->
-                <!--</span>-->
-            </p>
+            <form-input-error
+                    :active="showLastNameError"
+                    :message="lastNameError"
+            />
+        </div>
+
+        <div class="py-3">
+            <v-btn
+                    outlined
+                    @click="updateUserInfo"
+                    :disabled="false"
+            >Next
+            </v-btn>
+
         </div>
     </div>
 </template>
 
 <script>
-    import { minLength,} from 'vuelidate/lib/validators'
+    import {minLength,} from 'vuelidate/lib/validators'
+    import FormInputError from '../../FormInputError'
 
     export default {
         name: "InformationStep",
+
+        components: {
+            FormInputError
+        },
+
         data() {
             return {
                 form: {
@@ -69,13 +70,45 @@
                 },
             }
         },
+
+        methods: {
+            updateUserInfo() {
+                //  todo implement this function
+                this.$emit('continue')
+            }
+        },
+
+        computed: {
+            showFirstNameError() {
+                return this.$v.form.firstName.$dirty && this.$v.form.firstName.$invalid;
+            },
+            showLastNameError() {
+                return this.$v.form.lastName.$dirty && this.$v.form.lastName.$invalid;
+            },
+
+            firstNameError() {
+                if (this.$v.form.firstName.$dirty && !this.$v.form.firstName.minLength) {
+
+                    return "minimum 3 characters"
+                }
+                return '';
+            },
+            lastNameError() {
+                if (this.$v.form.lastName.$dirty && !this.$v.form.lastName.minLength) {
+
+                    return "minimum 3 characters"
+                }
+                return '';
+            },
+        },
+
         validations: {
             form: {
                 firstName: {
-                    minLength:minLength(3),
+                    minLength: minLength(3),
                 },
                 lastName: {
-                    minLength:minLength(3),
+                    minLength: minLength(3),
                 },
 
             },
@@ -86,6 +119,6 @@
 <style scoped>
     /*noinspection CssUnusedSymbol*/
     .form-text-input /deep/ .v-input__slot {
-        border-width:1px!important;
+        border-width: 1px !important;
     }
 </style>

@@ -3,8 +3,9 @@
     <v-container d-flex justify-center>
         <v-card
                 style="width: 100%; max-width: 400px;"
+                @input="resetServerMessages"
         >
-            <p class="mt-4 mb-2 text-center grey--text body-1" ><span>Not registered? </span>
+            <p class="mt-4 mb-2 text-center grey--text body-1"><span>Not registered? </span>
                 <router-link class="light-blue--text " :to="{name:'register'}">register</router-link>
             </p>
 
@@ -18,19 +19,19 @@
                         placeholder="email@example.com"
                         v-model="$v.form.email.$model"
                         hide-details
-                        :error="$v.form.email.$dirty && $v.form.email.$invalid"
+                        :error="showEmailError"
                         :success="! $v.form.email.$invalid"
                         @keyup.enter="login"
 
                 ></v-text-field>
-                <p class="mb-0 ">
-
-                        <span class="error--text" v-if="! $v.form.email.required && $v.form.email.$dirty">email field is
-                            required</span>
-                    <span class="error--text" v-if="! $v.form.email.email && $v.form.email.$dirty">please provide a
-                            valid
-                            email</span>
-                </p>
+                <form-input-error
+                        :active="showEmailError"
+                        :message="emailError.message"
+                        :route="{name:'register',params:{init_email: form.email}}"
+                        :show-link="emailError.showLink "
+                        link-text="register"
+                        @input="serverMessages.email = null"
+                />
 
             </v-card-text>
             <v-card-text class="form-group">
@@ -43,24 +44,17 @@
                         hide-details
                         v-model="$v.form.password.$model"
                         type="password"
-                        :error="$v.form.password.$dirty && $v.form.password.$invalid"
+                        :error="showPasswordError"
                         :success="! $v.form.password.$invalid"
                         @keyup.enter="login"
                 ></v-text-field>
-                <p class="mb-0 ">
-                            <span
-                                    class="error--text"
-                                    v-if="! $v.form.password.required && $v.form.password.$dirty"
-                            >
-                            password field is required
-                            </span>
-                    <span
-                            class="error--text"
-                            v-if="! $v.form.password.minLength && $v.form.password.$dirty"
-                    >
-                            password length is min 8 character
-                            </span>
-                </p>
+
+                <form-input-error
+                        :active="showPasswordError"
+                        :message="passwordError"
+                        @input="serverMessages.password = ''"
+                />
+
             </v-card-text>
             <v-card-actions class="pa-4">
                 <v-btn
@@ -79,9 +73,14 @@
 
 <script>
     import {required, minLength, email} from 'vuelidate/lib/validators'
+    import FormInputError from '../FormInputError'
 
     export default {
         name: "Login",
+
+        components: {
+            FormInputError
+        },
 
         props: {
             init_email: {type: String, default: ''}
@@ -93,15 +92,77 @@
                     email: this.init_email,
                     password: '',
                 },
+                serverMessages: {
+                    email: '',
+                    password: '',
+                }
             }
         },
 
         methods: {
             login() {
                 if (!this.$v.$invalid) {
-                    console.log('logging in');
+                    this.$store.dispatch('auth/signIn', {
+                        email: this.form.email,
+                        password: this.form.password,
+                    })
+                        .then(() => {
+                            this.$router.push('/')
+                        })
+                        .catch(err => {
+                            console.log('err: ', err);
+                            if (err.code === 'auth/user-not-found') {
+                                this.serverMessages.email = {
+                                    message: "User not found",
+                                    showLink: true
+                                }
+                            } else if (err.code === "auth/wrong-password") {
+                                this.serverMessages.password = "Wrong password"
+
+                            }
+                        })
+
                 }
+            },
+            resetServerMessages() {
+                this.serverMessages.email = ''
+                this.serverMessages.password = ''
+
             }
+        },
+
+        computed: {
+            showEmailError() {
+                return (this.$v.form.email.$dirty && this.$v.form.email.$invalid) || !!this.serverMessages.email
+            },
+
+            showPasswordError() {
+                return (this.$v.form.password.$dirty && this.$v.form.password.$invalid) || !!this.serverMessages.password.length
+            },
+
+            emailError() {
+                if (this.$v.form.email.$dirty && !this.$v.form.email.required) {
+                    return {message: 'email field is required', showLink: false}
+                } else if (this.$v.form.email.$dirty && !this.$v.form.email.email) {
+                    return {message: 'please provide a valid email', showLink: false}
+                } else if (this.serverMessages.email) {
+                    return {message: this.serverMessages.email.message, showLink: this.serverMessages.email.showLink}
+                }
+                return ''
+            },
+
+            passwordError() {
+                if (this.$v.form.password.$dirty && !this.$v.form.password.required) {
+                    return 'password field is required'
+                } else if (this.$v.form.password.$dirty && !this.$v.form.password.minLength) {
+                    return 'password length is min 8 character'
+                } else if (this.serverMessages.password.length) {
+                    return this.serverMessages.password
+                }
+                return ''
+            },
+
+
         },
 
         validations: {
@@ -118,6 +179,3 @@
         },
     }
 </script>
-
-<style scoped>
-</style>

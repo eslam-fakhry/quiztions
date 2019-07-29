@@ -1,119 +1,113 @@
 <template>
-    <div @input="update">
-        <p class="mt-4 mb-2 text-center grey--text body-1" ><span>Already registered? </span>
+    <div>
+        <p class="mt-4 mb-2 text-center grey--text body-1"><span>Already registered? </span>
             <router-link class="light-blue--text " :to="{name:'login'}">login</router-link>
         </p>
 
         <div class="form-group py-3">
-            <v-label class="">Username</v-label>
-
-            <v-text-field
-                    class="my-2 form-text-input"
-                    outlined
-                    single-line
-                    label="username"
-                    v-model.lazy="$v.form.username.$model"
-                    hide-details
-                    :error="$v.form.username.$dirty && $v.form.username.$invalid"
-                    :success="! $v.form.username.$invalid"
-            ></v-text-field>
-            <p class="mb-0 ">
-            <span class="error--text" v-if="! $v.form.username.required && $v.form.username.$dirty">
-                username field is required
-            </span>
-                <span class="error--text" v-else-if="! $v.form.username.minLength && $v.form.username.$dirty">
-                username must be a least 3 characters
-            </span>
-                <span class="error--text" v-else-if="! $v.form.username.isUsernameUnique && $v.form.username.$dirty">
-                username is already taken
-            </span>
-            </p>
-        </div>
-        <div class="form-group py-3">
             <v-label class="">Email</v-label>
             <v-text-field
-                    class="my-2 form-text-input"
+                    class="my-2"
                     outlined
                     single-line
                     label="email"
-                    v-model.lazy="$v.form.email.$model"
+                    :value="$v.form.email.$model"
                     hide-details
-                    :error="$v.form.email.$dirty && $v.form.email.$invalid"
+                    :error="showEmailError"
                     :success="! $v.form.email.$invalid"
+                    @blur="$v.form.email.$touch()"
+                    @input="onEmailInput"
+
             ></v-text-field>
-            <p class="mb-0 ">
-                <span class="primary--text" v-if="checkingEmail">checking email</span>
-                <span class="error--text" v-else-if="! $v.form.email.required && $v.form.email.$dirty">
-                email field is required
-            </span>
-                <span class="error--text" v-else-if="! $v.form.email.email && $v.form.email.$dirty">
-                please provide a valid email
-            </span>
-                <span class="error--text" v-else-if="! $v.form.email.isEmailUnique && $v.form.email.$dirty">
-                this email is already taken
-            <router-link :to="{name:'login',params:{init_email: form.email} }">login instead</router-link>
-        </span>
-            </p>
+
+            <form-input-error
+                    :loading="checkingEmail"
+                    :active="showEmailError"
+                    :message="emailError.message"
+
+                    :route="{name:'login',params:{init_email: form.email} }"
+                    :show-link="emailError.showLink "
+                    link-text="login"
+            />
+
         </div>
         <div class="form-group py-3">
             <v-label class="">password</v-label>
             <v-text-field
-                    class="my-2 form-text-input"
+                    class="my-2"
                     outlined
                     single-line
                     label="password"
-                    v-model.lazy="$v.form.password1.$model"
+                    v-model="$v.form.password1.$model"
                     type="password"
                     hide-details
-                    :error="$v.form.password1.$dirty && $v.form.password1.$invalid"
+                    :error="showPassword1Error"
                     :success="! $v.form.password1.$invalid"
+                    @input="delayTouch($v.form.password1)"
+                    @blur="$v.form.password1.$touch()"
+
             ></v-text-field>
+            <!--@input="errors.password1 = ''"-->
+            <form-input-error
+                    :loading="false"
+                    :active="showPassword1Error"
+                    :message="password1Error"
 
-            <p class="mb-0 ">
-            <span class="error--text" v-if="! $v.form.password1.required && $v.form.password1.$dirty">password field is
-            required
-            </span>
-
-                <span class="error--text" v-else-if="! $v.form.password1.strongPassword && $v.form.password1.$dirty">
-                password must contain a letter, a number, a special characters, and minimum length of 8 characters
-            </span>
-            </p>
+            />
         </div>
         <div class="form-group py-3">
             <v-label class="">confirm password</v-label>
             <v-text-field
-                    class="my-2 form-text-input"
+                    class="my-2"
                     outlined
                     single-line
                     label="confirm password"
-                    v-model.lazy="$v.form.password2.$model"
+                    v-model="$v.form.password2.$model"
                     type="password"
                     hide-details
-                    :error="$v.form.password2.$dirty && $v.form.password2.$invalid"
+                    :error="showPassword2Error"
                     :success="! $v.form.password2.$invalid"
+                    @blur="$v.form.password2.$touch()"
+                    @input="delayTouch($v.form.password2)"
+
             ></v-text-field>
-            <p class="mb-0 ">
-            <span class="error--text" v-if="! $v.form.password2.required && $v.form.password2.$dirty">
-                password field is required
-            </span>
-                <span class="error--text" v-else-if="! $v.form.password2.samePassword && $v.form.password2.$dirty">
-                passwords must match
-            </span>
-            </p>
+            <form-input-error
+                    :loading="false"
+                    :active="showPassword2Error"
+                    :message="password2Error"
+
+            />
+        </div>
+        <div class="py-3">
+            <v-btn
+                    outlined
+                    @click="register"
+                    :disabled="false"
+                    :loading="registering"
+            >Next
+            </v-btn>
+
         </div>
     </div>
 </template>
 
 <script>
+    import _ from 'lodash'
     import {required, minLength, email, sameAs} from 'vuelidate/lib/validators'
+    import fb from '../../../services/firebaseConfig'
+    import FormInputError from '../../FormInputError'
+
+    const touchMap = new WeakMap()
 
     export default {
         name: "CredentialsStep",
-        props: {
 
-            init_username: {type: String, default: ''},
+        components: {
+            FormInputError
+        },
+
+        props: {
             init_email: {type: String, default: ''},
-            init_password: {type: String, default: ''},
             init_errors: {
                 type: Object,
                 default() {
@@ -130,109 +124,134 @@
         data() {
             return {
                 form: {
-                    username: this.init_username,
                     email: this.init_email,
-                    password1: this.init_password,
-                    password2: this.init_password,
+                    password1: '',
+                    password2: '',
                 },
                 errors: this.init_errors,
                 checkingEmail: false,
-                checkingUsername: false,
+                registering: false,
                 existingEmail: 'eslam1000man@gmail.com',
-                existingUsername: 'eslam',
             }
         },
         methods: {
-            // delayTouch($v) {
-            // $v.$reset()
-            // if (touchMap.has($v)) {
-            //     clearTimeout(touchMap.get($v))
-            // }
-            // touchMap.set($v, setTimeout($v.$touch, 1000))
+            // to delay client-side validation for better user experience
+            delayTouch($v) {
+                $v.$reset();
+                if (touchMap.has($v)) clearTimeout(touchMap.get($v));
+                touchMap.set($v, setTimeout($v.$touch, 1000));
+            },
+            // to delay server-side validation for performance
+            onEmailInput: _.debounce(function (event) {
+                this.$v.form.email.$model = event
+            }, 1000),
+            register() {
+                if (!this.$v.$invalid) {
+                    console.log('registering');
+
+                    this.registering = true;
+                    this.$store.dispatch('auth/signUp', {
+                        email: this.form.email,
+                        password: this.form.password1,
+                    })
+                        .then(() => {
+                            this.registering = false;
+                            this.$emit('continue');
+
+                        })
+                        .catch(err => {
+                            console.log('err: ', err);
+                            if (err.code === 'auth/email-already-in-use') {
+                                this.errors.email = "User already registered"
+                            } else if (err.code === "auth/weak-password") {
+                                this.errors.password1 = "Weak password"
+                            }
+                            this.registering = false;
+                        })
+                }
+
+            },
+
+            // async checkEmail(value) {
+            //     // console.log('in checkEmail');
+            //     // eslint-disable-next-line
+            //     return new Promise((resolve, reject) => {
+            //         setTimeout(() => {
+            //             resolve(typeof value === 'string' && value.length % 2 !== 0)
+            //         }, 350 + Math.random() * 300)
+            //     })
+            //     // .then(res => {
+            //     //     this.checkingEmail = false
+            //     //     return res
+            //     // })
+            //
             // },
-
-            update() {
-                console.log('update');
-                this.$emit('input', !this.$v.$invalid)
-                // this.$emit('input',true)
-
-            },
-            checkValidity() {
-                return !this.$v.$invalid
-            },
-
-            async checkEmail(value) {
-                // eslint-disable-next-line
-                return new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        resolve(typeof value === 'string' && value.length % 2 !== 0)
-                    }, 350 + Math.random() * 300)
-                })
-                // .then(res => {
-                //     this.checkingEmail = false
-                //     return res
-                // })
-
-            },
-            checkusername() {
-
-            },
-            wait(ms) {
-                return new Promise(r => setTimeout(r, ms));
-            }
 
         },
-        watch: {
-            // ['form.username']:function(){
-            //     console.log('form watch');
-            //     this.$emit('input',! this.$v.$invalid)
-            // },
-            // ['form.email']:function(){
-            //     console.log('form watch');
-            //     this.$emit('input',! this.$v.$invalid)
-            // },
-            // ['form.password1']:function(){
-            //     console.log('form watch');
-            //     this.$emit('input',! this.$v.$invalid)
-            // },
-            // ['form.password2']:function(){
-            //     console.log('form watch');
-            //     this.$emit('input',! this.$v.$invalid)
-            // },
+
+        computed: {
+            showEmailError() {
+                return (this.$v.form.email.$dirty && this.$v.form.email.$invalid) || !!this.errors.email.length;
+            },
+            showPassword1Error() {
+                return (this.$v.form.password1.$dirty && this.$v.form.password1.$invalid) || !!this.errors.password1.length;
+            },
+            showPassword2Error() {
+                return (this.$v.form.password2.$dirty && this.$v.form.password2.$invalid);
+            },
+            emailError() {
+                if (this.$v.form.email.$dirty && !this.$v.form.email.required) {
+                    return {message: 'email field is required', showLink: false}
+                } else if (this.$v.form.email.$dirty && !this.$v.form.email.email) {
+                    return {message: 'please provide a valid email', showLink: false}
+                } else if (this.$v.form.email.$dirty && !this.$v.form.email.isEmailUnique) {
+                    return {message: 'this email is already taken', showLink: true}
+                } else if (this.errors.email.length) {
+                    return {message: this.errors.email, showLink: false}
+                }
+                return ''
+            },
+
+            password1Error() {
+                if (this.$v.form.password1.$dirty && !this.$v.form.password1.required) {
+                    return 'password field is required'
+                } else if (this.$v.form.password1.$dirty && !this.$v.form.password1.strongPassword) {
+                    return 'password must contain a letter, a number, a special characters, and minimum length of 8 characters'
+                } else if (this.errors.password1.length) {
+                    return this.errors.password1
+                }
+                return ''
+            },
+            password2Error() {
+                if (this.$v.form.password2.$dirty && !this.$v.form.password2.required) {
+                    return 'password field is required'
+                } else if (this.$v.form.password2.$dirty && !this.$v.form.password2.samePassword) {
+                    return 'passwords must match'
+                }
+                return ''
+            },
         },
+
+
         validations: {
             form: {
-                username: {
-                    required,
-                    minLength: minLength(3),
-                    // todo add valid username rule i.e. have no spaces
-                    isUsernameUnique(username) {
-
-                        // todo: add debounce
-                        // console.log('isUsernameUnique called');
-
-                        return username !== this.existingUsername
-                    },
-                },
                 email: {
                     required,
                     email,
                     async isEmailUnique(value) {
-                        // todo: add debounce
                         // console.log('isEmailUnique called');
 
                         // standalone validator ideally should not assume a field is required
                         if (value === '') return true
                         // console.log('isEmailUnique called after');
 
-
-                        // simulate async call, fail for all logins with even length
                         this.checkingEmail = true
 
-                        const result = await this.checkEmail(value)
+                        const result = await fb.isEmailUnique(value)
                         this.checkingEmail = false
                         return Boolean(result)
                     },
+
 
                 },
                 password1: {
@@ -253,15 +272,9 @@
             },
         },
 
-        created() {
-            // this.$emit('checkValidation',this.checkValidity.bind(this))
-        }
     }
 </script>
 
 <style scoped>
-    /*noinspection CssUnusedSymbol*/
-    .form-text-input /deep/ .v-input__slot {
-        border-width:1px!important;
-    }
+
 </style>

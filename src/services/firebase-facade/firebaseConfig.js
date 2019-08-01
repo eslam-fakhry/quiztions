@@ -17,28 +17,33 @@ firebase.initializeApp(config)
 // firebase utils
 const db = firebase.database()
 const auth = firebase.auth()
+const currentUser = auth.currentUser
+// console.log('currentUser: ',currentUser);
 
 // firebase collections
-// const postsCollection = db.collection('posts')
-// const commentsCollection = db.collection('comments')
-// const likesCollection = db.collection('likes')
+const coursesRef = db.ref('courses')
+const lessonsRef = db.ref('lessons')
+const questionsRef = db.ref('questions')
+const rightAnswersRef = db.ref('rightAnswers')
+const studentsRef = db.ref('students')
+const teachersRef = db.ref('teachers')
+
+// studentsRef.child("mv0x7P86mLTCfpMF0lQVeyAfsEu2").update({email:'green'}).then(res=>{
+//     console.log(res);
+// })
 
 
-//check if email exists
-// isEmailUnique('islam1000man@gmail.com').then(res=>console.log(res))
-
-async function isEmailUnique(email) {
-
-    const methods = await auth.fetchSignInMethodsForEmail(email)
-    return ! methods.length
-}
-
-const publicAPI = {
+export default {
     db,
     auth,
-    isEmailUnique
-    // postsCollection,
-    // commentsCollection,
-    // likesCollection
+    currentUser,
+    refs: {
+        coursesRef,
+        lessonsRef,
+        questionsRef,
+        rightAnswersRef,
+        studentsRef,
+        teachersRef,
+    },
+
 };
-export default publicAPI

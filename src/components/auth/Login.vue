@@ -102,7 +102,7 @@
         methods: {
             login() {
                 if (!this.$v.$invalid) {
-                    this.$store.dispatch('auth/signIn', {
+                    this.$store.dispatch('user/signIn', {
                         email: this.form.email,
                         password: this.form.password,
                     })

@@ -50,7 +50,7 @@
 
 <script>
     import {createNamespacedHelpers } from 'vuex'
-    const {mapState, mapActions} = createNamespacedHelpers('auth')
+    const {mapState, mapActions} = createNamespacedHelpers('user')
     import {minLength,} from 'vuelidate/lib/validators'
     import FormInputError from '../../FormInputError'
 
@@ -82,7 +82,7 @@
                 if (!this.$v.$invalid) {
                     const payload = {
                         userInfo: this.form,
-                        id: this.user.uid,
+                        id: this.userUid,
                     };
                     this.updateUserInfo(payload).then((res) => {
                         console.log('[InformationStep -- updateUserInfo]: ', res);
@@ -96,7 +96,7 @@
 
         computed: {
             ...mapState({
-                user: state => state.user
+                userUid: state => state.uid
             }),
             showFirstNameError() {
                 return this.$v.form.firstName.$dirty && this.$v.form.firstName.$invalid;

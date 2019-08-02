@@ -150,7 +150,7 @@
                     console.log('registering');
 
                     this.registering = true;
-                    this.$store.dispatch('auth/signUp', {
+                    this.$store.dispatch('user/signUp', {
                         email: this.form.email,
                         password: this.form.password1,
                     })

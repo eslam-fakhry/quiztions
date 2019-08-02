@@ -10,7 +10,7 @@
                     v-model.lazy="$v.form.firstName.$model"
                     hide-details
                     :error="showFirstNameError"
-                    :success="! $v.form.firstName.$invalid"
+                    :success="$v.form.lastName.$dirty && ! $v.form.firstName.$invalid"
             ></v-text-field>
             <form-input-error
                     :active="showFirstNameError"
@@ -39,7 +39,7 @@
         <div class="py-3">
             <v-btn
                     outlined
-                    @click="updateUserInfo"
+                    @click="updateUser"
                     :disabled="false"
             >Next
             </v-btn>
@@ -49,6 +49,8 @@
 </template>
 
 <script>
+    import {createNamespacedHelpers } from 'vuex'
+    const {mapState, mapActions} = createNamespacedHelpers('auth')
     import {minLength,} from 'vuelidate/lib/validators'
     import FormInputError from '../../FormInputError'
 
@@ -66,19 +68,36 @@
                     lastName: '',
                     birthday: '',
                     gender: '',
-                    avatar: '',
+                    photoURL: 'sd',
                 },
             }
         },
 
         methods: {
-            updateUserInfo() {
+            ...mapActions([
+                'updateUserInfo'
+            ]),
+            updateUser() {
                 //  todo implement this function
-                this.$emit('continue')
+                if (!this.$v.$invalid) {
+                    const payload = {
+                        userInfo: this.form,
+                        id: this.user.uid,
+                    };
+                    this.updateUserInfo(payload).then((res) => {
+                        console.log('[InformationStep -- updateUserInfo]: ', res);
+                        this.$emit('continue')
+                    })
+
+
+                }
             }
         },
 
         computed: {
+            ...mapState({
+                user: state => state.user
+            }),
             showFirstNameError() {
                 return this.$v.form.firstName.$dirty && this.$v.form.firstName.$invalid;
             },

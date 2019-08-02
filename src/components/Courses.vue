@@ -4,10 +4,12 @@
         <LogoutBtn>
             <v-btn>logout</v-btn>
         </LogoutBtn>
+        <v-btn @click="$store.dispatch('addCoursesToUser')">addCoursesToUser</v-btn>
+        <v-btn @click="fetchUserCourses">fetchUserCourses</v-btn>
 
         <v-layout wrap>
 
-            <v-flex xs12 sm6 md4 lg3 v-for="course in courses" :key="`course--${course.id}`">
+            <v-flex xs12 sm6 md4 lg3 v-for="(course, id) in courses" :key="`course--${id}`">
                 <v-card
                         :elevation="0"
                         outlined
@@ -35,7 +37,7 @@
                         </div>
                     </v-card-title>
                     <v-card-actions>
-                        <v-btn text color="orange" :to="{name:'course',params:{course_id:course.id}}">Enter</v-btn>
+                        <v-btn text color="orange" :to="{name:'course',params:{course_id:id}}">Enter</v-btn>
                     </v-card-actions>
                 </v-card>
 
@@ -45,7 +47,8 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import {createNamespacedHelpers } from 'vuex'
+    const {mapState, mapActions} = createNamespacedHelpers('user')
 
     import LogoutBtn from './auth/LogoutBtn'
 
@@ -54,7 +57,12 @@
         components: {LogoutBtn},
         computed: {
             // todo add loading state
-            ...mapGetters(['courses']),
+            ...mapState(['courses']),
+        },
+        methods:mapActions(['fetchUserCourses']),
+
+        created(){
+
         },
     }
 </script>

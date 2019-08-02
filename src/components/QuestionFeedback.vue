@@ -1,14 +1,15 @@
 <template>
     <v-alert
             prominent
-            :type="uiState.ANSWERED_CORRECTLY?'success':uiState.ANSWERED_WRONG?'error':'info'"
+            :type="alertType"
             v-if="uiState.ANSWER_CHECKED"
             :icon="false"
     >
         <div
-                class="text-wrap"
+                class="text-wrap feedback-text"
                 style="max-width: 300px"
-        >{{feedback}}</div>
+        >{{feedback}}
+        </div>
     </v-alert>
 </template>
 <script>
@@ -23,6 +24,12 @@
                 type: String,
                 required: true
             },
-        }
+        },
+
+        computed: {
+            alertType() {
+                return this.uiState.ANSWERED_CORRECTLY ? 'success' : this.uiState.ANSWERED_WRONG ? 'error' : 'info';
+            }
+        },
     }
 </script>

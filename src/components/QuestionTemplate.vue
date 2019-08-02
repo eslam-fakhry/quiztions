@@ -3,15 +3,15 @@
         <template v-for="(part,i) in templateParts">
             <v-text-field
                     v-if="i>0"
-                    :autofocus="i===1"
                     :key="`${part}--${i}--text`"
-                    class="d-inline-block"
-                    single-line
-                    hide-details
+                    :autofocus="i===1"
                     :value="value[i-1]"
                     @input="update($event,i-1)"
                     :disabled="uiState.ANSWER_CHECKED"
                     :style="textInputStyle(value[i-1])"
+                    class="d-inline-block"
+                    single-line
+                    hide-details
             ></v-text-field>
             <span :key="`${part}--${i}`">
                     {{part}}

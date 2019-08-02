@@ -1,7 +1,7 @@
 <template>
     <div class="py-4 my-4 option text-center"
          v-on="$listeners"
-         :class="classes"
+         :class="selected?classes:{}"
     >{{option}}
     </div>
 </template>
@@ -24,9 +24,9 @@
         computed: {
             classes() {
                 return {
-                    blue: this.uiState.ANSWER_NOT_CHECKED && this.selected,
-                    green: this.uiState.ANSWERED_CORRECTLY && this.selected,
-                    red: this.uiState.ANSWERED_WRONG && this.selected,
+                    blue: this.uiState.ANSWER_NOT_CHECKED ,
+                    green: this.uiState.ANSWERED_CORRECTLY ,
+                    red: this.uiState.ANSWERED_WRONG ,
                 }
             }
         },

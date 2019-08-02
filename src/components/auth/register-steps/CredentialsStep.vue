@@ -94,7 +94,7 @@
 <script>
     import _ from 'lodash'
     import {required, minLength, email, sameAs} from 'vuelidate/lib/validators'
-    import fb from '../../../services/firebaseConfig'
+    import fb from '../../../services/firebase-facade'
     import FormInputError from '../../FormInputError'
 
     const touchMap = new WeakMap()

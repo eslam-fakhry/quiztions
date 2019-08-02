@@ -2,7 +2,7 @@
     <v-container class="">
         <h1 class="text-center">Lessons</h1>
         <v-layout wrap v-if="! loading">
-            <v-flex class="child-flex" v-for="lesson in course.lessons" :key="lesson.id">
+            <v-flex class="child-flex" v-for="(lesson, id) in course.lessons" :key="id">
                 <!--v-model="value"-->
                 <v-menu
                         :disabled="false"
@@ -31,7 +31,7 @@
                             laksdjfla
                         </v-card-text>
                         <v-card-actions>
-                            <v-btn :to="{name:'lesson',params:{lesson_id:lesson.id}}">enter</v-btn>
+                            <v-btn :to="{name:'lesson',params:{lesson_id:id}}">enter</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-menu>
@@ -66,6 +66,7 @@
                 async handler(id) {
                     this.loading = true;
                     this.course = await this.$store.dispatch('fetchCourse', {id});
+                    console.log('[Course -- watch -- course]',this.course);
                     this.loading = false;
                 }
             }

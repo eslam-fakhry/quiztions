@@ -69,7 +69,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
 
-    const loggedIn = store.getters['auth/loggedIn']
+    const loggedIn = store.getters['user/loggedIn']
     console.log('loggedIn:',loggedIn);
     if (requiresAuth && !loggedIn) {
         next('/login')

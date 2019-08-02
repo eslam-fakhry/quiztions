@@ -10,7 +10,7 @@
 
         methods: {
             logout() {
-                this.$store.dispatch('auth/signOut')
+                this.$store.dispatch('user/signOut')
             }
         },
     }

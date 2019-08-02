@@ -84,6 +84,10 @@
             init_email:{
                 type:String,
                 default:'',
+            },
+            step:{
+                type:Number,
+                default:1,
             }
         },
 
@@ -93,7 +97,7 @@
         },
         data() {
             return {
-                currentStep: 2,
+                currentStep: this.step,
                 loading:false,
             }
         },

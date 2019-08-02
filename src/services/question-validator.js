@@ -1,14 +1,17 @@
-function validate(userAnswer, question, isValidateRemotely = false) {
+import store from '../store'
+
+function validate(userAnswer, questionId, isValidateRemotely = false) {
     if(! isValidateRemotely){
-        return validateLocally(userAnswer, question)
+        return validateLocally(userAnswer, questionId)
     }else{
-        return validateRemotely(userAnswer, question)
+        return validateRemotely(userAnswer, questionId)
 
     }
 }
 
-function validateLocally(userAnswer, question) {
-    return arraysEqual(userAnswer, question.rightAnswer)
+function validateLocally(userAnswer, questionId) {
+    const rightAnswer = store.getters.getRightAnswer(questionId)
+    return arraysEqual(userAnswer, rightAnswer)
 
 }
 

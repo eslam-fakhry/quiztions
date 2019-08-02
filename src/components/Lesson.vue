@@ -33,6 +33,7 @@
 </template>
 
 <script>
+    //todo fix can-navigate
 
     import Question from './Question'
     import ResultMessage from './ResultMessage'
@@ -67,7 +68,7 @@
                 questions: [],
                 currentIndex: 0,
                 score: [],
-                loading: true,
+                loading: false,
             }
         },
 

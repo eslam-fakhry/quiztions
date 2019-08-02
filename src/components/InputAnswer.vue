@@ -1,30 +1,25 @@
-<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-
-    <Answer :question="question" v-on="$listeners">
-        <template v-slot:default="{userAnswer,uiState}">
-            <v-textarea
-                    autofocus
-                    style="width: 100vw;max-width: 300px;"
-                    outlined
-                    v-model="userAnswer[0]"
-                    :disabled="uiState.ANSWER_CHECKED"
-                    :success="uiState.ANSWERED_CORRECTLY"
-                    :error="uiState.ANSWERED_WRONG"
-            ></v-textarea>
-        </template>
-    </Answer>
-
+<template>
+    <v-textarea
+            v-model="value[0]"
+            :disabled="uiState.ANSWER_CHECKED"
+            :success="uiState.ANSWERED_CORRECTLY"
+            :error="uiState.ANSWERED_WRONG"
+            style="width: 100vw;max-width: 300px;"
+            autofocus
+            outlined
+    ></v-textarea>
 </template>
 <script>
-    import Answer from "./Answer";
-
+    // todo check if textarea needs key
     export default {
         name: 'InputAnswer',
-
+        // todo: remove if not needed
+        inject: ['question'],
         props: {
-            question: {type: Object, required: true},
+            value: {},
+            uiState: {},
         },
 
-        components: {Answer,},
+        components: {},
     }
 </script>

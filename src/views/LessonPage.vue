@@ -15,11 +15,11 @@
 </template>
 
 <script>
+
     import {mapGetters} from 'vuex'
 
     import Lesson from '../components/Lesson'
     import Loading from '../components/Loading'
-
     export default {
         name: "LessonPage",
         props: {

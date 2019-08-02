@@ -2,7 +2,7 @@
     <div style="width: 100vw;max-width: 300px;">
         <SingleSelectionOption
                 class=" "
-                v-for="option in options"
+                v-for="option in question.options"
                 :key="option"
                 :option="option"
                 @click="choose(option)"
@@ -18,6 +18,8 @@
     export default {
         name: 'SelectionOptions',
         components: {SingleSelectionOption},
+        inject:['question'],
+
         props: {
             uiState: {
                 type: Object,
@@ -25,10 +27,6 @@
             },
             value: {
                 type: String
-            },
-            options: {
-                type: Array,
-                required: true
             },
             disabled: {
                 type: Boolean,

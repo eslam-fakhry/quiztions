@@ -4,44 +4,39 @@
             class=" justify-center align-center "
             style="height: 100%"
     >
-        <div class="text-center pb-6 mt-6">{{question.body}}</div>
+        <v-flex shrink>
+            <div class="text-center pb-6 mt-6">{{question.body}}</div>
+        </v-flex>
         <v-flex>
-            <component
-                    :is="answerComponentName"
-                    :question="question"
+
+            <Answer
                     @continue="$emit('continue')"
                     @result="$emit('result',$event)"
-                    :key="question.id"
-            ></component>
+            />
+
         </v-flex>
+
     </v-layout>
 </template>
 
 <script>
-    import _ from "lodash"
 
-    import SelectionAnswer from "../components/SelectionAnswer";
-    import CompletionAnswer from "../components/CompletionAnswer";
-    import InputAnswer from "../components/InputAnswer";
+
+    import Answer from "../components/Answer";
 
     export default {
         name: "Question",
         components: {
-            SelectionAnswer,
-            CompletionAnswer,
-            InputAnswer,
+            Answer,
         },
         props: {
             question: {type: Object, required: true}
         },
-        computed: {
-            /**
-             * @return {string}
-             */
-            answerComponentName() {
-                return _.camelCase(this.question.type) + "Answer";
+        provide() {
+            return {
+                question:this.question
             }
-        },
+        }
     }
 </script>
 

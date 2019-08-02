@@ -1,7 +1,17 @@
 <template>
     <v-layout column style="height: 100%">
         <v-flex shrink>
-            <slot v-bind="{question,userAnswer,uiState,updateAnswer}"></slot>
+            <!--<slot v-bind="{question,userAnswer,uiState,updateAnswer}"></slot>-->
+            <component
+                    :is="answerComponentName"
+                    :question="question"
+                    @continue="$emit('continue')"
+                    @result="$emit('result',$event)"
+                    :key="question.id"
+                    v-model="userAnswer"
+                    :ui-state="uiState"
+            ></component>
+
         </v-flex>
         <v-flex grow class="d-flex justify-center align-center">
             <QuestionFeedback :ui-state="uiState" :feedback="feedback"/>
@@ -18,21 +28,32 @@
     </v-layout>
 </template>
 <script>
+
+    import _ from "lodash"
+    import {mapGetters} from 'vuex'
+
+    import SelectionAnswer from "../components/SelectionAnswer";
+    import CompletionAnswer from "../components/CompletionAnswer";
+    import InputAnswer from "../components/InputAnswer";
+
     import QuestionMixin from "./mixins/Question"
     import QuestionFeedback from "./QuestionFeedback";
-    import {mapGetters} from 'vuex'
 
     export default {
         name: 'Answer',
 
         props: {
-            question: {type: Object, required: true},
+            // question: {type: Object, required: true},
         },
+        inject:['question'],
 
         mixins: [QuestionMixin,],
 
         components: {
             QuestionFeedback,
+            SelectionAnswer,
+            CompletionAnswer,
+            InputAnswer,
         },
 
         methods: {
@@ -44,7 +65,15 @@
 
         },
 
-        computed: mapGetters(['getRightAnswer']),
+        computed: {
+            ...mapGetters(['getRightAnswer']),
+            /**
+             * @return {string}
+             */
+            answerComponentName() {
+                return _.camelCase(this.question.type) + "Answer";
+            }
+        },
 
     }
 </script>

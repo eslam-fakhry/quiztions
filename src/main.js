@@ -3,7 +3,7 @@ import Vue from 'vue'
 
 import './plugins/vuelidate'
 import vuetify from './plugins/vuetify'
-import fb from './services/firebaseConfig'
+import fb from './services/firebase-facade'
 import App from './App.vue'
 import router from './router'
 import store from './store'

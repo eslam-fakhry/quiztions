@@ -21,7 +21,7 @@ export default {
         },
         async validate() {
             this.loading = true;
-            this.correct = await questionValidator.validate(this.userAnswer, this.question, this.question.serverValidate)
+            this.correct = await questionValidator.validate(this.userAnswer, this.question.id)
             this.$emit('result', this.correct ? 'right' : 'wrong');
             this.answerChecked = true;
             this.setFeedback();

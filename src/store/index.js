@@ -12,8 +12,27 @@ export default new Vuex.Store({
     },
 
     state: {
-        questions: [
-            {
+        students: {
+            "student1": {
+                name:"Eslam Fakhry",
+                email:"eslam@email.com",
+                courses:{
+                    "course1":{name:'psychology 101'}
+                }
+            },
+        },
+        teachers: {
+            "teacher1": {
+                name:"Muhammad Khaled",
+                email:"eslam@email.com",
+                courses:{
+                    "course1":{name:'psychology 101'}
+                }
+            },
+        },
+
+        questions: {
+            "1":{
                 id: '1',
                 body: 'what is the longest river in Africa?',
                 serverValidate: false,
@@ -21,14 +40,14 @@ export default new Vuex.Store({
                 options: ['Nile', 'Rhine', 'Amazon'],
                 rightAnswer: ['Nile']
             },
-            {
+            "2":{
                 id: '2',
                 body: 'what is the longest river in Africa?',
                 serverValidate: false,
                 type: 'input',
                 rightAnswer: ['Nile']
             },
-            {
+            "3":{
                 id: '3',
                 body: 'complete',
                 serverValidate: false,
@@ -37,7 +56,7 @@ export default new Vuex.Store({
                 rightAnswer: ['black', 'blue']
             },
 
-            {
+            "4":{
                 id: '4',
                 body: 'complete',
                 serverValidate: false,
@@ -45,7 +64,7 @@ export default new Vuex.Store({
                 template: '--blank-- of thrones is name of the famous hbo series',
                 rightAnswer: ['game']
             },
-            {
+            "5":{
                 id: '5',
                 body: 'complete',
                 serverValidate: false,
@@ -53,7 +72,7 @@ export default new Vuex.Store({
                 template: '--blank-- of thrones is name of the famous hbo series',
                 rightAnswer: ['game']
             },
-            {
+            "6":{
                 id: '6',
                 body: 'what is the actor of El-kebeer series?',
                 serverValidate: false,
@@ -61,41 +80,41 @@ export default new Vuex.Store({
                 rightAnswer: ['Ahmed']
             },
 
-        ],
-        lessons: [
-            {
+        },
+        lessons: {
+            "1":{
                 id: '1',
                 name: 'basics stuff',
                 questions: ['1', '2', '3']
             },
-            {
+            "2":{
                 id: '2',
                 name: 'advanced stuff',
                 questions: ['6', '5', '3']
             },
-            {
+            "3":{
                 id: '3',
                 name: 'stuff with medium',
                 questions: ['1', '4', '6', '3']
             },
-            {
+            "4":{
                 id: '4',
                 name: 'stuff about you1',
                 questions: ['6', '5', '3'],
             },
-            {
+            "5":{
                 id: '5',
                 name: 'stuff about you2',
                 questions: ['2', '6', '4', '3', '6', '3',],
             },
-            {
+            "6":{
                 id: '6',
                 name: 'stuff about you3',
-                questions: ['2', '6', '5', '3','4',],
+                questions: ['2', '6', '5', '3', '4',],
             },
-        ],
-        courses: [
-            {
+        },
+        courses: {
+            "1":{
                 id: '1',
                 name: 'intro to machine learning',
                 lessons: [
@@ -104,19 +123,19 @@ export default new Vuex.Store({
                     {id: '3', name: 'stuff about you2'},
                 ]
             },
-            {
+            "2":{
                 id: '2',
                 name: 'intro to algebra',
                 lessons: [
                     {id: '1', name: 'basics stuff'},
                     {id: '4', name: 'stuff with medium4'},
                     {id: '3', name: 'stuff about you2'},
-                    {id: '3', name: 'stuff about you2'},
-                    {id: '3', name: 'stuff about you2'},
-                    {id: '3', name: 'stuff about you2'},
+                    {id: '5', name: 'stuff about you2'},
+                    {id: '6', name: 'stuff about you2'},
+                    {id: '7', name: 'stuff about you2'},
                 ]
             },
-            {
+            "3":{
                 id: '3',
                 name: 'philosophy',
                 lessons: [
@@ -125,7 +144,7 @@ export default new Vuex.Store({
                     {id: '4', name: 'stuff about you4'},
                 ]
             },
-            {
+            "4":{
                 id: '4',
                 name: 'dream psychology',
                 lessons: [
@@ -134,7 +153,15 @@ export default new Vuex.Store({
                     {id: '3', name: 'stuff about you2'},
                 ],
             },
-        ],
+        },
+        rightAnswers: {
+            '1': ['Nile'],
+            '2': ['Nile'],
+            '3': ['black', 'blue'],
+            '4': ['game'],
+            '5': ['game'],
+            '6': ['Ahmed']
+        }
 
     },
 
@@ -143,7 +170,7 @@ export default new Vuex.Store({
     actions: {
 
         // eslint-disable-next-line no-unused-vars
-        async fetchUserCourse({getters}, {id}) {
+        async fetchUserCourses({getters}, {id}) {
             // fetch from server
 
             // otherwise show user-friendly error
@@ -177,14 +204,11 @@ export default new Vuex.Store({
 
         },
 
-        async fetchQuestionsInAdvance({dispatch}, {ids}){
-            ids.forEach((id)=>{
-                dispatch('fetchQuestion',{id})
-
+        async fetchQuestionsInAdvance({dispatch}, {ids}) {
+            ids.forEach((id) => {
+                dispatch('fetchQuestion', {id})
             })
-
         },
-
     },
 
     getters: {
@@ -199,17 +223,25 @@ export default new Vuex.Store({
         },
         getCourse(state) {
             return (id) => {
-                return state.courses.find(course => course.id === id)
+                return state.courses[id]
+                // return state.courses.find(course => course.id === id)
             }
         },
         getLesson(state) {
             return (id) => {
-                return state.lessons.find(lesson => lesson.id === id)
+                return state.lessons[id]
+                // return state.lessons.find(lesson => lesson.id === id)
             }
         },
         getQuestion(state) {
             return (id) => {
-                return state.questions.find(question => question.id === id)
+                return state.questions[id]
+                // return state.questions.find(question => question.id === id)
+            }
+        },
+        getRightAnswer(state) {
+            return (id) => {
+                return state.rightAnswers[id]
             }
         },
     },

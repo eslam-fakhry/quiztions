@@ -1,4 +1,4 @@
-import fb from '../../services/firebaseConfig'
+import fb from '../../services/firebase-facade'
 
 export default {
     namespaced: true,

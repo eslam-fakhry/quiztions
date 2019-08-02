@@ -20,6 +20,7 @@
 <script>
     import QuestionMixin from "./mixins/Question"
     import QuestionFeedback from "./QuestionFeedback";
+    import {mapGetters} from 'vuex'
 
     export default {
         name: 'Answer',
@@ -38,13 +39,12 @@
             // override setFeedback from question mixin
             setFeedback() {
                 this.feedback = this.correct ? `you were right, "${this.userAnswer}" is the answer` : `sorry
-            but "${this.question.rightAnswer}" is the right answer`
+            but "${this.getRightAnswer(this.question.id)}" is the right answer`
             },
 
         },
 
-        created() {
-        },
+        computed: mapGetters(['getRightAnswer']),
 
     }
 </script>

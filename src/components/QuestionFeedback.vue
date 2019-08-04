@@ -8,6 +8,7 @@
         <div
                 class="text-wrap feedback-text"
                 style="max-width: 300px"
+                data-jest="feedback-text"
         >{{feedback}}
         </div>
     </v-alert>

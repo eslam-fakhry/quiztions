@@ -1,7 +1,8 @@
 // import Vue from 'vue'
 import Vuetify from 'vuetify'
-
 import {mount, createLocalVue} from '@vue/test-utils'
+
+import helpers from '../helpers'
 
 import SingleSelectionOption from "@/components/SingleSelectionOption.vue"
 
@@ -13,11 +14,7 @@ describe('SingleSelectionOption.vue', () => {
     let vuetify
 
     beforeEach(() => {
-        vuetify = new Vuetify({
-            icons: {
-                iconfont: 'mdi',
-            },
-        })
+        vuetify = new Vuetify()
     })
 
     it('renders option when passed', () => {
@@ -27,7 +24,17 @@ describe('SingleSelectionOption.vue', () => {
 
         const wrapper = createWrapper(option, uiState, selected)
 
-        expect(wrapper.find('.option').html()).toMatch(option)
+        expect(helpers.select('option',wrapper).html()).toMatch(option)
+    })
+
+    it('emits click when option is clicked ', () => {
+        const option = 'option'
+        const uiState = {NOT_ANSWERED: true,};
+        const selected = false
+
+        const wrapper = createWrapper(option, uiState, selected)
+        helpers.select('option',wrapper).trigger('click')
+        expect(wrapper.emitted().click).toBeTruthy()
     })
 
     it('renders as neutral when not selected ', () => {
@@ -37,9 +44,11 @@ describe('SingleSelectionOption.vue', () => {
 
         const wrapper = createWrapper(option, uiState, selected)
 
-        expect(wrapper.find('.option').classes()).not.toContain('blue')
-        expect(wrapper.find('.option').classes()).not.toContain('green')
-        expect(wrapper.find('.option').classes()).not.toContain('red')
+        const optionItem = helpers.select('option',wrapper)
+
+        expect(optionItem.classes()).not.toContain('blue')
+        expect(optionItem.classes()).not.toContain('green')
+        expect(optionItem.classes()).not.toContain('red')
     })
 
     it('renders as marked when selected and not checked', () => {
@@ -48,7 +57,7 @@ describe('SingleSelectionOption.vue', () => {
         const selected = true
 
         const wrapper = createWrapper(option, uiState, selected)
-        expect(wrapper.find('.option').classes()).toContain('blue')
+        expect(helpers.select('option',wrapper).classes()).toContain('blue')
     })
 
     it('renders as correct when selected and answer is correct', () => {
@@ -57,7 +66,7 @@ describe('SingleSelectionOption.vue', () => {
         const selected = true
 
         const wrapper = createWrapper(option, uiState, selected)
-        expect(wrapper.find('.option').classes()).toContain('green')
+        expect(helpers.select('option',wrapper).classes()).toContain('green')
     })
 
     it('renders as wrong when selected and answer is wrong', () => {
@@ -67,7 +76,7 @@ describe('SingleSelectionOption.vue', () => {
 
         const wrapper = createWrapper(option, uiState, selected)
 
-        expect(wrapper.find('.option').classes()).toContain('red')
+        expect(helpers.select('option',wrapper).classes()).toContain('red')
     })
 
     function createWrapper(option, uiState, selected) {

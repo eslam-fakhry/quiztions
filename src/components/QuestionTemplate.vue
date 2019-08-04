@@ -25,14 +25,12 @@
 
     export default {
         name: 'QuestionTemplate',
+        inject:['question'],
+
         props: {
             chosenOption: {},
             value: {
                 type: Array,
-                required: true
-            },
-            template: {
-                type: String,
                 required: true
             },
             uiState: {
@@ -49,7 +47,7 @@
         },
         computed: {
             templateParts() {
-                return this.template.split('--blank--');
+                return this.question.template.split('--blank--');
             },
             textInputWidth() {
                 return text => {

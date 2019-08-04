@@ -10,11 +10,9 @@
     ></v-textarea>
 </template>
 <script>
-    // todo check if textarea needs key
+    // todo fix modifying props.value directly
     export default {
         name: 'InputAnswer',
-        // todo: remove if not needed
-        inject: ['question'],
         props: {
             value: {},
             uiState: {},

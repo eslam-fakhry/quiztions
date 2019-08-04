@@ -11,6 +11,7 @@
                 </v-btn>
             </v-layout>
         </v-flex>
+
         <v-flex grow>
             <keep-alive>
                 <Question :key="componentKey"
@@ -81,6 +82,8 @@
                 // this.currentIndex++
             },
             addScoreResult(result) {
+                // todo add  question from the event
+                // todo add index to check if we can go next
                 this.score.push({
                     question: this.currentQuestion,
                     result
@@ -108,6 +111,7 @@
                 }
             },
             showQuestion() {
+                // todo move loading to question
                 return !this.loading && !this.showSuccess && !this.showFailure
             },
             showSuccess() {

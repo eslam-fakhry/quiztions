@@ -4,7 +4,6 @@
             <!--<slot v-bind="{question,userAnswer,uiState,updateAnswer}"></slot>-->
             <component
                     :is="answerComponentName"
-                    :question="question"
                     @continue="$emit('continue')"
                     @result="$emit('result',$event)"
                     :key="question.id"

@@ -1,7 +1,8 @@
 <template>
     <div class="py-4 my-4 option text-center"
-         v-on="$listeners"
+         @click="$emit('click')"
          :class="selected?classes:{}"
+         data-jest="option"
     >{{option}}
     </div>
 </template>

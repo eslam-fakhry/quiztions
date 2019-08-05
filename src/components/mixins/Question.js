@@ -22,7 +22,11 @@ export default {
         async validate() {
             this.loading = true;
             this.correct = await questionValidator.validate(this.userAnswer, this.question.id)
-            this.$emit('result', this.correct ? 'right' : 'wrong');
+
+            this.$emit('result', {
+                question:this.question,
+                result:this.correct ? 'right' : 'wrong'
+            });
             this.answerChecked = true;
             this.setFeedback();
             this.loading = false
@@ -57,7 +61,7 @@ export default {
         },
     },
 
-    activated() {
+    created() {
         const enterPressHandler = ()=>{
 
             if (event.key === 'Enter') {
@@ -67,8 +71,15 @@ export default {
             }
         };
         document.addEventListener('keypress', enterPressHandler);
+        this.$once('hook:activated', () => {
+            document.addEventListener('keypress', enterPressHandler)
+        })
 
-        this.$once('hook:deactivated', ()=> {
+
+        this.$once('hook:deactivated', () => {
+            document.removeEventListener('keypress', enterPressHandler)
+        })
+        this.$once('hook:destroyed', ()=> {
             document.removeEventListener('keypress', enterPressHandler)
         })
 

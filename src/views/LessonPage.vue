@@ -8,6 +8,7 @@
                     :key="`lesson-${lesson_id}`"
                     :lesson="lesson"
                     :can-navigate="true"
+                    :tolerance="1"
             />
             <Loading v-else/>
         </v-flex>

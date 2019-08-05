@@ -16,14 +16,11 @@
             <keep-alive>
                 <Question :key="componentKey"
                           @result="addScoreResult"
-                          :question="questions[currentIndex]"
+                          :question-id="lesson.questions[currentIndex]"
                           @continue="currentIndex++"
                           v-if="uiState.SHOW_QUESTION"
                 ></Question>
-                <Loading key="loading"
-                         v-if="uiState.LOADING_QUESTION"
-                >
-                </Loading>
+
             </keep-alive>
 
             <ResultMessage :result="uiState.SHOW_SUCCESS?'success':'failure'"
@@ -35,10 +32,13 @@
 
 <script>
     //todo fix can-navigate
+    /*
+     we can use include or exclude props of keep alive to decide when to cache
+     or to set max to 0 when not caching
 
+     */
     import Question from './Question'
     import ResultMessage from './ResultMessage'
-    import Loading from './Loading'
 
     export default {
         name: "Lesson",
@@ -46,7 +46,6 @@
         components: {
             Question,
             ResultMessage,
-            Loading,
         },
 
         props: {
@@ -66,10 +65,8 @@
 
         data() {
             return {
-                questions: [],
                 currentIndex: 0,
                 score: [],
-                loading: false,
             }
         },
 
@@ -81,12 +78,12 @@
                 this.canGoToNext && this.currentIndex++
                 // this.currentIndex++
             },
-            addScoreResult(result) {
+            addScoreResult(payload) {
                 // todo add  question from the event
                 // todo add index to check if we can go next
                 this.score.push({
-                    question: this.currentQuestion,
-                    result
+                    ...payload,
+                    index:this.currentIndex,
                 })
             },
         },
@@ -95,15 +92,11 @@
             componentKey() {
                 return this.canNavigate ? this.currentIndex : 'component'
             },
-            currentQuestion() {
-                return this.questions[this.currentIndex]
-            },
             progressPercentage() {
                 return this.score.length / (this.lesson.questions.length) * 100
             },
             uiState() {
                 return {
-                    LOADING_QUESTION: this.loading,
                     SHOW_QUESTION: this.showQuestion,
                     SHOW_SUCCESS: this.showSuccess,
                     SHOW_FAILURE: this.showFailure,
@@ -111,8 +104,7 @@
                 }
             },
             showQuestion() {
-                // todo move loading to question
-                return !this.loading && !this.showSuccess && !this.showFailure
+                return  !this.showSuccess && !this.showFailure
             },
             showSuccess() {
                 return this.completed && this.isLastSlide
@@ -136,7 +128,8 @@
                 return !this.canGoToNext || this.isLastSlide
             },
             canGoToNext() {
-                return -1 !== this.score.findIndex(score => score.question === this.currentQuestion)
+                // todo check for failed to continue
+                return -1 !== this.score.findIndex(score => score.index === this.currentIndex)
             },
             isLastSlide() {
                 return this.currentIndex === this.lastSlideIndex
@@ -160,21 +153,7 @@
                     }
 
 
-                    // todo: add fetchInAdvance to fetch more questions in background to reduce loading states
 
-                    // check if question is already in component state
-                    if (!this.isLastSlide && !this.questions[this.currentIndex]) {
-
-                        this.loading = true
-
-                        const questionId = this.lesson.questions[this.currentIndex]
-                        // todo: add error handler
-                        this.$store.dispatch('fetchQuestion', {id: questionId})
-                            .then((question) => {
-                                !this.questions[this.currentIndex] && this.questions.push(question);
-                            })
-                            .finally(() => this.loading = false)
-                    }
                 }
             },
         },

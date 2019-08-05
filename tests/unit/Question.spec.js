@@ -1,7 +1,7 @@
-// import Vue from 'vue'
-import Vuetify from 'vuetify'
-
 import {mount, createLocalVue} from '@vue/test-utils'
+import Vuetify from 'vuetify'
+import Vuex from 'vuex'
+import flushPromises from 'flush-promises'
 
 import Question from "@/components/Question.vue"
 
@@ -9,29 +9,74 @@ import Question from "@/components/Question.vue"
 
 const localVue = createLocalVue()
 localVue.use(Vuetify)
+localVue.use(Vuex)
 
 describe('Question.vue', () => {
     let vuetify
+    let actions
+    let store
+
+
 
     beforeEach(() => {
+        actions = {
+            fetchQuestion: jest.fn(),
+        }
+        store = new Vuex.Store({
+            actions
+        })
         vuetify = new Vuetify()
     })
 
-    it('renders question body', () => {
+    it('dispatches "fetchQuestion" when created', () => {
         const question={
                 body:"what is the longest river in Africa",
                 id : 'question1',
                 type:'selection',
                 options:['Nile','Rhine','Amazon']
             }
+        const questionId = 'question1'
+        actions.fetchQuestion.mockReturnValueOnce(Promise.resolve(question))
 
-        const wrapper = createWrapper(question)
+        createWrapper(questionId)
 
-        expect(wrapper.html()).toContain(question.body)
+        expect(actions.fetchQuestion).toHaveBeenCalled()
 
     })
 
-    it('accepts question body of type array', () => {
+
+    it('renders "Loading" when fetching', () => {
+        const question={
+                body:"what is the longest river in Africa",
+                id : 'question1',
+                type:'selection',
+                options:['Nile','Rhine','Amazon']
+            }
+        const questionId = 'question1'
+        actions.fetchQuestion.mockReturnValueOnce(Promise.resolve(question))
+
+        const wrapper = createWrapper(questionId)
+
+        expect(wrapper.find({name:"Loading"}).exists()).toBeTruthy()
+
+    })
+
+    it('renders question body', async () => {
+        const question={
+                body:"what is the longest river in Africa",
+                id : 'question1',
+                type:'selection',
+                options:['Nile','Rhine','Amazon']
+            }
+        const questionId = 'question1'
+        actions.fetchQuestion.mockReturnValueOnce(Promise.resolve(question))
+
+        const wrapper = createWrapper(questionId)
+        await flushPromises()
+        expect(wrapper.html()).toContain(question.body)
+    })
+
+    it('accepts question body of type array', async () => {
         const question={
                 body:[
                     {text:"what is the longest river in Africa?"},
@@ -42,9 +87,12 @@ describe('Question.vue', () => {
                 type:'selection',
                 options:['Nile','Rhine','Amazon']
             }
+            const questionId = 'question1'
 
-        const wrapper = createWrapper(question)
+        actions.fetchQuestion.mockReturnValueOnce(Promise.resolve(question))
 
+        const wrapper = createWrapper(questionId)
+        await flushPromises()
         expect(wrapper.html()).toContain(question.body[0].text)
         expect(wrapper.html()).toContain(question.body[1].text)
 
@@ -54,12 +102,13 @@ describe('Question.vue', () => {
 
 
 
-    function createWrapper(question) {
+    function createWrapper(questionId) {
         return mount(Question, {
             localVue,
             vuetify,
+            store,
             propsData:{
-                question
+                questionId
             },
         })
     }

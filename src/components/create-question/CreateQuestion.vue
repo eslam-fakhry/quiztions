@@ -7,7 +7,7 @@
 
         <v-stepper-content step="1">
             <v-card  class="mb-12" height1="200px">
-                <v-text-field v-model="body[0]" outlined></v-text-field>
+                <v-text-field v-model="body[0]" outlined hide-details></v-text-field>
             </v-card>
             <v-btn color="primary" @click="currentStep = 2">Continue</v-btn>
             <v-btn text>Cancel</v-btn>
@@ -21,6 +21,7 @@
                         :items="answerTypes"
                         label="Answer type"
                         solo
+                        hide-details
                         v-model="selectedAnswerType"
                 ></v-select>
             </v-card>

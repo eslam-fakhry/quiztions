@@ -42,7 +42,7 @@ const router = new Router({
             path: '/lesson/:lesson_id',
             name: 'lesson',
             props: true,
-            component: () => import('./views/LessonPage.vue'),
+            component: () => import('./components/Lesson.vue'),
             meta: {requiresAuth: true}
         },
         {
@@ -70,7 +70,6 @@ router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
 
     const loggedIn = store.getters['user/loggedIn']
-    console.log('loggedIn:',loggedIn);
     if (requiresAuth && !loggedIn) {
         next('/login')
     } else if (requiresAuth && loggedIn) {

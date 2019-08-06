@@ -1,33 +1,42 @@
 <template>
-    <v-layout column style="height: 100%" >
-        <v-flex shrink>
-            <v-layout justify-space-between class="lesson-nav align-center" v-if="canNavigate">
-                <v-btn icon small grey rounded @click="prevQuestion" :disabled="prevDisabled">
-                    <v-icon>chevron_left</v-icon>
-                </v-btn>
-                <v-progress-linear :value="progressPercentage"></v-progress-linear>
-                <v-btn icon small grey rounded @click="nextQuestion" :disabled="nextDisabled">
-                    <v-icon>chevron_right</v-icon>
-                </v-btn>
-            </v-layout>
-        </v-flex>
+    <div style="height: 100%">
+        <Loading
+                v-if="loading"
+        />
+        <v-layout
+                v-else
+                column
+                style="height: 100%"
+        >
+            <v-flex shrink>
+                <v-layout justify-space-between class="lesson-nav align-center" v-if="canNavigate">
+                    <v-btn icon small grey rounded @click="prevQuestion" :disabled="prevDisabled">
+                        <v-icon>chevron_left</v-icon>
+                    </v-btn>
+                    <v-progress-linear :value="progressPercentage"></v-progress-linear>
+                    <v-btn icon small grey rounded @click="nextQuestion" :disabled="nextDisabled">
+                        <v-icon>chevron_right</v-icon>
+                    </v-btn>
+                </v-layout>
+            </v-flex>
 
-        <v-flex grow>
-            <keep-alive>
-                <Question :key="componentKey"
-                          @result="addScoreResult"
-                          :question-id="lesson.questions[currentIndex]"
-                          @continue="currentIndex++"
-                          v-if="uiState.SHOW_QUESTION"
-                ></Question>
+            <v-flex grow>
+                <keep-alive>
+                    <Question :key="componentKey"
+                              @result="addScoreResult"
+                              :question-id="lesson.questions[currentIndex]"
+                              @continue="currentIndex++"
+                              v-if="uiState.SHOW_QUESTION"
+                    ></Question>
 
-            </keep-alive>
+                </keep-alive>
 
-            <ResultMessage :result="uiState.SHOW_SUCCESS?'success':'failure'"
-                           v-if="uiState.SHOW_RESULT"
-            />
-        </v-flex>
-    </v-layout>
+                <ResultMessage :result="uiState.SHOW_SUCCESS?'success':'failure'"
+                               v-if="uiState.SHOW_RESULT"
+                />
+            </v-flex>
+        </v-layout>
+    </div>
 </template>
 
 <script>
@@ -39,6 +48,7 @@
      */
     import Question from './Question'
     import ResultMessage from './ResultMessage'
+    import Loading from './Loading'
 
     export default {
         name: "Lesson",
@@ -46,25 +56,21 @@
         components: {
             Question,
             ResultMessage,
+            Loading,
         },
 
         props: {
-            lesson: {
-                type: Object,
-                required: true
-            },
-            canNavigate: {
-                type: Boolean,
-                default: true
-            },
-            tolerance: {
-                type: Number
-            },
+            lesson_id:{
+                type:String,
+                required:true,
+            }
             // todo: add shuffle on retake option
         },
 
         data() {
             return {
+                loading: true,
+                lesson:{},
                 currentIndex: 0,
                 score: [],
             }
@@ -79,11 +85,9 @@
                 // this.currentIndex++
             },
             addScoreResult(payload) {
-                // todo add  question from the event
-                // todo add index to check if we can go next
                 this.score.push({
                     ...payload,
-                    index:this.currentIndex,
+                    index: this.currentIndex,
                 })
             },
         },
@@ -104,7 +108,7 @@
                 }
             },
             showQuestion() {
-                return  !this.showSuccess && !this.showFailure
+                return !this.showSuccess && !this.showFailure
             },
             showSuccess() {
                 return this.completed && this.isLastSlide
@@ -136,28 +140,37 @@
             },
             lastSlideIndex() {
                 return this.failed ? this.score.length : this.lesson.questions.length;
+            },
+            canNavigate(){
+                return true
+            },
+            tolerance(){
+                return 1
             }
         },
 
         watch: {
-            currentIndex: {
+            lesson_id: {
                 immediate: true,
-                handler: function (newValue) {
-                    if (this.failed) return;
-
-                    // control the range of currentIndex property
-                    if (newValue < 0) {
-                        this.currentIndex = 0
-                    } else if (newValue > this.lastSlideIndex) {
-                        this.currentIndex = this.lastSlideIndex
-                    }
-
-
-
+                async handler(id) {
+                    this.loading = true;
+                    this.lesson = await this.$store.dispatch('fetchLesson', {id});
+                    this.loading = false;
                 }
             },
-        },
+            currentIndex(newValue) {
+                if (this.failed) return;
 
+                // control the range of currentIndex property
+                if (newValue < 0) {
+                    this.currentIndex = 0
+                } else if (newValue > this.lastSlideIndex) {
+                    this.currentIndex = this.lastSlideIndex
+                }
+
+
+            },
+        },
 
 
     }

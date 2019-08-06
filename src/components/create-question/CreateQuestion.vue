@@ -1,21 +1,11 @@
 <template>
 
     <v-stepper v-model="currentStep" vertical>
-        <v-stepper-step :complete="currentStep > 1" step="1">
-            Question body
-        </v-stepper-step>
+
+
+        <v-stepper-step :complete="currentStep > 1" step="1">Configure analytics for this app</v-stepper-step>
 
         <v-stepper-content step="1">
-            <v-card  class="mb-12" height1="200px">
-                <v-text-field v-model="body[0]" outlined hide-details></v-text-field>
-            </v-card>
-            <v-btn color="primary" @click="currentStep = 2">Continue</v-btn>
-            <v-btn text>Cancel</v-btn>
-        </v-stepper-content>
-
-        <v-stepper-step :complete="currentStep > 2" step="2">Configure analytics for this app</v-stepper-step>
-
-        <v-stepper-content step="2">
             <v-card color="grey lighten-1" class="mb-12" height1="200px">
                 <v-select
                         :items="answerTypes"
@@ -25,6 +15,18 @@
                         v-model="selectedAnswerType"
                 ></v-select>
             </v-card>
+            <v-btn color="primary" @click="currentStep = 2">Continue</v-btn>
+            <v-btn text>Cancel</v-btn>
+        </v-stepper-content>
+
+        <v-stepper-step :complete="currentStep > 2" step="2">
+            Question body
+        </v-stepper-step>
+
+        <v-stepper-content step="2">
+            <v-card  class="mb-12" height1="200px">
+                <v-text-field v-model="body[0]" outlined hide-details></v-text-field>
+            </v-card>
             <v-btn color="primary" @click="currentStep = 3">Continue</v-btn>
             <v-btn text>Cancel</v-btn>
         </v-stepper-content>
@@ -33,9 +35,11 @@
 
         <v-stepper-content step="3">
             <v-card color="grey lighten-1" class="mb-12" height1="200px">
-                <CreateOptions
+                <CreateList
                         v-if="selectedAnswerType === 'Selection'"
                         :value="[...options]"
+                        :min="2"
+                        :max="5"
                         @input="options=$event"
                 />
                 <CreateCompletionTemplate
@@ -66,7 +70,7 @@
                 solo
                 v-model="selectedAnswerType"
         ></v-select>
-        <CreateOptions
+        <CreateList
                 v-if="selectedAnswerType === 'Selection'"
                 :value="[...options]"
                 @input="options=$event"
@@ -91,13 +95,13 @@
 <script>
     import {required} from 'vuelidate/lib/validators'
 
-    import CreateOptions from './CreateOptions'
+    import CreateList from '../CreateList'
     import CreateCompletionTemplate from './CreateCompletionTemplate'
 
     export default {
         name: "CreateQuestion",
 
-        components: {CreateOptions, CreateCompletionTemplate},
+        components: {CreateList, CreateCompletionTemplate},
 
         data() {
             return {
@@ -105,7 +109,7 @@
                 body: [],
                 answerTypes: ['Selection', 'Input', 'Completion'],
                 selectedAnswerType: '',
-                options: ['', ''],
+                options: [],
                 questionTemplate: '',
 
             }

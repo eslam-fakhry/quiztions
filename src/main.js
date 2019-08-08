@@ -50,3 +50,8 @@ fb.auth.onAuthStateChanged(user => {
     // }
 
 });
+
+
+// firebase rules todos
+
+//todo: only teachers can create courses, lessons, and questions

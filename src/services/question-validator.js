@@ -1,5 +1,9 @@
 import store from '../store'
 
+function getRightAnswer(questionId) {
+    return store.getters['answers/getRightAnswer'](questionId);
+}
+
 function validate(userAnswer, questionId, isValidateRemotely = false) {
     if(! isValidateRemotely){
         return validateLocally(userAnswer, questionId)
@@ -10,7 +14,7 @@ function validate(userAnswer, questionId, isValidateRemotely = false) {
 }
 
 function validateLocally(userAnswer, questionId) {
-    const rightAnswer = store.getters.getRightAnswer(questionId)
+    const rightAnswer = getRightAnswer(questionId)
     return arraysEqual(userAnswer, rightAnswer)
 
 }

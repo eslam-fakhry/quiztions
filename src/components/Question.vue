@@ -38,6 +38,9 @@
 </template>
 
 <script>
+    import {createNamespacedHelpers } from 'vuex'
+    const { mapActions} = createNamespacedHelpers('questions')
+
     import Answer from "../components/Answer";
     import Loading from './Loading'
 
@@ -62,6 +65,9 @@
                 fetchedQuestion:{},
             }
         },
+
+        methods: mapActions(['fetchQuestion']),
+
         computed: {
             isBodyString() {
                 return typeof this.fetchedQuestion.body === 'string';
@@ -72,7 +78,7 @@
                 immediate: true,
                 handler(val) {
                     this.loading = true
-                    this.$store.dispatch('fetchQuestion', {id: val})
+                    this.fetchQuestion({id: val})
                         .then((question) => {
                             this._provided ={question}
                             this.fetchedQuestion= Object.assign({},question);

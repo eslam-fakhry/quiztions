@@ -42,8 +42,11 @@
 </template>
 
 <script>
-    import Loading from '../components/Loading'
+    import {createNamespacedHelpers } from 'vuex'
+    const { mapActions} = createNamespacedHelpers('courses')
 
+    import Loading from '../components/Loading'
+    // todo test fetchCourse
     export default {
         name: "Course",
         props: {
@@ -60,12 +63,15 @@
                 loading: false,
             }
         },
+
+        methods: mapActions(['fetchCourse']),
+
         watch: {
             course_id: {
                 immediate: true,
                 async handler(id) {
                     this.loading = true;
-                    this.course = await this.$store.dispatch('fetchCourse', {id});
+                    this.course = await this.fetchCourse({id});
                     console.log('[Course -- watch -- course]',this.course);
                     this.loading = false;
                 }

@@ -12,10 +12,14 @@
                     class="d-inline-block"
                     single-line
                     hide-details
+                    data-jest="blank"
             ></v-text-field>
-            <span :key="`${part}--${i}`">
-                    {{part}}
-            </span>
+            <span
+                    :key="`${part}--${i}`"
+                    v-if="part.length"
+                    data-jest="text-part"
+                    v-text="part"
+            />
         </template>
 
     </div>

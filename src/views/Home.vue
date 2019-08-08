@@ -10,7 +10,7 @@
 
 <script>
 
-    import Courses from "../components/Courses";
+    import Courses from "@/components/Courses";
 
     export default {
         components: {Courses},

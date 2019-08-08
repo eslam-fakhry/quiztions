@@ -45,7 +45,7 @@
     import {createNamespacedHelpers } from 'vuex'
     const { mapActions} = createNamespacedHelpers('courses')
 
-    import Loading from '../components/Loading'
+    import Loading from '@/components/Loading'
     // todo test fetchCourse
     export default {
         name: "Course",

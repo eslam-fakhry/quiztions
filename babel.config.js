@@ -6,5 +6,10 @@ module.exports = {
         ['babel-plugin-remove-attribute', {
             attribute: 'data-jest',
         }],
+        ["module-resolver", {
+            "alias": {
+                "@": "./src",
+            }
+        }],
     ],
 }

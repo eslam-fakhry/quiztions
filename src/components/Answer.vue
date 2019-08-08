@@ -31,9 +31,9 @@
     import _ from "lodash"
     import {mapGetters} from 'vuex'
 
-    import SelectionAnswer from "../components/SelectionAnswer";
-    import CompletionAnswer from "../components/CompletionAnswer";
-    import InputAnswer from "../components/InputAnswer";
+    import SelectionAnswer from "@/components/SelectionAnswer";
+    import CompletionAnswer from "@/components/CompletionAnswer";
+    import InputAnswer from "@/components/InputAnswer";
 
     import QuestionMixin from "./mixins/Question"
     import QuestionFeedback from "./QuestionFeedback";

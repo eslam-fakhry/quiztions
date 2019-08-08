@@ -73,7 +73,7 @@
 
 <script>
     import {required, minLength, email} from 'vuelidate/lib/validators'
-    import FormInputError from '../FormInputError'
+    import FormInputError from '@/components/FormInputError'
 
     export default {
         name: "Login",

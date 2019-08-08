@@ -52,7 +52,7 @@
     import {createNamespacedHelpers } from 'vuex'
     const {mapState, mapActions} = createNamespacedHelpers('user')
     import {minLength,} from 'vuelidate/lib/validators'
-    import FormInputError from '../../FormInputError'
+    import FormInputError from '@/components/FormInputError'
 
     export default {
         name: "InformationStep",

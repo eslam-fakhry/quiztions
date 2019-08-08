@@ -8,6 +8,7 @@
             <v-text-field
                     outlined
                     v-model="name"
+                    data-jest="name-field"
             />
         </v-flex>
         <v-flex>
@@ -18,10 +19,11 @@
 </template>
 
 <script>
+    import {createNamespacedHelpers} from 'vuex'
+
+    const {mapActions} = createNamespacedHelpers('courses')
     export default {
-        name: "CreateCourse",
-
-
+        name: "EditCourse",
 
         data() {
             return {
@@ -32,16 +34,18 @@
         },
 
         methods: {
-            next(){
-              return this.saved ? this.addLesson() :this.SaveCourse()
+            ...mapActions(['createCourse']),
+            next() {
+                return this.saved ? this.addLesson() : this.SaveCourse()
             },
             SaveCourse() {
-                console.log('course saved')
-                this.saved = true
+                this.createCourse({name: this.name}).then(() => {
+                    this.saved = true
+                })
             },
             addLesson() {
                 console.log('addLesson');
-                this.$router.push({ name: 'add_lesson', params: { courseId: '123' } })
+                this.$router.push({name: 'add_lesson', params: {courseId: '123'}})
             },
         },
     }

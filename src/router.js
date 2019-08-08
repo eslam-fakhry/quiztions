@@ -67,7 +67,7 @@ const router = new Router({
             path: '/add-course',
             name: 'add_course',
             props: true,
-            component: () => import('./components/teacher/CreateCourse.vue'),
+            component: () => import('./components/teacher/EditCourse.vue'),
         },
         {
             path: '/add-lesson',

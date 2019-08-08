@@ -17,30 +17,15 @@ localVue.use(Vuex)
 describe('CreateQuestion.vue', () => {
     let vuetify
     let wrapper
-    // let actions
-    // let store
 
 
     beforeEach(() => {
-        // actions = {
-        //     fetchQuestion: jest.fn(),
-        // }
-        // store = new Vuex.Store({
-        //     actions
-        // })
+
         vuetify = new Vuetify()
 
     })
 
-    it('dispatches "fetchQuestion" when created', () => {
-        // const question={
-        //         body:"what is the longest river in Africa",
-        //         id : 'question1',
-        //         type:'selection',
-        //         options:['Nile','Rhine','Amazon']
-        //     }
-        // const questionId = 'question1'
-        // actions.fetchQuestion.mockReturnValueOnce(Promise.resolve(question))
+    it('renders', () => {
 
         wrapper = createWrapper()
 
@@ -49,14 +34,6 @@ describe('CreateQuestion.vue', () => {
     })
 
     it('shows "v-select" to choose type of question', async () => {
-        // const question={
-        //         body:"what is the longest river in Africa",
-        //         id : 'question1',
-        //         type:'selection',
-        //         options:['Nile','Rhine','Amazon']
-        //     }
-        // const questionId = 'question1'
-        // actions.fetchQuestion.mockReturnValueOnce(Promise.resolve(question))
 
         wrapper = createWrapper()
         //todo: remove internal functionality tests
@@ -90,7 +67,6 @@ describe('CreateQuestion.vue', () => {
         return mount(CreateQuestion, {
             localVue,
             vuetify,
-            // store,
 
         })
     }

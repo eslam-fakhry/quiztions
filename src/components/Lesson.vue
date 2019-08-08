@@ -46,6 +46,9 @@
      or to set max to 0 when not caching
 
      */
+    import {createNamespacedHelpers } from 'vuex'
+    const { mapActions} = createNamespacedHelpers('lessons')
+
     import Question from './Question'
     import ResultMessage from './ResultMessage'
     import Loading from './Loading'
@@ -77,6 +80,7 @@
         },
 
         methods: {
+            ...mapActions(['fetchLesson']),
             prevQuestion() {
                 this.currentIndex--
             },
@@ -154,7 +158,7 @@
                 immediate: true,
                 async handler(id) {
                     this.loading = true;
-                    this.lesson = await this.$store.dispatch('fetchLesson', {id});
+                    this.lesson = await this.fetchLesson({id});
                     this.loading = false;
                 }
             },

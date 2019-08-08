@@ -22,7 +22,12 @@ describe('Lesson.vue', () => {
             fetchLesson: jest.fn(),
         }
         store = new Vuex.Store({
-            actions
+            modules:{
+                lessons: {
+                    namespaced:true,
+                    actions,
+                },
+            },
         })
         vuetify = new Vuetify()
     })
@@ -75,7 +80,6 @@ describe('Lesson.vue', () => {
             .toBe(lesson.questions[0])
 
     })
-
 
 
     function createWrapper(lesson_id) {

@@ -23,7 +23,12 @@ describe('Question.vue', () => {
             fetchQuestion: jest.fn(),
         }
         store = new Vuex.Store({
-            actions
+            modules:{
+                questions:{
+                    namespaced:true,
+                    actions
+                }
+            }
         })
         vuetify = new Vuetify()
     })

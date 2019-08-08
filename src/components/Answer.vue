@@ -65,7 +65,7 @@
         },
 
         computed: {
-            ...mapGetters(['getRightAnswer']),
+            ...mapGetters('answers',['getRightAnswer']),
             /**
              * @return {string}
              */

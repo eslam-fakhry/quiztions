@@ -63,6 +63,24 @@ const router = new Router({
             props: true,
             component: () => import('./components/create-question/CreateQuestion.vue'),
         },
+        {
+            path: '/add-course',
+            name: 'add_course',
+            props: true,
+            component: () => import('./components/teacher/CreateCourse.vue'),
+        },
+        {
+            path: '/add-lesson',
+            name: 'add_lesson',
+            props: true,
+            component: () => import('./components/teacher/CreateLesson.vue'),
+        },
+        {
+            path: '/experiment',
+            name: 'experiment',
+            props: true,
+            component: () => import('./views/Experiment.vue'),
+        },
     ]
 });
 

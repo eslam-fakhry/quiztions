@@ -3,7 +3,8 @@ import Vuetify from 'vuetify'
 
 import {mount, createLocalVue} from '@vue/test-utils'
 import QuestionTemplate from "@/components/QuestionTemplate.vue"
-
+import helpers from '../helpers'
+const {selectAll} = helpers;
 
 const localVue = createLocalVue()
 localVue.use(Vuetify)
@@ -28,6 +29,8 @@ describe('QuestionTemplate.vue', () => {
 
         expect(wrapper.contains('.v-text-field input')).toBeTruthy()
         expect(wrapper.html()).toContain('is good')
+        expect(selectAll('blank',wrapper).length).toBe(1)
+        expect(selectAll('text-part',wrapper).length).toBe(1)
     })
 
     it('emits the answer on input', () => {

@@ -42,20 +42,20 @@ const router = new Router({
             path: '/lesson/:lesson_id',
             name: 'lesson',
             props: true,
-            component: () => import('./components/Lesson.vue'),
+            component: () => import('./views/Lesson.vue'),
             meta: {requiresAuth: true}
         },
         {
             path: '/login',
             name: 'login',
             props: true,
-            component: () => import('./components/auth/Login.vue'),
+            component: () => import('./views/Login.vue'),
         },
         {
             path: '/register',
             name: 'register',
             props: true,
-            component: () => import('./components/auth/Register.vue'),
+            component: () => import('./views/Register.vue'),
         },
         {
             path: '/add-question',
@@ -80,6 +80,12 @@ const router = new Router({
             name: 'experiment',
             props: true,
             component: () => import('./views/Experiment.vue'),
+        },
+        {
+            path: '/dashboard',
+            name: 'dashboard',
+            props: true,
+            component: () => import('./views/Dashboard.vue'),
         },
     ]
 });

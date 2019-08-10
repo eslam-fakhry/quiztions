@@ -23,7 +23,7 @@
                             >
                                 <v-icon>home</v-icon>
                             </v-avatar>
-                            <v-label class="text-center py-1" v-on="on" >{{lesson.name}}</v-label>
+                            <v-label class="text-center py-1" v-on="on">{{lesson.name}}</v-label>
                         </v-layout>
                     </template>
                     <v-card>
@@ -42,10 +42,12 @@
 </template>
 
 <script>
-    import {createNamespacedHelpers } from 'vuex'
-    const { mapActions} = createNamespacedHelpers('courses')
-
+    import {createNamespacedHelpers} from 'vuex'
+    import layoutMixin from "@/layouts/layoutMixin"
     import Loading from '@/components/Loading'
+
+    const {mapActions} = createNamespacedHelpers('courses')
+
     // todo test fetchCourse
     export default {
         name: "Course",
@@ -54,6 +56,9 @@
                 required: true
             }
         },
+
+        mixins: [layoutMixin,],
+
         components: {
             Loading
         },
@@ -72,7 +77,6 @@
                 async handler(id) {
                     this.loading = true;
                     this.course = await this.fetchCourse({id});
-                    console.log('[Course -- watch -- course]',this.course);
                     this.loading = false;
                 }
             }

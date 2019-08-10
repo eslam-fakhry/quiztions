@@ -11,14 +11,17 @@
 
 <script>
     import CompletionRightAnswers from '../components/create-question/CompletionRightAnswers'
+    import layoutMixin from "@/layouts/layoutMixin"
+
     export default {
         name: "Experiment",
-        components:{
+        mixins: [layoutMixin,],
+        components: {
             CompletionRightAnswers
         },
-        data(){
-            return{
-                rightAnswer:[],
+        data() {
+            return {
+                rightAnswer: [],
             }
         }
     }

@@ -73,12 +73,14 @@
 </template>
 
 <script>
-    import CredentialsStep from './register-steps/CredentialsStep'
-    import InformationStep from './register-steps/InformationStep'
+    import CredentialsStep from '@/components/auth/register-steps/CredentialsStep'
+    import InformationStep from '@/components/auth/register-steps/InformationStep'
+    import layoutMixin from "@/layouts/layoutMixin"
 
     // todo: use stepper from vuetify
     export default {
         name: "Register",
+        mixins: [layoutMixin,],
 
         props:{
             init_email:{
@@ -97,6 +99,7 @@
         },
         data() {
             return {
+                layout:'FullScreen',
                 currentStep: this.step,
                 loading:false,
             }

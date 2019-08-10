@@ -4,7 +4,7 @@
         <LogoutBtn>
             <v-btn>logout</v-btn>
         </LogoutBtn>
-        <v-btn @click="$store.dispatch('addCoursesToUser')">addCoursesToUser</v-btn>
+        <v-btn @click="showToast">show_toast</v-btn>
         <v-btn @click="fetchUserCourses">fetchUserCourses</v-btn>
 
         <v-layout wrap>
@@ -59,7 +59,12 @@
             // todo add loading state
             ...mapState(['courses']),
         },
-        methods:mapActions(['fetchUserCourses']),
+        methods:{
+            ...mapActions(['fetchUserCourses']),
+            showToast(){
+                this.$store.commit('snackbars/SET_TOAST', {message: "you're successfully logged in",})
+            },
+        },
 
         created(){
 

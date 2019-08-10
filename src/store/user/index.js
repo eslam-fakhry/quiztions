@@ -1,4 +1,4 @@
-import fb from '../../services/firebase-facade'
+import fb from '@/services/firebase-facade'
 
 export default {
     namespaced: true,
@@ -35,7 +35,6 @@ export default {
     },
     actions: {
 
-        // eslint-disable-next-line no-unused-vars
         signIn({commit}, {email, password}) {
             return fb.auth.signInWithEmailAndPassword(email, password)
             // eslint-disable-next-line no-unused-vars
@@ -47,7 +46,6 @@ export default {
             //     });
         },
 
-        // eslint-disable-next-line no-unused-vars
         signUp({commit}, {email, password}) {
             return fb.auth.createUserWithEmailAndPassword(email, password)
             // eslint-disable-next-line no-unused-vars
@@ -59,7 +57,6 @@ export default {
             //     });
         },
 
-        // eslint-disable-next-line no-unused-vars
         signOut({commit}) {
             return fb.auth.signOut()
             // eslint-disable-next-line no-unused-vars
@@ -71,16 +68,12 @@ export default {
             //     });
         },
 
-        // eslint-disable-next-line no-unused-vars
         async fetchUserCourses({state, commit}) {
             // fetch from server
             fb.db.ref('students')
                 .child(state.uid)
                 .child('courses')
                 .on('value', function (snap) {
-                    console.log('snap',snap);
-                    console.log('snap.val()',snap.val());
-
                     commit('SET_USER_COURSES', snap.val())
                 })
             // otherwise show user-friendly error

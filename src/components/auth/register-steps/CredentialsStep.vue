@@ -96,6 +96,7 @@
     import {required, minLength, email, sameAs} from 'vuelidate/lib/validators'
     import fb from '@/services/firebase-facade'
     import FormInputError from '@/components/FormInputError'
+    import {showSnackbar} from "../../../utils";
 
     const touchMap = new WeakMap()
 
@@ -147,8 +148,6 @@
             }, 1000),
             register() {
                 if (!this.$v.$invalid) {
-                    console.log('registering');
-
                     this.registering = true;
                     this.$store.dispatch('user/signUp', {
                         email: this.form.email,
@@ -156,8 +155,9 @@
                     })
                         .then(() => {
                             this.registering = false;
-                            this.$emit('continue');
+                            showSnackbar("you're successfully registered",'success')
 
+                            this.$emit('continue');
                         })
                         .catch(err => {
                             console.log('err: ', err);
@@ -169,24 +169,7 @@
                             this.registering = false;
                         })
                 }
-
             },
-
-            // async checkEmail(value) {
-            //     // console.log('in checkEmail');
-            //     // eslint-disable-next-line
-            //     return new Promise((resolve, reject) => {
-            //         setTimeout(() => {
-            //             resolve(typeof value === 'string' && value.length % 2 !== 0)
-            //         }, 350 + Math.random() * 300)
-            //     })
-            //     // .then(res => {
-            //     //     this.checkingEmail = false
-            //     //     return res
-            //     // })
-            //
-            // },
-
         },
 
         computed: {
@@ -211,7 +194,6 @@
                 }
                 return ''
             },
-
             password1Error() {
                 if (this.$v.form.password1.$dirty && !this.$v.form.password1.required) {
                     return 'password field is required'
@@ -232,27 +214,19 @@
             },
         },
 
-
         validations: {
             form: {
                 email: {
                     required,
                     email,
                     async isEmailUnique(value) {
-                        // console.log('isEmailUnique called');
-
                         // standalone validator ideally should not assume a field is required
                         if (value === '') return true
-                        // console.log('isEmailUnique called after');
-
                         this.checkingEmail = true
-
                         const result = await fb.isEmailUnique(value)
                         this.checkingEmail = false
                         return Boolean(result)
                     },
-
-
                 },
                 password1: {
                     required,
@@ -271,10 +245,5 @@
                 },
             },
         },
-
     }
 </script>
-
-<style scoped>
-
-</style>

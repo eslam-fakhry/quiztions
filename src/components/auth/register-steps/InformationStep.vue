@@ -85,7 +85,6 @@
                         id: this.userUid,
                     };
                     this.updateUserInfo(payload).then((res) => {
-                        console.log('[InformationStep -- updateUserInfo]: ', res);
                         this.$emit('continue')
                     })
 

@@ -8,6 +8,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './assets/scss/app.scss'
+import {showSnackbar} from "./utils";
 
 Vue.config.productionTip = false
 
@@ -17,6 +18,8 @@ Vue.config.productionTip = false
 //     store,
 //     render: h => h(App)
 // }).$mount('#app')
+
+Vue.config.devtools = process.env.NODE_ENV === 'development'
 
 // handle page reloads
 let app
@@ -31,6 +34,8 @@ fb.auth.onAuthStateChanged(user => {
             store,
             render: h => h(App)
         })
+        window.__VUE_DEVTOOLS_GLOBAL_HOOK__.Vue = app.constructor;
+
     }
     // if (user) {
     //     // User is signed in.
@@ -51,6 +56,9 @@ fb.auth.onAuthStateChanged(user => {
 
 });
 
+window.onerror = function(message, source, lineNumber,collNumber, errorObject){
+    showSnackbar('Something went wrong','error')
+}
 
 // firebase rules todos
 

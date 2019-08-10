@@ -1,8 +1,8 @@
 <template>
     <div>
-         <Courses ></Courses>
+        <Courses></Courses>
         <div>
-            <div  class="ma-12 " style="width: 300px;">
+            <div class="ma-12 " style="width: 300px;">
             </div>
         </div>
     </div>
@@ -11,8 +11,10 @@
 <script>
 
     import Courses from "@/components/Courses";
+    import layoutMixin from "@/layouts/layoutMixin"
 
     export default {
+        mixins: [layoutMixin,],
         components: {Courses},
         data() {
             return {

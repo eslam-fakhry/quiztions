@@ -5,6 +5,7 @@
             <v-btn>logout</v-btn>
         </LogoutBtn>
         <v-btn @click="showToast">show_toast</v-btn>
+        <v-btn @click="$store.dispatch('addCoursesToUser')">addCoursesToUser</v-btn>
         <v-btn @click="fetchUserCourses">fetchUserCourses</v-btn>
 
         <v-layout wrap>

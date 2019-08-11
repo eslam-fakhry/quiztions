@@ -1,6 +1,8 @@
 import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/auth'
+import 'firebase/functions'
+import 'firebase/storage'
 
 // firebase init goes here
 const config = {
@@ -17,8 +19,12 @@ firebase.initializeApp(config)
 // firebase utils
 const db = firebase.database()
 const auth = firebase.auth()
-const currentUser = auth.currentUser
-// console.log('currentUser: ',currentUser);
+const functions = firebase.functions()
+const storage = firebase.storage()
+
+// functions.httpsCallable('setJob')('Student').then(res=>{
+//     console.log(res);
+// })
 
 // firebase collections
 const coursesRef = db.ref('courses')
@@ -36,7 +42,8 @@ const teachersRef = db.ref('teachers')
 export default {
     db,
     auth,
-    currentUser,
+    functions,
+    storage,
     refs: {
         coursesRef,
         lessonsRef,

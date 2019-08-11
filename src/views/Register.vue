@@ -1,107 +1,64 @@
 <template>
     <v-container d-flex justify-center>
-
-
         <v-stepper v-model="currentStep" style="width: 100%; max-width: 400px;">
             <v-stepper-header>
-                <v-stepper-step :complete="currentStep > 1" step="1">Account</v-stepper-step>
-
-                <v-divider></v-divider>
-
-                <v-stepper-step :complete="currentStep > 2" step="2">Information</v-stepper-step>
+                <template v-for="(step,index) in steps">
+                    <v-divider v-if="index !== 0" :key="index+'divider'"></v-divider>
+                    <v-stepper-step :complete="currentStep > (index+1)" :step="index+1" :key="index">{{step.label}}
+                    </v-stepper-step>
+                </template>
             </v-stepper-header>
 
             <v-stepper-items>
-                <v-stepper-content step="1" class="pa-4" >
-                            <!--v-if="currentStep === 0"-->
-                    <CredentialsStep
-                            :init_email="init_email"
-                            @continue="goNext"
-
-                    />
-
-                    <!--<div class="py-3">-->
-                        <!--<v-btn-->
-                                <!--outlined-->
-                                <!--@click="goNext"-->
-                                <!--:disabled="! canGoToNext"-->
-                        <!--&gt;{{isLastStep?'Finish':'Next'}}-->
-                        <!--</v-btn>-->
-
-                        <!--<v-btn text>Cancel</v-btn>-->
-                    <!--</div>-->
-
-                </v-stepper-content>
-
-                <v-stepper-content step="2" class="pa-4">
-                    <InformationStep
-                            @continue="goNext"
-
-                    />
-                </v-stepper-content>
-
+                <template v-for="(step,index) in steps">
+                    <v-stepper-content :step="index+1" class="pa-4" :key="index">
+                        <component
+                                :is="step.component"
+                                @continue="goNext"
+                                :init_email="init_email"
+                        />
+                    </v-stepper-content>
+                </template>
             </v-stepper-items>
         </v-stepper>
-
-
-        <!--&lt;!&ndash;<component :is="steps[currentStep]"></component>&ndash;&gt;-->
-        <!--<v-card-->
-        <!--style="width: 100%; max-width: 400px;"-->
-        <!--&gt;-->
-
-        <!--<CredentialsStep-->
-        <!--v-if="currentStep === 0"-->
-        <!--ref="CredentialsStep"-->
-        <!--@checkValidation="setValidationFunction($event,'credentials')"-->
-
-        <!--/>-->
-
-        <!--<InformationStep-->
-        <!--v-if="currentStep === 1"-->
-        <!--ref="InformationStep"-->
-        <!--@checkValidation="setValidationFunction($event,'information')"-->
-        <!--/>-->
-        <!--<v-card-actions class="pa-4">-->
-        <!--<v-btn-->
-        <!--outlined-->
-        <!--@click="goNext"-->
-        <!--:disabled="! canGoToNext"-->
-        <!--&gt;{{isLastStep?'Finish':'Next'}}</v-btn>-->
-        <!--</v-card-actions>-->
-        <!--</v-card>-->
     </v-container>
 </template>
 
 <script>
+    // steps
     import CredentialsStep from '@/components/auth/register-steps/CredentialsStep'
+    import AccountTypeStep from '@/components/auth/register-steps/AccountTypeStep'
     import InformationStep from '@/components/auth/register-steps/InformationStep'
+    import ImageStep from '@/components/auth/register-steps/ImageStep'
+
     import layoutMixin from "@/layouts/layoutMixin"
 
-    // todo: use stepper from vuetify
     export default {
         name: "Register",
         mixins: [layoutMixin,],
 
-        props:{
-            init_email:{
-                type:String,
-                default:'',
+        props: {
+            init_email: {
+                type: String,
+                default: '',
             },
-            step:{
-                type:Number,
-                default:1,
+            step: {
+                type: Number,
+                default: 1,
             }
         },
 
         components: {
             CredentialsStep,
+            AccountTypeStep,
             InformationStep,
+            ImageStep,
         },
         data() {
             return {
-                layout:'FullScreen',
+                layout: 'FullScreen',
                 currentStep: this.step,
-                loading:false,
+                loading: false,
             }
         },
         methods: {
@@ -112,13 +69,25 @@
         },
         computed: {
             steps() {
-                return ['credentialsStep', 'informationStep',];
+                return [{
+                    component: CredentialsStep,
+                    label: 'Credentials'
+                }, {
+                    component: AccountTypeStep,
+                    label: 'Account Type'
+                }, {
+                    component: InformationStep,
+                    label: 'Information'
+                }, {
+                    component: ImageStep,
+                    label: 'Image'
+                },];
             },
             currentStepName() {
                 return this.steps[this.currentStep]
             },
             isLastStep() {
-                return this.currentStep === this.steps.length ;
+                return this.currentStep === this.steps.length;
             },
             canGoToNext() {
                 return true

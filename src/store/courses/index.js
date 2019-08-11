@@ -1,4 +1,5 @@
 import fb from '@/services/firebase-facade'
+import mutations from '../mutation-types'
 
 export default {
     namespaced: true,
@@ -8,10 +9,7 @@ export default {
     },
 
     mutations: {
-        ['SET_USER_COURSES'](state, courses) {
-            state.courses = courses
-        },
-        ['APPEND_COURSE'](state, payload) {
+        [mutations.APPEND_COURSE](state, payload) {
             state.courses[payload.id] = payload
         },
     },
@@ -26,7 +24,7 @@ export default {
                 .once('value')
                 .then(snap => {
                     const newCourse = {...snap.val(), id}
-                    commit('APPEND_COURSE', newCourse)
+                    commit(mutations.APPEND_COURSE, newCourse)
                     return newCourse
                 })
             // todo:show 404 page
@@ -42,7 +40,7 @@ export default {
                 .once('value')
                 .then(snap => {
                     const newCourse = {...snap.val(), id}
-                    commit('APPEND_COURSE', newCourse)
+                    commit(mutations.APPEND_COURSE, newCourse)
                     return newCourse
                 })
             // todo:show 404 page

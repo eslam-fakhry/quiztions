@@ -1,3 +1,4 @@
+import mutations from '../mutation-types'
 
 export default {
     namespaced: true,
@@ -7,10 +8,9 @@ export default {
 
     },
     mutations: {
-        ['SET_TOAST'](state, payload) {
+        [mutations.SET_TOAST](state, payload) {
             state.message = payload.message
             state.color = payload.color || "info"
-            console.log(payload.color);
         },
     },
 }

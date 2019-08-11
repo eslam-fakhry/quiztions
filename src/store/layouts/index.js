@@ -1,3 +1,4 @@
+import mutations from '../mutation-types'
 
 export default {
     namespaced: true,
@@ -6,7 +7,7 @@ export default {
 
     },
     mutations: {
-        ['SET_LAYOUT'](state, layout) {
+        [mutations.SET_LAYOUT](state, layout) {
             state.layout = layout
         },
     },

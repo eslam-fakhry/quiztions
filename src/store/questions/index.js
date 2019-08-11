@@ -1,4 +1,5 @@
 import fb from '@/services/firebase-facade'
+import mutations from '../mutation-types'
 
 export default {
     namespaced: true,
@@ -7,7 +8,7 @@ export default {
 
     },
     mutations: {
-        ['APPEND_QUESTION'](state, payload) {
+        [mutations.APPEND_QUESTION](state, payload) {
             state.questions[payload.id] = payload
         },
     },
@@ -23,7 +24,7 @@ export default {
                 .once('value')
                 .then(snap => {
                     const newQuestion = {...snap.val(), id}
-                    commit('APPEND_QUESTION', newQuestion)
+                    commit(mutations.APPEND_QUESTION, newQuestion)
                     return newQuestion
                 })
             // otherwise show user-friendly error

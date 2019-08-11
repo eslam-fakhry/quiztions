@@ -1,4 +1,5 @@
 import fb from '@/services/firebase-facade'
+import mutations from '../mutation-types'
 
 export default {
     namespaced: true,
@@ -7,7 +8,7 @@ export default {
 
     },
     mutations: {
-        ['APPEND_LESSON'](state, payload) {
+        [mutations.APPEND_LESSON](state, payload) {
             state.lessons[payload.id] = payload
         },
     },
@@ -22,7 +23,7 @@ export default {
                 .once('value')
                 .then(snap => {
                     const newLesson = {...snap.val(), id}
-                    commit('APPEND_LESSON', newLesson)
+                    commit(mutations.APPEND_LESSON, newLesson)
                     return newLesson
                 })
             // otherwise show 404 page

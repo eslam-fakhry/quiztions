@@ -1,40 +1,120 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div>
         <div class="form-group py-3">
-            <v-label class="">First Name</v-label>
+            <v-label class="">Full Name</v-label>
             <v-text-field
                     class="my-2 form-text-input"
                     outlined
                     single-line
-                    label="first name"
-                    v-model.lazy="$v.form.firstName.$model"
+                    label="Full name"
                     hide-details
-                    :error="showFirstNameError"
-                    :success="$v.form.lastName.$dirty && ! $v.form.firstName.$invalid"
+                    v-model="$v.form.fullName.$model"
+                    :error="showFullNameError"
+                    :success="$v.form.fullName.$dirty && ! $v.form.fullName.$invalid"
             ></v-text-field>
             <form-input-error
-                    :active="showFirstNameError"
-                    :message="firstNameError"
+                    :active="showFullNameError"
+                    :message="fullNameError"
             />
         </div>
 
         <div class="form-group py-3">
-            <v-label class="">Last Name</v-label>
-            <v-text-field
-                    class="my-2 form-text-input"
-                    outlined
-                    single-line
-                    placeholder="last name"
-                    v-model.lazy="$v.form.lastName.$model"
-                    hide-details
-                    :error="$v.form.lastName.$dirty && $v.form.lastName.$invalid"
-                    :success="$v.form.lastName.$dirty && ! $v.form.lastName.$invalid"
-            ></v-text-field>
-            <form-input-error
-                    :active="showLastNameError"
-                    :message="lastNameError"
-            />
+            <v-dialog
+                    ref="dialog"
+                    v-model="modal"
+                    :return-value.sync="form.birthday"
+                    persistent
+                    full-width
+                    width="290px"
+            >
+                <template v-slot:activator="{ on }">
+                    <v-text-field
+                            v-model="form.birthday"
+                            label="Picker in dialog"
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                    ></v-text-field>
+                </template>
+                <v-date-picker v-model="form.birthday" scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+                    <v-btn text color="primary" @click="$refs.dialog.save(form.birthday)">OK</v-btn>
+                </v-date-picker>
+            </v-dialog>
         </div>
+
+        <div v-if="false" class="form-group py-3">
+            <v-menu
+                    ref="menu"
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :return-value.sync="birthday"
+                    transition="scale-transition"
+                    offset-y
+                    full-width
+                    min-width="290px"
+            >
+                <template v-slot:activator="{ on }">
+                    <v-text-field
+                            v-model="form.birthday"
+                            label="Picker in menu"
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                    ></v-text-field>
+                </template>
+                <v-date-picker v-model="form.birthday" no-title scrollable>
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="menu = false">Cancel</v-btn>
+                    <v-btn text color="primary" @click="$refs.menu.save(form.birthday)">OK</v-btn>
+                </v-date-picker>
+            </v-menu>
+        </div>
+
+        <div class="form-group py-3">
+
+            <v-radio-group
+                    hide-details
+                    class="mt-0"
+                    v-model="form.gender"
+            >
+                <!--suppress HtmlUnknownBooleanAttribute -->
+                <template v-slot:label>
+                    <div>Gender</div>
+                </template>
+                <v-radio value="m">
+                    <template v-slot:label>
+                        <div>Male</div>
+                    </template>
+                </v-radio>
+                <v-radio value="f">
+                    <template v-slot:label>
+                        <div>Female</div>
+                    </template>
+                </v-radio>
+            </v-radio-group>
+        </div>
+
+
+        <!--<div class="form-group py-3">-->
+        <!--<v-label class="">Last Name</v-label>-->
+        <!--<v-text-field-->
+        <!--class="my-2 form-text-input"-->
+        <!--outlined-->
+        <!--single-line-->
+        <!--placeholder="last name"-->
+        <!--v-model.lazy="$v.form.lastName.$model"-->
+        <!--hide-details-->
+        <!--:error="$v.form.lastName.$dirty && $v.form.lastName.$invalid"-->
+        <!--:success="$v.form.lastName.$dirty && ! $v.form.lastName.$invalid"-->
+        <!--&gt;</v-text-field>-->
+        <!--<form-input-error-->
+        <!--:active="showLastNameError"-->
+        <!--:message="lastNameError"-->
+        <!--/>-->
+        <!--</div>-->
+
 
         <div class="py-3">
             <v-btn
@@ -43,16 +123,17 @@
                     :disabled="false"
             >Next
             </v-btn>
-
         </div>
     </div>
 </template>
 
 <script>
-    import {createNamespacedHelpers } from 'vuex'
+    import {createNamespacedHelpers} from 'vuex'
+
     const {mapState, mapActions} = createNamespacedHelpers('user')
     import {minLength,} from 'vuelidate/lib/validators'
     import FormInputError from '@/components/FormInputError'
+
 
     export default {
         name: "InformationStep",
@@ -63,56 +144,44 @@
 
         data() {
             return {
+                modal: false,
                 form: {
-                    firstName: '',
-                    lastName: '',
+                    fullName: '',
                     birthday: '',
                     gender: '',
-                    photoURL: 'sd',
                 },
             }
         },
 
         methods: {
             ...mapActions([
-                'updateUserInfo'
+                'updateUserInfo',
             ]),
-            updateUser() {
+            async updateUser() {
                 //  todo implement this function
                 if (!this.$v.$invalid) {
-                    const payload = {
-                        userInfo: this.form,
-                        id: this.userUid,
-                    };
-                    this.updateUserInfo(payload).then((res) => {
+                    try {
+                        await this.updateUserInfo(this.form)
                         this.$emit('continue')
-                    })
+                    } catch (e) {
+                        console.log('[InformationStep:error]',e);
+                    }
 
 
                 }
-            }
+            },
+
         },
 
         computed: {
             ...mapState({
                 userUid: state => state.uid
             }),
-            showFirstNameError() {
-                return this.$v.form.firstName.$dirty && this.$v.form.firstName.$invalid;
+            showFullNameError() {
+                return this.$v.form.fullName.$dirty && this.$v.form.fullName.$invalid;
             },
-            showLastNameError() {
-                return this.$v.form.lastName.$dirty && this.$v.form.lastName.$invalid;
-            },
-
-            firstNameError() {
-                if (this.$v.form.firstName.$dirty && !this.$v.form.firstName.minLength) {
-
-                    return "minimum 3 characters"
-                }
-                return '';
-            },
-            lastNameError() {
-                if (this.$v.form.lastName.$dirty && !this.$v.form.lastName.minLength) {
+            fullNameError() {
+                if (this.$v.form.fullName.$dirty && !this.$v.form.fullName.minLength) {
 
                     return "minimum 3 characters"
                 }
@@ -122,13 +191,9 @@
 
         validations: {
             form: {
-                firstName: {
+                fullName: {
                     minLength: minLength(3),
                 },
-                lastName: {
-                    minLength: minLength(3),
-                },
-
             },
         },
     }

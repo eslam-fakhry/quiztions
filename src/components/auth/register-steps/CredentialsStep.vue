@@ -155,8 +155,6 @@
                     })
                         .then(() => {
                             this.registering = false;
-                            showSnackbar("you're successfully registered",'success')
-
                             this.$emit('continue');
                         })
                         .catch(err => {
@@ -223,7 +221,7 @@
                         // standalone validator ideally should not assume a field is required
                         if (value === '') return true
                         this.checkingEmail = true
-                        const result = await fb.isEmailUnique(value)
+                        const result = await fb.helpers.isEmailUnique(value)
                         this.checkingEmail = false
                         return Boolean(result)
                     },

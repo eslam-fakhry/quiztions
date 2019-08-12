@@ -82,10 +82,18 @@ const router = new Router({
             component: () => import('./views/Experiment.vue'),
         },
         {
-            path: '/dashboard',
-            name: 'dashboard',
+            path: '/course/edit/:course_id',
+            name: 'edit-course',
             props: true,
-            component: () => import('./views/Dashboard.vue'),
+            component: () => import('./views/EditCourse.vue'),
+            meta: {requiresAuth: true}
+        },
+        {
+            path: '/lesson/edit/:lesson_id',
+            name: 'edit-lesson',
+            props: true,
+            component: () => import('./views/EditLesson.vue'),
+            meta: {requiresAuth: true}
         },
     ]
 });

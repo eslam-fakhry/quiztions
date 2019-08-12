@@ -29,6 +29,34 @@ export default {
             // otherwise show 404 page
             // todo:show 404 page
         },
+        async createLesson({commit, state,rootState}, {name,courseId}) {
+            // A lesson entry.
+            const lessonData = {
+                name,
+            };
+
+            // Get a key for a new Lesson.
+            const newLessonKey = fb.db.ref().child('lessons').push().key;
+
+            // Write the new lesson's data simultaneously in the lessons list and the user's lesson list.
+            const updates = {};
+            updates['/lessons/' + newLessonKey] = lessonData;
+            updates['/courses/' + courseId + '/lessons/' + newLessonKey] = lessonData;
+            await fb.db.ref().update(updates);
+            return newLessonKey
+        },
+        // async deleteLesson({commit, state, rootState}, {id}) {
+        //
+        //     // Get a key for a new Lesson.
+        //     // const newLessonKey = fb.db.ref().child('courses').push().key;
+        //
+        //     // Write the new course's data simultaneously in the courses list and the user's course list.
+        //
+        //     const updates = {};
+        //     updates['/courses/' + id] = null;
+        //     updates['/teachers/' + rootState.user.uid + '/courses/' + id] = null;
+        //     await fb.db.ref().update(updates);
+        // },
 
     },
     getters: {

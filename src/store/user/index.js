@@ -67,35 +67,14 @@ export default {
 
         signIn({commit}, {email, password}) {
             return fb.auth.signInWithEmailAndPassword(email, password)
-            // eslint-disable-next-line no-unused-vars
-            //         .catch(function(error) {
-            //         // Handle Errors here.
-            //         // var errorCode = error.code;
-            //         // var errorMessage = error.message;
-            //         // ...
-            //     });
         },
 
         signUp({commit}, {email, password}) {
             return fb.auth.createUserWithEmailAndPassword(email, password)
-            // eslint-disable-next-line no-unused-vars
-            //         .catch(function(error) {
-            //         // Handle Errors here.
-            //         // var errorCode = error.code;
-            //         // var errorMessage = error.message;
-            //         // ...
-            //     });
         },
 
         signOut({commit}) {
             return fb.auth.signOut()
-            // eslint-disable-next-line no-unused-vars
-            //         .catch(function(error) {
-            //         // Handle Errors here.
-            //         // var errorCode = error.code;
-            //         // var errorMessage = error.message;
-            //         // ...
-            //     });
         },
 
 
@@ -113,6 +92,7 @@ export default {
 
         async setUserProfile({state, commit}, user) {
             commit(mutations.SET_USER, user)
+            if (! user) return;
             try {
                 const idTokenResult = await fb.auth.currentUser.getIdTokenResult()
                 commit(mutations.SET_JOB, idTokenResult.claims.job)
@@ -122,7 +102,6 @@ export default {
 
 
         },
-
 
         async setUserJob({state, commit}, {job}) {
             await fb.functions.httpsCallable('setJob')({job})

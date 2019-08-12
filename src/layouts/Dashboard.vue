@@ -1,5 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <v-app id="inspire">
+    <div>
         <v-navigation-drawer
                 v-model="drawer"
                 :clipped="$vuetify.breakpoint.lgAndUp"
@@ -118,112 +118,117 @@
                     >
                     </v-img></v-avatar>
             </v-btn>
+            <LogoutBtn>
+                <v-btn>logout</v-btn>
+            </LogoutBtn>
         </v-app-bar>
         <v-content>
             <router-view></router-view>
         </v-content>
-        <v-btn
-                bottom
-                color="pink"
-                dark
-                fab
-                fixed
-                right
-                @click="dialog = !dialog"
-        >
-            <v-icon>add</v-icon>
-        </v-btn>
-        <v-dialog
-                v-model="dialog"
-                width="800px"
-        >
-            <v-card>
-                <v-card-title class="grey darken-2">
-                    Create contact
-                </v-card-title>
-                <v-container grid-list-sm>
-                    <v-layout
-                            wrap
-                    >
-                        <v-flex
-                                xs12
-                                align-center
-                                justify-space-between
-                        >
-                            <v-layout align-center>
-                                <v-avatar
-                                        size="40px"
-                                        class="mr-4"
-                                >
-                                    <img
-                                            src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"
-                                            alt=""
-                                    >
-                                </v-avatar>
-                                <v-text-field
-                                        placeholder="Name"
-                                ></v-text-field>
-                            </v-layout>
-                        </v-flex>
-                        <v-flex xs6>
-                            <v-text-field
-                                    prepend-icon="business"
-                                    placeholder="Company"
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs6>
-                            <v-text-field
-                                    placeholder="Job title"
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                            <v-text-field
-                                    prepend-icon="mail"
-                                    placeholder="Email"
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                            <v-text-field
-                                    type="tel"
-                                    prepend-icon="phone"
-                                    placeholder="(000) 000 - 0000"
-                            ></v-text-field>
-                        </v-flex>
-                        <v-flex xs12>
-                            <v-text-field
-                                    prepend-icon="notes"
-                                    placeholder="Notes"
-                            ></v-text-field>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
-                <v-card-actions>
-                    <v-btn
-                            text
-                            color="primary"
-                    >More</v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                            text
-                            color="primary"
-                            @click="dialog = false"
-                    >Cancel</v-btn>
-                    <v-btn
-                            text
-                            @click="dialog = false"
-                    >Save</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-    </v-app>
+        <!--<v-btn-->
+                <!--bottom-->
+                <!--color="pink"-->
+                <!--dark-->
+                <!--fab-->
+                <!--fixed-->
+                <!--right-->
+                <!--@click="dialog = !dialog"-->
+        <!--&gt;-->
+            <!--<v-icon>add</v-icon>-->
+        <!--</v-btn>-->
+        <!--<v-dialog-->
+                <!--v-model="dialog"-->
+                <!--width="800px"-->
+        <!--&gt;-->
+            <!--<v-card>-->
+                <!--<v-card-title class="grey darken-2">-->
+                    <!--Create contact-->
+                <!--</v-card-title>-->
+                <!--<v-container grid-list-sm>-->
+                    <!--<v-layout-->
+                            <!--wrap-->
+                    <!--&gt;-->
+                        <!--<v-flex-->
+                                <!--xs12-->
+                                <!--align-center-->
+                                <!--justify-space-between-->
+                        <!--&gt;-->
+                            <!--<v-layout align-center>-->
+                                <!--<v-avatar-->
+                                        <!--size="40px"-->
+                                        <!--class="mr-4"-->
+                                <!--&gt;-->
+                                    <!--<img-->
+                                            <!--src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"-->
+                                            <!--alt=""-->
+                                    <!--&gt;-->
+                                <!--</v-avatar>-->
+                                <!--<v-text-field-->
+                                        <!--placeholder="Name"-->
+                                <!--&gt;</v-text-field>-->
+                            <!--</v-layout>-->
+                        <!--</v-flex>-->
+                        <!--<v-flex xs6>-->
+                            <!--<v-text-field-->
+                                    <!--prepend-icon="business"-->
+                                    <!--placeholder="Company"-->
+                            <!--&gt;</v-text-field>-->
+                        <!--</v-flex>-->
+                        <!--<v-flex xs6>-->
+                            <!--<v-text-field-->
+                                    <!--placeholder="Job title"-->
+                            <!--&gt;</v-text-field>-->
+                        <!--</v-flex>-->
+                        <!--<v-flex xs12>-->
+                            <!--<v-text-field-->
+                                    <!--prepend-icon="mail"-->
+                                    <!--placeholder="Email"-->
+                            <!--&gt;</v-text-field>-->
+                        <!--</v-flex>-->
+                        <!--<v-flex xs12>-->
+                            <!--<v-text-field-->
+                                    <!--type="tel"-->
+                                    <!--prepend-icon="phone"-->
+                                    <!--placeholder="(000) 000 - 0000"-->
+                            <!--&gt;</v-text-field>-->
+                        <!--</v-flex>-->
+                        <!--<v-flex xs12>-->
+                            <!--<v-text-field-->
+                                    <!--prepend-icon="notes"-->
+                                    <!--placeholder="Notes"-->
+                            <!--&gt;</v-text-field>-->
+                        <!--</v-flex>-->
+                    <!--</v-layout>-->
+                <!--</v-container>-->
+                <!--<v-card-actions>-->
+                    <!--<v-btn-->
+                            <!--text-->
+                            <!--color="primary"-->
+                    <!--&gt;More</v-btn>-->
+                    <!--<v-spacer></v-spacer>-->
+                    <!--<v-btn-->
+                            <!--text-->
+                            <!--color="primary"-->
+                            <!--@click="dialog = false"-->
+                    <!--&gt;Cancel</v-btn>-->
+                    <!--<v-btn-->
+                            <!--text-->
+                            <!--@click="dialog = false"-->
+                    <!--&gt;Save</v-btn>-->
+                <!--</v-card-actions>-->
+            <!--</v-card>-->
+        <!--</v-dialog>-->
+    </div>
 </template>
 
 <script>
 
+    import LogoutBtn from '@/components/auth/LogoutBtn'
 
     export default {
         name:'Dashboard',
 
+        components: {LogoutBtn},
 
 
         props: {

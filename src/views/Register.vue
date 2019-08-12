@@ -1,6 +1,6 @@
 <template>
     <v-container d-flex justify-center>
-        <v-stepper v-model="currentStep" style="width: 100%; max-width: 400px;">
+        <v-stepper alt-labels v-model="currentStep" style="width: 100%; max-width: 400px;">
             <v-stepper-header>
                 <template v-for="(step,index) in steps">
                     <v-divider v-if="index !== 0" :key="index+'divider'"></v-divider>

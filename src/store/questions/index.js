@@ -1,4 +1,5 @@
-import fb from '../../services/firebase-facade'
+import fb from '@/services/firebase-facade'
+import mutations from '../mutation-types'
 
 export default {
     namespaced: true,
@@ -7,7 +8,7 @@ export default {
 
     },
     mutations: {
-        ['APPEND_QUESTION'](state, payload) {
+        [mutations.APPEND_QUESTION](state, payload) {
             state.questions[payload.id] = payload
         },
     },
@@ -23,17 +24,33 @@ export default {
                 .once('value')
                 .then(snap => {
                     const newQuestion = {...snap.val(), id}
-                    commit('APPEND_QUESTION', newQuestion)
+                    commit(mutations.APPEND_QUESTION, newQuestion)
                     return newQuestion
                 })
             // otherwise show user-friendly error
             // todo: show user-friendly error
         },
-        async fetchQuestionsInAdvance({dispatch}, {ids}) {
-            ids.forEach((id) => {
-                dispatch('fetchQuestion', {id})
-            })
+
+        async createQuestion({commit, state, rootState}, payload) {
+            console.log(payload);
+            // A question entry.
+            const questionData = {
+                ...payload.question,
+                teacherId:rootState.user.uid,
+            };
+
+            // Get a key for a new Question.
+            const newQuestionKey = fb.db.ref().child('questions').push().key;
+
+            // Write the new question's data simultaneously in the questions list and the user's question list.
+            const updates = {};
+            updates['/questions/' + newQuestionKey] = questionData;
+            updates['/lessons/' + payload.lessonId + '/questions/' + newQuestionKey] = newQuestionKey;
+            updates['/rightAnswers/' + newQuestionKey] = payload.rightAnswer;
+            await fb.db.ref().update(updates);
+            return newQuestionKey
         },
+
     },
     getters: {
         getQuestion(state) {

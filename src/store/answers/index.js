@@ -1,4 +1,5 @@
-import fb from '../../services/firebase-facade'
+import fb from '@/services/firebase-facade'
+import mutations from '../mutation-types'
 
 export default {
     namespaced: true,
@@ -14,7 +15,7 @@ export default {
 
     },
     mutations: {
-        ['APPEND_RIGHT_ANSWER'](state, payload) {
+        [mutations.APPEND_ANSWER](state, payload) {
             state.rightAnswers[payload.id] = payload.value
         },
     },
@@ -30,7 +31,7 @@ export default {
                 .once('value')
                 .then(snap => {
                     const newRightAnswer = {value: snap.val(), id}
-                    commit('APPEND_RIGHT_ANSWER', newRightAnswer)
+                    commit(mutations.APPEND_ANSWER, newRightAnswer)
                     return newRightAnswer
                 })
             // todo: show user-friendly error

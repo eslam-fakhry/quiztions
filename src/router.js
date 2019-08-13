@@ -42,26 +42,20 @@ const router = new Router({
             path: '/lesson/:lesson_id',
             name: 'lesson',
             props: true,
-            component: () => import('./components/Lesson.vue'),
+            component: () => import('./views/Lesson.vue'),
             meta: {requiresAuth: true}
         },
         {
             path: '/login',
             name: 'login',
             props: true,
-            component: () => import('./components/auth/Login.vue'),
+            component: () => import('./views/Login.vue'),
         },
         {
             path: '/register',
             name: 'register',
             props: true,
-            component: () => import('./components/auth/Register.vue'),
-        },
-        {
-            path: '/add-question',
-            name: 'add_question',
-            props: true,
-            component: () => import('./components/create-question/CreateQuestion.vue'),
+            component: () => import('./views/Register.vue'),
         },
         {
             path: '/add-course',
@@ -80,6 +74,26 @@ const router = new Router({
             name: 'experiment',
             props: true,
             component: () => import('./views/Experiment.vue'),
+        },
+        {
+            path: '/course/edit/:course_id',
+            name: 'edit-course',
+            props: true,
+            component: () => import('./views/EditCourse.vue'),
+            meta: {requiresAuth: true}
+        },
+        {
+            path: '/lesson/edit/:lesson_id',
+            name: 'edit-lesson',
+            props: true,
+            component: () => import('./views/EditLesson.vue'),
+            meta: {requiresAuth: true}
+        },
+        {
+            path: '/question/create/:lesson_id',
+            name: 'create-question',
+            props: true,
+            component: () => import('./components/create-question/CreateQuestion.vue'),
         },
     ]
 });

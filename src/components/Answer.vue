@@ -31,20 +31,25 @@
     import _ from "lodash"
     import {mapGetters} from 'vuex'
 
-    import SelectionAnswer from "../components/SelectionAnswer";
-    import CompletionAnswer from "../components/CompletionAnswer";
-    import InputAnswer from "../components/InputAnswer";
+    import SelectionAnswer from "@/components/SelectionAnswer";
+    import CompletionAnswer from "@/components/CompletionAnswer";
+    import InputAnswer from "@/components/InputAnswer";
 
     import QuestionMixin from "./mixins/Question"
     import QuestionFeedback from "./QuestionFeedback";
 
+    const answerComponents = {
+        'selection': SelectionAnswer,
+        'completion': CompletionAnswer,
+        'input': InputAnswer,
+    }
     export default {
         name: 'Answer',
 
         props: {
             // question: {type: Object, required: true},
         },
-        inject:['question'],
+        inject: ['question'],
 
         mixins: [QuestionMixin,],
 
@@ -65,12 +70,14 @@
         },
 
         computed: {
-            ...mapGetters('answers',['getRightAnswer']),
+            ...mapGetters('answers', ['getRightAnswer']),
+
             /**
              * @return {string}
              */
             answerComponentName() {
-                return _.camelCase(this.question.type) + "Answer";
+                return answerComponents[this.question.type];
+                // return _.camelCase(this.question.type) + "Answer";
             }
         },
 

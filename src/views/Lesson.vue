@@ -47,14 +47,19 @@
 
      */
     import {createNamespacedHelpers } from 'vuex'
-    const { mapActions} = createNamespacedHelpers('lessons')
 
-    import Question from './Question'
-    import ResultMessage from './ResultMessage'
-    import Loading from './Loading'
+    import Question from '@/components/Question'
+    import ResultMessage from '@/components/ResultMessage'
+    import Loading from '@/components/Loading'
+    import layoutMixin from "@/layouts/layoutMixin"
+
+
+    const { mapActions} = createNamespacedHelpers('lessons')
 
     export default {
         name: "Lesson",
+        performance:true,
+        mixins: [layoutMixin,],
 
         components: {
             Question,
@@ -72,6 +77,7 @@
 
         data() {
             return {
+                layout:'FullScreen',
                 loading: true,
                 lesson:{},
                 currentIndex: 0,
@@ -175,6 +181,15 @@
 
             },
         },
+        beforeRouteLeave (to, from, next) {
+            const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+            if (answer) {
+                next()
+            } else {
+                // next(false)
+            }
+        },
+
 
 
     }

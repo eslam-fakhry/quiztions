@@ -73,10 +73,13 @@
 
 <script>
     import {required, minLength, email} from 'vuelidate/lib/validators'
-    import FormInputError from '../FormInputError'
+    import FormInputError from '@/components/FormInputError'
+    import layoutMixin from "@/layouts/layoutMixin"
+    import {showSnackbar} from "../utils";
 
     export default {
         name: "Login",
+        mixins: [layoutMixin,],
 
         components: {
             FormInputError
@@ -88,6 +91,7 @@
 
         data() {
             return {
+                layout:'FullScreen',
                 form: {
                     email: this.init_email,
                     password: '',
@@ -107,10 +111,11 @@
                         password: this.form.password,
                     })
                         .then(() => {
+                            showSnackbar("you're successfully logged in",'success')
                             this.$router.push('/')
                         })
                         .catch(err => {
-                            console.log('err: ', err);
+                            // console.log('err: ', err);
                             if (err.code === 'auth/user-not-found') {
                                 this.serverMessages.email = {
                                     message: "User not found",
@@ -135,11 +140,9 @@
             showEmailError() {
                 return (this.$v.form.email.$dirty && this.$v.form.email.$invalid) || !!this.serverMessages.email
             },
-
             showPasswordError() {
                 return (this.$v.form.password.$dirty && this.$v.form.password.$invalid) || !!this.serverMessages.password.length
             },
-
             emailError() {
                 if (this.$v.form.email.$dirty && !this.$v.form.email.required) {
                     return {message: 'email field is required', showLink: false}
@@ -150,7 +153,6 @@
                 }
                 return ''
             },
-
             passwordError() {
                 if (this.$v.form.password.$dirty && !this.$v.form.password.required) {
                     return 'password field is required'
@@ -161,8 +163,6 @@
                 }
                 return ''
             },
-
-
         },
 
         validations: {

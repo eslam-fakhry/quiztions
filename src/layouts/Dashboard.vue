@@ -1,5 +1,5 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <v-app id="inspire">
+    <div>
         <v-navigation-drawer
                 v-model="drawer"
                 :clipped="$vuetify.breakpoint.lgAndUp"
@@ -218,7 +218,7 @@
                 <!--</v-card-actions>-->
             <!--</v-card>-->
         <!--</v-dialog>-->
-    </v-app>
+    </div>
 </template>
 
 <script>

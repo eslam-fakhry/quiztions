@@ -30,21 +30,21 @@ export default {
             // todo:show 404 page
         },
         async createLesson({commit, state,rootState}, {name,courseId}) {
-            // A lesson entry.
-            const lessonData = {
-                name,
-            };
-
             // Get a key for a new Lesson.
             const newLessonKey = fb.db.ref().child('lessons').push().key;
-
             // Write the new lesson's data simultaneously in the lessons list and the user's lesson list.
             const updates = {};
-            updates['/lessons/' + newLessonKey] = lessonData;
-            updates['/courses/' + courseId + '/lessons/' + newLessonKey] = lessonData;
+            updates['/lessons/' + newLessonKey] = {
+                name,
+                teacherId:rootState.user.uid,
+            };
+            updates['/courses/' + courseId + '/lessons/' + newLessonKey] = {
+                name,
+            };
             await fb.db.ref().update(updates);
             return newLessonKey
         },
+
         // async deleteLesson({commit, state, rootState}, {id}) {
         //
         //     // Get a key for a new Lesson.

@@ -23,34 +23,13 @@
                             vertical
                     ></v-divider>
                     <v-spacer></v-spacer>
-                    <v-dialog v-model="dialog" max-width="500px">
-                        <template v-slot:activator="{ on }">
-                            <v-btn color="primary" dark class="mb-2" v-on="on">New Question</v-btn>
-                        </template>
-                        <v-card>
-                            <v-card-title>
-                                <span class="headline">New Question</span>
-                            </v-card-title>
+                    <v-btn
+                            color="primary"
+                            dark
+                            class="mb-2"
+                            :to="{name:'create-question',params:{lesson_id:lesson.id}}"
+                    >New Question</v-btn>
 
-                            <v-card-text>
-                                <v-container grid-list-md>
-                                    <v-layout wrap>
-                                        <v-flex xs12 sm6 md4>
-                                            <v-text-field v-model="editedItem.name"
-                                                          label="Question name"></v-text-field>
-                                        </v-flex>
-
-                                    </v-layout>
-                                </v-container>
-                            </v-card-text>
-
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
                 </v-toolbar>
             </template>
             <template v-slot:item.action="{ item }">
@@ -185,7 +164,7 @@
                     this.loading = true;
                     this.lesson = await this.fetchLesson({id});
                     if (this.lesson.questions) {
-                        this.questions = this.lesson.questions.map((key, index) => {
+                        this.questions = Object.values(this.lesson.questions).map((key, index) => {
                             return {
                                 id: key,
                                 name: index,

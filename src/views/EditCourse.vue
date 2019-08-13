@@ -26,7 +26,7 @@
                     <v-spacer></v-spacer>
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ on }">
-                            <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+                            <v-btn color="primary" dark class="mb-2" v-on="on">New Lesson</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -45,18 +45,6 @@
                                                     :label="`can ${editedItem.canNavigate?'':'not'} navigate`"
                                             ></v-switch>
                                         </v-flex>
-                                        <!--<v-flex xs12 sm6 md4>-->
-                                        <!--<v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>-->
-                                        <!--</v-flex>-->
-                                        <!--<v-flex xs12 sm6 md4>-->
-                                        <!--<v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>-->
-                                        <!--</v-flex>-->
-                                        <!--<v-flex xs12 sm6 md4>-->
-                                        <!--<v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>-->
-                                        <!--</v-flex>-->
-                                        <!--<v-flex xs12 sm6 md4>-->
-                                        <!--<v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>-->
-                                        <!--</v-flex>-->
                                     </v-layout>
                                 </v-container>
                             </v-card-text>
@@ -92,14 +80,6 @@
                 This course has no lessons yet.
             </template>
         </v-data-table>
-
-        <v-card       class="my-4 py-12 elevation-1">
-            <v-container>
-            <div class="overline mb-4">Information</div>
-            sdfkj
-            </v-container>
-        </v-card>
-
     </v-container>
 </template>
 

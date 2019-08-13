@@ -58,12 +58,6 @@ const router = new Router({
             component: () => import('./views/Register.vue'),
         },
         {
-            path: '/add-question',
-            name: 'add_question',
-            props: true,
-            component: () => import('./components/create-question/CreateQuestion.vue'),
-        },
-        {
             path: '/add-course',
             name: 'add_course',
             props: true,
@@ -94,6 +88,12 @@ const router = new Router({
             props: true,
             component: () => import('./views/EditLesson.vue'),
             meta: {requiresAuth: true}
+        },
+        {
+            path: '/question/create/:lesson_id',
+            name: 'create-question',
+            props: true,
+            component: () => import('./components/create-question/CreateQuestion.vue'),
         },
     ]
 });

@@ -32,18 +32,18 @@ export default {
         },
 
         async createCourse({commit, state, rootState}, {name}) {
-            // A course entry.
-            const courseData = {
-                name,
-            };
-
             // Get a key for a new Course.
             const newCourseKey = fb.db.ref().child('courses').push().key;
 
             // Write the new course's data simultaneously in the courses list and the user's course list.
             const updates = {};
-            updates['/courses/' + newCourseKey] = courseData;
-            updates['/teachers/' + rootState.user.uid + '/courses/' + newCourseKey] = courseData;
+            updates['/courses/' + newCourseKey] = {
+                name,
+                teacherId: rootState.user.uid,
+            };
+            updates['/teachers/' + rootState.user.uid + '/courses/' + newCourseKey] = {
+                name,
+            };
             await fb.db.ref().update(updates);
             return newCourseKey
         },

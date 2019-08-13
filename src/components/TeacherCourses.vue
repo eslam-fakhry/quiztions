@@ -69,11 +69,6 @@
                 You have no course yet. why not making a new one
             </template>
         </v-data-table>
-        <v-card class="my-4 py-12 elevation-1">
-            sdfkj
-        </v-card>
-
-        <!--<v-btn @click="$store.dispatch('addCoursesToUser')">addCoursesToUser</v-btn>-->
     </v-container>
 </template>
 

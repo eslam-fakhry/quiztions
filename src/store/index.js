@@ -35,9 +35,9 @@ export default new Vuex.Store({
         // todo: remove this function
         async addCoursesToUser({state}) {
             console.log('adding course to user');
-            fb.db.ref(state.user.job+'s').child(state.user.uid).child('courses').set({
-                "course1": {name: "intro to machine learning"},
+            fb.db.ref(state.user.job+'s').child(state.user.uid).child('courses').update({
                 "course2": {name: "intro to machine learning 2"},
+                "course5": {name: "intro to machine learning 5"},
             })
 
         },

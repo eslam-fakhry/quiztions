@@ -1,18 +1,19 @@
 import {mount, createLocalVue} from '@vue/test-utils'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
+import Vuelidate from 'vuelidate'
 import flushPromises from 'flush-promises'
 
 import helpers from '../helpers'
-const {select} = helpers;
-
 import CreateQuestion from "@/components/create-question/CreateQuestion.vue"
 import CreateList from "@/components/CreateList.vue"
 
+const {select} = helpers;
 
 const localVue = createLocalVue()
 localVue.use(Vuetify)
 localVue.use(Vuex)
+localVue.use(Vuelidate)
 
 describe('CreateQuestion.vue', () => {
     let vuetify
@@ -26,8 +27,9 @@ describe('CreateQuestion.vue', () => {
     })
 
     it('renders', () => {
+        const lesson_id = 'lesson1'
 
-        wrapper = createWrapper()
+        wrapper = createWrapper(lesson_id)
 
         expect(wrapper.isVueInstance()).toBeTruthy()
 
@@ -35,7 +37,9 @@ describe('CreateQuestion.vue', () => {
 
     it('shows "v-select" to choose type of question', async () => {
 
-        wrapper = createWrapper()
+        const lesson_id = 'lesson1'
+
+        wrapper = createWrapper(lesson_id)
         //todo: remove internal functionality tests
         expect(select('select-question-type', wrapper).exists()).toBeTruthy()
         chooseType('Selection')
@@ -63,10 +67,11 @@ describe('CreateQuestion.vue', () => {
     }
 
 
-    function createWrapper() {
+    function createWrapper(lesson_id) {
         return mount(CreateQuestion, {
             localVue,
             vuetify,
+            propsData: {lesson_id}
 
         })
     }

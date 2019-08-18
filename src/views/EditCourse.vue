@@ -1,86 +1,90 @@
 <!--suppress ALL -->
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <v-container class="">
+    <div>
+        <Loading v-if="loading" />
+        <v-container v-else class="" >
 
 
-        <h1 class="text-center">{{course.name}}</h1>
+            <h1 class="text-center">{{course.name}}</h1>
 
 
-        <v-data-table
-                :headers="headers"
-                :items="lessons"
-                sort-by="calories"
-                class="elevation-1"
-                @click:row="onRowClick"
-                :loading="loading"
-                loading-text="Loading... Please wait"
-        >
-            <template v-slot:top>
-                <v-toolbar flat color="white">
-                    <v-toolbar-title>{{course.name}}</v-toolbar-title>
-                    <v-divider
-                            class="mx-4"
-                            inset
-                            vertical
-                    ></v-divider>
-                    <v-spacer></v-spacer>
-                    <v-dialog v-model="dialog" max-width="500px">
-                        <template v-slot:activator="{ on }">
-                            <v-btn color="primary" dark class="mb-2" v-on="on">New Lesson</v-btn>
-                        </template>
-                        <v-card>
-                            <v-card-title>
-                                <span class="headline">New Lesson</span>
-                            </v-card-title>
+            <v-data-table
+                    :headers="headers"
+                    :items="lessons"
+                    sort-by="calories"
+                    class="elevation-1"
+                    @click:row="onRowClick"
+                    :loading="loading"
+                    loading-text="Loading... Please wait"
+            >
+                <template v-slot:top>
+                    <v-toolbar flat color="white">
+                        <v-toolbar-title>{{course.name}}</v-toolbar-title>
+                        <v-divider
+                                class="mx-4"
+                                inset
+                                vertical
+                        ></v-divider>
+                        <v-spacer></v-spacer>
+                        <v-dialog v-model="dialog" max-width="500px">
+                            <template v-slot:activator="{ on }">
+                                <v-btn color="primary" dark class="mb-2" v-on="on">New Lesson</v-btn>
+                            </template>
+                            <v-card>
+                                <v-card-title>
+                                    <span class="headline">New Lesson</span>
+                                </v-card-title>
 
-                            <v-card-text>
-                                <v-container grid-list-md>
-                                    <v-layout wrap>
-                                        <v-flex xs12 sm6 md4>
-                                            <v-text-field v-model="editedItem.name" label="lesson name"></v-text-field>
-                                        </v-flex>
-                                        <v-flex xs12 sm6 md4>
-                                            <v-switch
-                                                    v-model="editedItem.canNavigate"
-                                                    :label="`can ${editedItem.canNavigate?'':'not'} navigate`"
-                                            ></v-switch>
-                                        </v-flex>
-                                    </v-layout>
-                                </v-container>
-                            </v-card-text>
+                                <v-card-text>
+                                    <v-container grid-list-md>
+                                        <v-layout wrap>
+                                            <v-flex xs12 sm6 md4>
+                                                <v-text-field v-model="editedItem.name"
+                                                              label="lesson name"></v-text-field>
+                                            </v-flex>
+                                            <v-flex xs12 sm6 md4>
+                                                <v-switch
+                                                        v-model="editedItem.canNavigate"
+                                                        :label="`can ${editedItem.canNavigate?'':'not'} navigate`"
+                                                ></v-switch>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-container>
+                                </v-card-text>
 
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                </v-toolbar>
-            </template>
-            <template v-slot:item.action="{ item }">
-                <div @click.stop>
-                    <v-icon
-                            small
-                            class="mr-2"
-                            @click.stop="editItem(item)"
-                    >
-                        edit
-                    </v-icon>
-                    <v-icon
-                            small
-                            @click.stop="deleteItem(item)"
-                    >
-                        delete
-                    </v-icon>
-                </div>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </v-toolbar>
+                </template>
+                <template v-slot:item.action="{ item }">
+                    <div @click.stop>
+                        <v-icon
+                                small
+                                class="mr-2"
+                                @click.stop="editItem(item)"
+                        >
+                            edit
+                        </v-icon>
+                        <v-icon
+                                small
+                                @click.stop="deleteItem(item)"
+                        >
+                            delete
+                        </v-icon>
+                    </div>
 
-            </template>
-            <template v-slot:no-data>
-                This course has no lessons yet.
-            </template>
-        </v-data-table>
-    </v-container>
+                </template>
+                <template v-slot:no-data>
+                    This course has no lessons yet.
+                </template>
+            </v-data-table>
+        </v-container>
+    </div>
 </template>
 
 <script>

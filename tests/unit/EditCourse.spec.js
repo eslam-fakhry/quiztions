@@ -6,7 +6,7 @@ import flushPromises from 'flush-promises'
 import helpers from '../helpers'
 const {select} = helpers;
 
-import EditCourse from "@/components/create-question/EditCourse.vue"
+import EditCourse from "@/views/EditCourse.vue"
 
 const localVue = createLocalVue()
 localVue.use(Vuetify)

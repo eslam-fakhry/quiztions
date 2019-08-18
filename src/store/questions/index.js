@@ -15,7 +15,7 @@ export default {
     actions: {
 
         async fetchQuestion({getters, commit}, {id}) {
-            let question = getters.getQuestion(id);
+            let question = state.questions[id]
             // await new Promise(r => setTimeout(r, 2000));
             if (question) return question;
             // fetch from server
@@ -32,7 +32,6 @@ export default {
         },
 
         async createQuestion({commit, state, rootState}, payload) {
-            console.log(payload);
             // A question entry.
             const questionData = {
                 ...payload.question,
@@ -51,12 +50,5 @@ export default {
             return newQuestionKey
         },
 
-    },
-    getters: {
-        getQuestion(state) {
-            return (id) => {
-                return state.questions[id]
-            }
-        },
     },
 }

@@ -24,7 +24,7 @@
                 <keep-alive>
                     <Question :key="componentKey"
                               @result="addScoreResult"
-                              :question-id="lesson.questions[currentIndex]"
+                              :question-id="questions[currentIndex]"
                               @continue="currentIndex++"
                               v-if="uiState.SHOW_QUESTION"
                     ></Question>
@@ -156,7 +156,13 @@
             },
             tolerance(){
                 return 1
-            }
+            },
+            questions(){
+                if (this.lesson){
+                    return Object.values(this.lesson.questions)
+                }
+                return null
+            },
         },
 
         watch: {

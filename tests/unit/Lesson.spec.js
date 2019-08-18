@@ -3,7 +3,7 @@ import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import flushPromises from 'flush-promises'
 
-import Lesson from "@/components/Lesson.vue"
+import Lesson from "@/views/Lesson.vue"
 import Question from "@/components/Question.vue"
 
 

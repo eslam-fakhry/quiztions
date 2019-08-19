@@ -40,10 +40,29 @@ async function createQuestion({question, rightAnswer, lessonId}) {
     return newQuestionKey
 }
 
+async function createLesson({name, courseId}) {
+
+    const lessonData = {
+        name,
+        teacherId: fb.auth.currentUser.uid,
+    }
+    const newLessonKey = fb.db.ref('lessons').push().key;
+    const updates = {};
+    updates['/lessons/' + newLessonKey] = lessonData
+    updates['/courses/' + courseId + '/lessons/' + newLessonKey] = {
+        name,
+    };
+    await fb.db.ref().update(updates);
+    return {
+        key: newLessonKey,
+        lesson: lessonData,
+    }
+}
 export default {
     ...fb,
     helpers,
     fetchResource,
     fetchUserCourses,
     createQuestion,
+    createLesson,
 }

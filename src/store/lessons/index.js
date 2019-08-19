@@ -30,19 +30,17 @@ export default {
                 })
         },
         async createLesson({commit, state, rootState}, {name, courseId}) {
-            // Get a key for a new Lesson.
-            const newLessonKey = fb.db.ref().child('lessons').push().key;
-            // Write the new lesson's data simultaneously in the lessons list and the user's lesson list.
-            const updates = {};
-            updates['/lessons/' + newLessonKey] = {
-                name,
-                teacherId: rootState.user.uid,
-            };
-            updates['/courses/' + courseId + '/lessons/' + newLessonKey] = {
-                name,
-            };
-            await fb.db.ref().update(updates);
-            return newLessonKey
+            return fb.createLesson({name, courseId})
+                .then(({key, lesson}) => {
+                    commit(mutations.APPEND_LESSON, lesson)
+                    // commit('course/UPDATE_COURSE')
+                    return key
+                })
+                // otherwise show user-friendly error
+                .catch(err => {
+                    // todo: show user-friendly error
+                    console.error(err)
+                })
         },
 
 

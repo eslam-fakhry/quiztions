@@ -27,7 +27,7 @@
                             color="primary"
                             dark
                             class="mb-2"
-                            :to="{name:'create-question',params:{lesson_id:lesson.id}}"
+                            :to="{name:'create-question',params:{lesson_id}}"
                     >New Question</v-btn>
 
                 </v-toolbar>

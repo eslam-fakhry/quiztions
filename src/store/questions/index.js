@@ -14,21 +14,29 @@ export default {
     },
     actions: {
 
-        async fetchQuestion({getters, commit}, {id}) {
+        async fetchQuestion({getters, state, commit}, {id}) {
             let question = state.questions[id]
             // await new Promise(r => setTimeout(r, 2000));
             if (question) return question;
             // fetch from server
-            return fb.refs.questionsRef
-                .child(id)
-                .once('value')
-                .then(snap => {
-                    const newQuestion = {...snap.val(), id}
-                    commit(mutations.APPEND_QUESTION, newQuestion)
-                    return newQuestion
+
+            fb.fetchResource('questions', id,snap=>{
+                const question = {...snap.val(), id}
+                commit(mutations.APPEND_QUESTION, question)
+
+            })
+
+            return fb.fetchResource('questions', id)
+
+                .then(question => {
+                    commit(mutations.APPEND_QUESTION, question)
+                    return question
                 })
-            // otherwise show user-friendly error
-            // todo: show user-friendly error
+                // otherwise show user-friendly error
+                .catch(err => {
+                    console.error(err)
+                    // todo: show user-friendly error
+                })
         },
 
         async createQuestion({commit, state, rootState}, payload) {

@@ -19,13 +19,13 @@ export default {
             let course = state.courses[id]
             if (course) return course
             // fetch from server
-            return fb.refs.coursesRef
-                .child(id)
-                .once('value')
-                .then(snap => {
-                    const newCourse = {...snap.val(), id}
-                    commit(mutations.APPEND_COURSE, newCourse)
-                    return newCourse
+            return fb.fetchResource('courses', id)
+                .then(course => {
+                    commit(mutations.APPEND_COURSE, course)
+                    return course
+                })
+                .catch(err => {
+                    console.error(err)
                 })
             // todo:show 404 page
             // otherwise show 404 page

@@ -78,12 +78,9 @@ export default {
         },
 
 
-        async fetchUserCourses({state, commit}) {
+        fetchUserCourses({state, commit}) {
             // fetch from server
-            fb.db.ref(state.job + 's')
-                .child(state.uid)
-                .child('courses')
-                .on('value', function (snap) {
+            fb.fetchUserCourses(state.job, function (snap) {
                     commit(mutations.SET_USER_COURSES, snap.val())
                 })
             // otherwise show user-friendly error

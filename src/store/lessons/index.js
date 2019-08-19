@@ -18,16 +18,16 @@ export default {
             let lesson = state.lessons[id];
             if (lesson) return lesson
             // fetch from server
-            return fb.refs.lessonsRef
-                .child(id)
-                .once('value')
-                .then(snap => {
-                    const newLesson = {...snap.val(), id}
-                    commit(mutations.APPEND_LESSON, newLesson)
-                    return newLesson
+            return fb.fetchResource('lessons', id)
+                .then(lesson => {
+                    commit(mutations.APPEND_LESSON, lesson)
+                    return lesson
                 })
-            // otherwise show 404 page
-            // todo:show 404 page
+                // otherwise show 404 page
+                .catch((err) => {
+                    console.error(err)
+                    // todo:show 404 page
+                })
         },
         async createLesson({commit, state, rootState}, {name, courseId}) {
             // Get a key for a new Lesson.

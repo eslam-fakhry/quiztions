@@ -58,6 +58,23 @@ async function createLesson({name, courseId}) {
         lesson: lessonData,
     }
 }
+
+async function createCourse({name}) {
+    const newCourseKey = fb.db.ref('courses').push().key;
+
+    const updates = {};
+    updates['/courses/' + newCourseKey] = {
+        name,
+        teacherId: fb.auth.currentUser.uid,
+    };
+    updates['/teachers/' + fb.auth.currentUser.uid + '/courses/' + newCourseKey] = {
+        name,
+    };
+    await fb.db.ref().update(updates);
+    return newCourseKey
+}
+
+
 export default {
     ...fb,
     helpers,
@@ -65,4 +82,5 @@ export default {
     fetchUserCourses,
     createQuestion,
     createLesson,
+    createCourse,
 }

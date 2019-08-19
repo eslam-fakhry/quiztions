@@ -31,8 +31,5 @@ function addStudent({name,email}) {
 
 export default {
     isEmailUnique,
-    addTeacher,
-    addStudent,
-
 }
 

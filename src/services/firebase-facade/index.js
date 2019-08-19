@@ -77,7 +77,7 @@ async function createCourse({name}) {
 
 export default {
     ...fb,
-    helpers,
+    ...helpers,
     fetchResource,
     fetchUserCourses,
     createQuestion,

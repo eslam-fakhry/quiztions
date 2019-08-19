@@ -26,10 +26,24 @@ function fetchUserCourses(job, cb) {
 }
 
 
+async function createQuestion({question, rightAnswer, lessonId}) {
+    const questionData = {
+        ...question,
+        teacherId: fb.auth.currentUser.uid,
+    };
+    const newQuestionKey = fb.db.ref('questions').push().key;
+    const updates = {};
+    updates['/questions/' + newQuestionKey] = questionData;
+    updates['/lessons/' + lessonId + '/questions/' + newQuestionKey] = newQuestionKey;
+    updates['/rightAnswers/' + newQuestionKey] = rightAnswer;
+    await fb.db.ref().update(updates);
+    return newQuestionKey
+}
 
 export default {
     ...fb,
     helpers,
     fetchResource,
     fetchUserCourses,
+    createQuestion,
 }

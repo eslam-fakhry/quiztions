@@ -39,23 +39,11 @@ export default {
                 })
         },
 
-        async createQuestion({commit, state, rootState}, payload) {
-            // A question entry.
-            const questionData = {
-                ...payload.question,
-                teacherId:rootState.user.uid,
-            };
-
-            // Get a key for a new Question.
-            const newQuestionKey = fb.db.ref().child('questions').push().key;
-
-            // Write the new question's data simultaneously in the questions list and the user's question list.
-            const updates = {};
-            updates['/questions/' + newQuestionKey] = questionData;
-            updates['/lessons/' + payload.lessonId + '/questions/' + newQuestionKey] = newQuestionKey;
-            updates['/rightAnswers/' + newQuestionKey] = payload.rightAnswer;
-            await fb.db.ref().update(updates);
-            return newQuestionKey
+        async createQuestion({commit, state, rootState}, {question, rightAnswer, lessonId}) {
+            return fb.createQuestion({question, rightAnswer, lessonId})
+                .catch(err => {
+                    console.error(err)
+                })
         },
 
     },

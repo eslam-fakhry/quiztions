@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
 import router from "../../router";
@@ -10,23 +11,22 @@ export default {
     },
     mutations: {
         [mutations.APPEND_LESSON](state, payload) {
-            state.lessons[payload.id] = payload
+            Vue.set(state.lessons, payload.id, payload)
+
         },
     },
     actions: {
         async fetchLesson({getters, state, commit}, {id}) {
             let lesson = state.lessons[id];
             if (lesson) return lesson
-            try {
-                // fetch from server
-                lesson = await fb.fetchResource('lessons', id)
-                commit(mutations.APPEND_LESSON, lesson)
-                return lesson
-            } catch (err) {
-                // otherwise show 404 page
-                router.replace({name: 'not-found'})
-                return null
-            }
+            commit(mutations.APPEND_LESSON, {questions: [], id})
+
+            fb.fetchSyncedResource('lessons', id, (snap) => {
+                if (!snap.val()) {
+                    return router.replace({name: 'not-found'})
+                }
+                commit(mutations.APPEND_LESSON, {...snap.val(), id})
+            })
         },
         async createLesson({commit, state, rootState}, {name, courseId}) {
             return fb.createLesson({name, courseId})
@@ -41,8 +41,6 @@ export default {
                     console.error(err)
                 })
         },
-
-
         // async deleteLesson({commit, state, rootState}, {id}) {
         //
         //     // Get a key for a new Lesson.
@@ -55,6 +53,5 @@ export default {
         //     updates['/teachers/' + rootState.user.uid + '/courses/' + id] = null;
         //     await fb.db.ref().update(updates);
         // },
-
     },
 }

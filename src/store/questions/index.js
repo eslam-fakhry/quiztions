@@ -1,4 +1,5 @@
 import fb from '@/services/firebase-facade'
+import Vue from 'vue'
 import mutations from '../mutation-types'
 import router from "../../router";
 
@@ -10,14 +11,13 @@ export default {
     },
     mutations: {
         [mutations.APPEND_QUESTION](state, payload) {
-            state.questions[payload.id] = payload
+            Vue.set(state.questions, payload.id, payload)
         },
     },
     actions: {
 
         async fetchQuestion({getters, state, commit}, {id}) {
             let question = state.questions[id]
-            // await new Promise(r => setTimeout(r, 2000));
             if (question) return question;
             try {
                 // fetch from server
@@ -29,8 +29,6 @@ export default {
                 router.replace({name: 'not-found'})
                 return null
             }
-
-
         },
 
         async createQuestion({commit, state, rootState}, {question, rightAnswer, lessonId}) {

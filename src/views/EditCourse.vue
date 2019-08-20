@@ -111,8 +111,6 @@
 
         data() {
             return {
-                course: {},
-                lessons: [],
                 loading: false,
                 dialog: false,
                 headers: [
@@ -141,12 +139,32 @@
             }
         },
 
+        computed: {
+            course() {
+                return this.$store.state.courses.courses[this.course_id]
+            },
+            lessons() {
+                const lessons = this.course.lessons
+
+                if (lessons) {
+                    return Object.keys(lessons).map(key => {
+                        return {
+                            ...lessons[key],
+                            id: key,
+                        }
+                    })
+                } else {
+                    return []
+                }
+            }
+        },
+
         methods: {
             ...mapActions(['fetchCourse']),
             ...mapLessonsActions(['createLesson']),
 
             onRowClick(ev) {
-                console.log(ev);
+                console.log(ev)
             },
             initialize() {
             },
@@ -160,7 +178,7 @@
 
             deleteItem(item) {
                 const index = this.lessons.indexOf(item)
-                confirm('Are you sure you want to delete this item?') && console.log('deleting ', this.lessons[index]);
+                confirm('Are you sure you want to delete this item?') && console.log('deleting ', this.lessons[index])
                 // confirm('Are you sure you want to delete this item?') && this.courses.splice(index, 1)
             },
 
@@ -174,10 +192,10 @@
 
             save() {
                 if (this.editedIndex > -1) {
-                    console.log('editing a lesson');
+                    console.log('editing a lesson')
                     // Object.assign(this.courses[this.editedIndex], this.editedItem)
                 } else {
-                    console.log('creating  a new lesson');
+                    console.log('creating  a new lesson')
                     // this.courses.push(this.editedItem)
                     this.createLesson({
                         name: this.editedItem.name,
@@ -196,22 +214,9 @@
             course_id: {
                 immediate: true,
                 async handler(id) {
-                    this.loading = true;
-                    this.course = await this.fetchCourse({id});
-                    if (this.course) {
-                        if (this.course.lessons) {
-                            this.lessons = Object.keys(this.course.lessons).map(key => {
-                                return {
-                                    ...this.course.lessons[key],
-                                    id: key,
-                                }
-                            })
-                        } else {
-                            this.lessons = []
-                        }
-
-                        this.loading = false;
-                    }
+                    this.loading = true
+                    await this.fetchCourse({id})
+                    if (this.course) this.loading = false
                 }
             },
             dialog(val) {

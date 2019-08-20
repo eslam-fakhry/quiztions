@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
 import router from "@/router";
@@ -12,7 +13,7 @@ export default {
 
     mutations: {
         [mutations.APPEND_COURSE](state, payload) {
-            state.courses[payload.id] = payload
+            Vue.set(state.courses, payload.id, payload)
         },
     },
 
@@ -20,16 +21,14 @@ export default {
         async fetchCourse({commit, state}, {id}) {
             let course = state.courses[id]
             if (course) return course
-            try {
-                // fetch from server
-                course = await fb.fetchResource('courses', id)
-                commit(mutations.APPEND_COURSE, course)
-                return course
-            } catch (err) {
-                // otherwise show 404 page
-                router.replace({name: 'not-found'})
-                return null
-            }
+            commit(mutations.APPEND_COURSE, {lessons: [], id})
+            // fetch from server
+            fb.fetchSyncedResource('courses', id, (snap) => {
+                if (!snap.val()) {
+                    return router.replace({name: 'not-found'})
+                }
+                commit(mutations.APPEND_COURSE, {...snap.val(), id})
+            })
         },
 
         async createCourse({commit, state, rootState}, {name}) {
@@ -56,15 +55,5 @@ export default {
         // },
 
 
-    },
-    getters: {
-        courses(state) {
-            return state.courses
-        },
-        getCourse(state) {
-            return (id) => {
-                return state.courses[id]
-            }
-        },
     },
 }

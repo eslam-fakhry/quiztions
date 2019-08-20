@@ -16,6 +16,12 @@ function fetchResource(resourceName, id) {
         })
 }
 
+function fetchSyncedResource(resourceName, id,cb) {
+    if (!allowableRefs.includes(resourceName)) throw new Error('Reference name is not allowed')
+    fb.db.ref(resourceName)
+        .child(id)
+        .on('value',cb)
+}
 
 function fetchUserCourses(job, cb) {
     if (!['student', 'teacher'].includes(job)) throw new Error('Reference name is not allowed')
@@ -83,4 +89,5 @@ export default {
     createQuestion,
     createLesson,
     createCourse,
+    fetchSyncedResource,
 }

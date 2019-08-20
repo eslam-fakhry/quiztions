@@ -28,7 +28,8 @@
                             dark
                             class="mb-2"
                             :to="{name:'create-question',params:{lesson_id}}"
-                    >New Question</v-btn>
+                    >New Question
+                    </v-btn>
 
                 </v-toolbar>
             </template>
@@ -81,8 +82,6 @@
 
         data() {
             return {
-                lesson: {},
-                questions: [],
                 loading: false,
                 dialog: false,
                 headers: [
@@ -111,6 +110,23 @@
                     protein: 0,
                 },
             }
+        },
+        computed: {
+            lesson() {
+                return this.$store.state.lessons.lessons[this.lesson_id]
+            },
+            questions() {
+                const questions = this.lesson.questions
+                if (questions) {
+                    return Object.values(questions).map((key, index) => {
+                        return {
+                            id: key,
+                            name: index,
+                        }
+                    })
+                }
+                return []
+            },
         },
 
         methods: {
@@ -162,34 +178,14 @@
                 immediate: true,
                 async handler(id) {
                     this.loading = true;
-                    this.lesson = await this.fetchLesson({id});
-                    if(this.lesson){
-                    if (this.lesson.questions) {
-                        this.questions = Object.values(this.lesson.questions).map((key, index) => {
-                            return {
-                                id: key,
-                                name: index,
-
-                            }
-                        })
-                    } else {
-                        this.questions = []
-                    }
+                    await this.fetchLesson({id});
                     this.loading = false;
-                    }
                 }
             },
             dialog(val) {
                 val || this.close()
             },
         },
-        computed: {
-            formTitle() {
-                return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-            },
-        },
-
-
     }
 </script>
 

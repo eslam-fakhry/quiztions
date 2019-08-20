@@ -64,20 +64,25 @@
         },
         data() {
             return {
-                course: {},
                 loading: false,
             }
         },
 
         methods: mapActions(['fetchCourse']),
 
+        computed: {
+            course() {
+                return this.$store.state.courses.courses[this.course_id]
+            }
+        },
+
         watch: {
             course_id: {
                 immediate: true,
                 async handler(id) {
-                    this.loading = true;
-                    this.course = await this.fetchCourse({id});
-                    if (this.course) this.loading = false;
+                    this.loading = true
+                    await this.fetchCourse({id})
+                    if (this.course) this.loading = false
                 }
             }
         },

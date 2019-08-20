@@ -79,7 +79,6 @@
             return {
                 layout:'FullScreen',
                 loading: true,
-                lesson:{},
                 currentIndex: 0,
                 score: [],
             }
@@ -157,11 +156,15 @@
             tolerance(){
                 return 1
             },
+            lesson(){
+                return this.$store.state.lessons.lessons[this.lesson_id]
+            },
             questions(){
-                if (this.lesson){
+                const questions = this.lesson.questions
+                if (questions){
                     return Object.values(this.lesson.questions)
                 }
-                return null
+                return []
             },
         },
 
@@ -187,14 +190,15 @@
 
             },
         },
-        beforeRouteLeave (to, from, next) {
-            const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-            if (answer) {
-                next()
-            } else {
-                // next(false)
-            }
-        },
+
+        // beforeRouteLeave (to, from, next) {
+        //     const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+        //     if (answer) {
+        //         next()
+        //     } else {
+        //         // next(false)
+        //     }
+        // },
 
 
 

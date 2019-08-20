@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
 import Home from './views/Home.vue'
+import Toolbar  from "./layouts/TheToolbar";
+
 
 
 
@@ -18,22 +20,31 @@ const router = new Router({
         {
             path: '/',
             name: 'home',
-            component: Home,
+            components: {
+                default: Home,
+                toolbar: Toolbar,
+            },
             meta: {requiresAuth: true},
         },
         {
             path: '/about',
             name: 'about',
-            // route level code-splitting
-            // this generates a separate chunk (about.[hash].js) for this route
-            // which is lazy-loaded when the route is visited.
-            component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+            components: {
+                default: () => import('./views/About.vue'),
+                toolbar: Toolbar,
+            },
         },
         {
             path: '/course/:course_id',
             name: 'course',
-            props: true,
-            component: () => import('./views/Course.vue'),
+            props: {
+                default:true,
+            },
+            components: {
+                default: () => import('./views/Course.vue'),
+                toolbar: Toolbar,
+            },
+
             meta: {requiresAuth: true},
         },
         {
@@ -54,49 +65,50 @@ const router = new Router({
             name: 'register',
             props: true,
             component: () => import('./views/Register.vue'),
-        },
-        {
-            path: '/add-course',
-            name: 'add_course',
-            props: true,
-            component: () => import('./components/teacher/EditCourse.vue'),
-        },
-        {
-            path: '/add-lesson',
-            name: 'add_lesson',
-            props: true,
-            component: () => import('./components/teacher/CreateLesson.vue'),
-        },
-        {
-            path: '/experiment',
-            name: 'experiment',
-            props: true,
-            component: () => import('./views/Experiment.vue'),
+
         },
         {
             path: '/course/edit/:course_id',
             name: 'edit-course',
-            props: true,
-            component: () => import('./views/EditCourse.vue'),
+            props: {
+                default:true,
+            },
+            components: {
+                default: () => import('./views/EditCourse.vue'),
+                toolbar: Toolbar,
+            },
             meta: {requiresAuth: true}
         },
         {
             path: '/lesson/edit/:lesson_id',
             name: 'edit-lesson',
-            props: true,
-            component: () => import('./views/EditLesson.vue'),
+            props: {
+                default:true,
+            },
+            components: {
+                default: () => import('./views/EditLesson.vue'),
+                toolbar: Toolbar,
+            },
             meta: {requiresAuth: true}
         },
         {
             path: '/question/create/:lesson_id',
             name: 'create-question',
-            props: true,
-            component: () => import('./components/create-question/CreateQuestion.vue'),
+            props: {
+                default:true,
+            },
+            components: {
+                default: () => import('./components/create-question/CreateQuestion.vue'),
+                toolbar: Toolbar,
+            },
         },
         {
             path: '/not-found',
             name: 'not-found',
-            component: () => import('./views/NotFound.vue'),
+            components: {
+                default: () => import('./views/NotFound.vue'),
+                toolbar: Toolbar,
+            },
         },
         {
             path:'*',

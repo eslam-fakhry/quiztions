@@ -10,12 +10,10 @@
 
     import Courses from "@/components/Courses";
     import TeacherCourses from "@/components/TeacherCourses";
-    import layoutMixin from "@/layouts/layoutMixin"
 
     const {mapState} = createNamespacedHelpers('user')
 
     export default {
-        mixins: [layoutMixin,],
         components: {Courses, TeacherCourses},
         data() {
             return {}
@@ -23,7 +21,6 @@
 
         computed: mapState({
             job: state => state.job
-        })
-        ,
+        }),
     }
 </script>

@@ -74,12 +74,10 @@
 <script>
     import {required, minLength, email} from 'vuelidate/lib/validators'
     import FormInputError from '@/components/FormInputError'
-    import layoutMixin from "@/layouts/layoutMixin"
     import {showSnackbar} from "../utils";
 
     export default {
         name: "Login",
-        mixins: [layoutMixin,],
 
         components: {
             FormInputError
@@ -91,7 +89,6 @@
 
         data() {
             return {
-                layout:'FullScreen',
                 form: {
                     email: this.init_email,
                     password: '',

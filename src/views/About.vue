@@ -4,12 +4,9 @@
   </div>
 </template>
 <script>
-    import layoutMixin from "@/layouts/layoutMixin"
 
     export default {
         name: "About",
-
-        mixins: [layoutMixin,],
     }
 
 </script>

@@ -89,7 +89,6 @@
 
 <script>
     import {createNamespacedHelpers} from 'vuex'
-    import layoutMixin from "@/layouts/layoutMixin"
     import Loading from '@/components/Loading'
 
     const {mapState, mapActions} = createNamespacedHelpers('courses')
@@ -103,7 +102,6 @@
             }
         },
 
-        mixins: [layoutMixin,],
 
         components: {
             Loading

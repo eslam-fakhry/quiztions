@@ -6,13 +6,9 @@
     </div>
   </div>
 </template>
-<script>
-    import layoutMixin from "@/layouts/layoutMixin"
 
+<script>
     export default {
         name: "NotFound",
-
-        mixins: [layoutMixin,],
     }
-
 </script>

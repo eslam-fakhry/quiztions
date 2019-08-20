@@ -75,7 +75,6 @@
                 </template>
             </v-list>
         </v-navigation-drawer>
-
         <v-app-bar
                 :clipped-left="$vuetify.breakpoint.lgAndUp"
                 app
@@ -91,7 +90,6 @@
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
-
 
 
             <v-menu open-on-hover1 buttom offset-y>
@@ -131,118 +129,15 @@
 
 
         </v-app-bar>
-        <v-content>
-            <router-view></router-view>
-        </v-content>
-        <!--<v-btn-->
-        <!--bottom-->
-        <!--color="pink"-->
-        <!--dark-->
-        <!--fab-->
-        <!--fixed-->
-        <!--right-->
-        <!--@click="dialog = !dialog"-->
-        <!--&gt;-->
-        <!--<v-icon>add</v-icon>-->
-        <!--</v-btn>-->
-        <!--<v-dialog-->
-        <!--v-model="dialog"-->
-        <!--width="800px"-->
-        <!--&gt;-->
-        <!--<v-card>-->
-        <!--<v-card-title class="grey darken-2">-->
-        <!--Create contact-->
-        <!--</v-card-title>-->
-        <!--<v-container grid-list-sm>-->
-        <!--<v-layout-->
-        <!--wrap-->
-        <!--&gt;-->
-        <!--<v-flex-->
-        <!--xs12-->
-        <!--align-center-->
-        <!--justify-space-between-->
-        <!--&gt;-->
-        <!--<v-layout align-center>-->
-        <!--<v-avatar-->
-        <!--size="40px"-->
-        <!--class="mr-4"-->
-        <!--&gt;-->
-        <!--<img-->
-        <!--src="//ssl.gstatic.com/s2/oz/images/sge/grey_silhouette.png"-->
-        <!--alt=""-->
-        <!--&gt;-->
-        <!--</v-avatar>-->
-        <!--<v-text-field-->
-        <!--placeholder="Name"-->
-        <!--&gt;</v-text-field>-->
-        <!--</v-layout>-->
-        <!--</v-flex>-->
-        <!--<v-flex xs6>-->
-        <!--<v-text-field-->
-        <!--prepend-icon="business"-->
-        <!--placeholder="Company"-->
-        <!--&gt;</v-text-field>-->
-        <!--</v-flex>-->
-        <!--<v-flex xs6>-->
-        <!--<v-text-field-->
-        <!--placeholder="Job title"-->
-        <!--&gt;</v-text-field>-->
-        <!--</v-flex>-->
-        <!--<v-flex xs12>-->
-        <!--<v-text-field-->
-        <!--prepend-icon="mail"-->
-        <!--placeholder="Email"-->
-        <!--&gt;</v-text-field>-->
-        <!--</v-flex>-->
-        <!--<v-flex xs12>-->
-        <!--<v-text-field-->
-        <!--type="tel"-->
-        <!--prepend-icon="phone"-->
-        <!--placeholder="(000) 000 - 0000"-->
-        <!--&gt;</v-text-field>-->
-        <!--</v-flex>-->
-        <!--<v-flex xs12>-->
-        <!--<v-text-field-->
-        <!--prepend-icon="notes"-->
-        <!--placeholder="Notes"-->
-        <!--&gt;</v-text-field>-->
-        <!--</v-flex>-->
-        <!--</v-layout>-->
-        <!--</v-container>-->
-        <!--<v-card-actions>-->
-        <!--<v-btn-->
-        <!--text-->
-        <!--color="primary"-->
-        <!--&gt;More</v-btn>-->
-        <!--<v-spacer></v-spacer>-->
-        <!--<v-btn-->
-        <!--text-->
-        <!--color="primary"-->
-        <!--@click="dialog = false"-->
-        <!--&gt;Cancel</v-btn>-->
-        <!--<v-btn-->
-        <!--text-->
-        <!--@click="dialog = false"-->
-        <!--&gt;Save</v-btn>-->
-        <!--</v-card-actions>-->
-        <!--</v-card>-->
-        <!--</v-dialog>-->
     </div>
 </template>
 
 <script>
-
     import LogoutBtn from '@/components/auth/LogoutBtn'
 
     export default {
-        name: 'Dashboard',
-
+        name: "TheToolbar",
         components: {LogoutBtn},
-
-
-        props: {
-            source: String,
-        },
         data: () => ({
             dialog: false,
             drawer: null,
@@ -264,3 +159,7 @@
         }),
     }
 </script>
+
+<style scoped>
+
+</style>

@@ -31,11 +31,9 @@
     import InformationStep from '@/components/auth/register-steps/InformationStep'
     import ImageStep from '@/components/auth/register-steps/ImageStep'
 
-    import layoutMixin from "@/layouts/layoutMixin"
 
     export default {
         name: "Register",
-        mixins: [layoutMixin,],
 
         props: {
             init_email: {
@@ -56,7 +54,6 @@
         },
         data() {
             return {
-                layout: 'FullScreen',
                 currentStep: this.step,
                 loading: false,
             }

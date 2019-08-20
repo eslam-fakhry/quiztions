@@ -51,7 +51,6 @@
     import Question from '@/components/Question'
     import ResultMessage from '@/components/ResultMessage'
     import Loading from '@/components/Loading'
-    import layoutMixin from "@/layouts/layoutMixin"
 
 
     const { mapActions} = createNamespacedHelpers('lessons')
@@ -59,7 +58,6 @@
     export default {
         name: "Lesson",
         performance:true,
-        mixins: [layoutMixin,],
 
         components: {
             Question,
@@ -77,7 +75,6 @@
 
         data() {
             return {
-                layout:'FullScreen',
                 loading: true,
                 currentIndex: 0,
                 score: [],
@@ -173,7 +170,7 @@
                 immediate: true,
                 async handler(id) {
                     this.loading = true;
-                    this.lesson = await this.fetchLesson({id});
+                    await this.fetchLesson({id});
                     if (this.lesson)this.loading = false;
                 }
             },

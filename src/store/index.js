@@ -9,7 +9,6 @@ import courses from './courses'
 import lessons from './lessons'
 import questions from './questions'
 import answers from './answers'
-import layouts from './layouts'
 import snackbars from './snackbars'
 
 import fb from '../services/firebase-facade'
@@ -25,7 +24,6 @@ export default new Vuex.Store({
         lessons,
         questions,
         answers,
-        layouts,
         snackbars,
     },
     actions: {

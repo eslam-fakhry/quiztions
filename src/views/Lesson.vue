@@ -171,7 +171,7 @@
                 async handler(id) {
                     this.loading = true;
                     this.lesson = await this.fetchLesson({id});
-                    this.loading = false;
+                    if (this.lesson)this.loading = false;
                 }
             },
             currentIndex(newValue) {

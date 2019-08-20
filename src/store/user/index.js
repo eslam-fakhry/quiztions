@@ -81,7 +81,8 @@ export default {
         fetchUserCourses({state, commit}) {
             // fetch from server
             fb.fetchUserCourses(state.job, function (snap) {
-                    commit(mutations.SET_USER_COURSES, snap.val())
+
+                    commit(mutations.SET_USER_COURSES, snap.val() || [])
                 })
             // otherwise show user-friendly error
 

@@ -163,6 +163,7 @@
                 async handler(id) {
                     this.loading = true;
                     this.lesson = await this.fetchLesson({id});
+                    if(this.lesson){
                     if (this.lesson.questions) {
                         this.questions = Object.values(this.lesson.questions).map((key, index) => {
                             return {
@@ -175,6 +176,7 @@
                         this.questions = []
                     }
                     this.loading = false;
+                    }
                 }
             },
             dialog(val) {

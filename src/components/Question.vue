@@ -1,7 +1,7 @@
 <template>
     <div style="height: 100%">
         <Loading
-                 v-if="loading"
+                v-if="loading"
         >
         </Loading>
         <v-layout
@@ -38,8 +38,9 @@
 </template>
 
 <script>
-    import {createNamespacedHelpers } from 'vuex'
-    const { mapActions} = createNamespacedHelpers('questions')
+    import {createNamespacedHelpers} from 'vuex'
+
+    const {mapActions} = createNamespacedHelpers('questions')
 
     import Answer from "../components/Answer";
     import Loading from './Loading'
@@ -62,7 +63,7 @@
         data() {
             return {
                 loading: false,
-                fetchedQuestion:{},
+                fetchedQuestion: {},
             }
         },
 
@@ -76,14 +77,14 @@
         watch: {
             questionId: {
                 immediate: true,
-                handler(val) {
+                async handler(val) {
                     this.loading = true
-                    this.fetchQuestion({id: val})
-                        .then((question) => {
-                            this._provided ={question}
-                            this.fetchedQuestion= Object.assign({},question);
-                        })
-                        .finally(() => this.loading = false)
+                    const question = await this.fetchQuestion({id: val})
+                    if (question) {
+                        this._provided = {question}
+                        this.fetchedQuestion = Object.assign({}, question);
+                        this.loading = false
+                    }
                 }
 
             }

@@ -1,5 +1,6 @@
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
+import router from "../../router";
 
 export default {
     namespaced: true,
@@ -18,25 +19,18 @@ export default {
             let question = state.questions[id]
             // await new Promise(r => setTimeout(r, 2000));
             if (question) return question;
-            // fetch from server
-
-            fb.fetchResource('questions', id,snap=>{
-                const question = {...snap.val(), id}
+            try {
+                // fetch from server
+                question = await fb.fetchResource('questions', id)
                 commit(mutations.APPEND_QUESTION, question)
+                return question
+            } catch (err) {
+                // otherwise show 404 page
+                router.replace({name: 'not-found'})
+                return null
+            }
 
-            })
 
-            return fb.fetchResource('questions', id)
-
-                .then(question => {
-                    commit(mutations.APPEND_QUESTION, question)
-                    return question
-                })
-                // otherwise show user-friendly error
-                .catch(err => {
-                    console.error(err)
-                    // todo: show user-friendly error
-                })
         },
 
         async createQuestion({commit, state, rootState}, {question, rightAnswer, lessonId}) {

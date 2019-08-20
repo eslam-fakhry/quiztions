@@ -77,7 +77,7 @@
                 async handler(id) {
                     this.loading = true;
                     this.course = await this.fetchCourse({id});
-                    this.loading = false;
+                    if (this.course) this.loading = false;
                 }
             }
         },

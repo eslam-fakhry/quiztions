@@ -1,8 +1,8 @@
 <!--suppress ALL -->
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div>
-        <Loading v-if="loading" />
-        <v-container v-else class="" >
+        <Loading v-if="loading"/>
+        <v-container v-else class="">
 
 
             <h1 class="text-center">{{course.name}}</h1>
@@ -93,7 +93,7 @@
     import Loading from '@/components/Loading'
 
     const {mapState, mapActions} = createNamespacedHelpers('courses')
-    const {mapActions:mapLessonsActions} = createNamespacedHelpers('lessons')
+    const {mapActions: mapLessonsActions} = createNamespacedHelpers('lessons')
 
     export default {
         name: "EditCourse",
@@ -181,7 +181,7 @@
                     // this.courses.push(this.editedItem)
                     this.createLesson({
                         name: this.editedItem.name,
-                        courseId:this.course_id
+                        courseId: this.course_id
 
                     })
                         .then((id) => {
@@ -198,18 +198,20 @@
                 async handler(id) {
                     this.loading = true;
                     this.course = await this.fetchCourse({id});
-                    if (this.course.lessons) {
-                        this.lessons = Object.keys(this.course.lessons).map(key => {
-                            return {
-                                ...this.course.lessons[key],
-                                id: key,
-                            }
-                        })
-                    } else {
-                        this.lessons = []
-                    }
+                    if (this.course) {
+                        if (this.course.lessons) {
+                            this.lessons = Object.keys(this.course.lessons).map(key => {
+                                return {
+                                    ...this.course.lessons[key],
+                                    id: key,
+                                }
+                            })
+                        } else {
+                            this.lessons = []
+                        }
 
-                    this.loading = false;
+                        this.loading = false;
+                    }
                 }
             },
             dialog(val) {

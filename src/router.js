@@ -13,10 +13,8 @@ const router = new Router({
     base: process.env.BASE_URL,
 
     routes: [
-        {
-            path: '*',
-            redirect: '/'
-        },
+
+
         {
             path: '/',
             name: 'home',
@@ -95,6 +93,15 @@ const router = new Router({
             props: true,
             component: () => import('./components/create-question/CreateQuestion.vue'),
         },
+        {
+            path: '/not-found',
+            name: 'not-found',
+            component: () => import('./views/NotFound.vue'),
+        },
+        {
+            path:'*',
+            redirect:'not-found'
+        }
     ]
 });
 

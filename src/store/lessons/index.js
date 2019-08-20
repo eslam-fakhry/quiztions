@@ -1,5 +1,6 @@
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
+import router from "../../router";
 
 export default {
     namespaced: true,
@@ -13,21 +14,19 @@ export default {
         },
     },
     actions: {
-
         async fetchLesson({getters, state, commit}, {id}) {
             let lesson = state.lessons[id];
             if (lesson) return lesson
-            // fetch from server
-            return fb.fetchResource('lessons', id)
-                .then(lesson => {
-                    commit(mutations.APPEND_LESSON, lesson)
-                    return lesson
-                })
+            try {
+                // fetch from server
+                lesson = await fb.fetchResource('lessons', id)
+                commit(mutations.APPEND_LESSON, lesson)
+                return lesson
+            } catch (err) {
                 // otherwise show 404 page
-                .catch((err) => {
-                    console.error(err)
-                    // todo:show 404 page
-                })
+                router.replace({name: 'not-found'})
+                return null
+            }
         },
         async createLesson({commit, state, rootState}, {name, courseId}) {
             return fb.createLesson({name, courseId})

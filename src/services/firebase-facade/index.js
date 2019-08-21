@@ -35,6 +35,7 @@ function fetchUserCourses(job, cb) {
 async function createQuestion({question, rightAnswer, lessonId}) {
     const questionData = {
         ...question,
+        lessonId,
         teacherId: fb.auth.currentUser.uid,
     };
     const newQuestionKey = fb.db.ref('questions').push().key;
@@ -50,6 +51,7 @@ async function createLesson({name, courseId}) {
 
     const lessonData = {
         name,
+        courseId,
         teacherId: fb.auth.currentUser.uid,
     }
     const newLessonKey = fb.db.ref('lessons').push().key;

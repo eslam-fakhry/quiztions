@@ -1,43 +1,15 @@
 import store from '../store'
 
-function getRightAnswer(questionId) {
-    return store.getters['answers/getRightAnswer'](questionId);
-}
-
 function validate(userAnswer, questionId, isValidateRemotely = false) {
-    if(! isValidateRemotely){
-        return validateLocally(userAnswer, questionId)
-    }else{
-        return validateRemotely(userAnswer, questionId)
-
-    }
+    return store.dispatch('answers/fetchRightAnswer', {id: questionId})
+        .then((rightAnswer) => {
+            return arraysEqual(userAnswer, rightAnswer)
+        })
 }
-
-function validateLocally(userAnswer, questionId) {
-    const rightAnswer = getRightAnswer(questionId)
-    return arraysEqual(userAnswer, rightAnswer)
-
-}
-
-// noinspection JSUnusedLocalSymbols
-// eslint-disable-next-line no-unused-vars
-async function validateRemotely(userAnswer, question)
-{
-    await wait(2000)
-    return true
-
-}
-
-
 function arraysEqual(a1, a2) {
     /* WARNING: arrays must not contain {objects} or behavior may be undefined */
     return JSON.stringify(a1) == JSON.stringify(a2);
 }
-
-function wait(ms) {
-    return new Promise(r => setTimeout(r, ms));
-}
 export default {
     validate,
-    validateRemotely,
 }

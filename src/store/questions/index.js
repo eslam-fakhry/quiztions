@@ -21,7 +21,8 @@ export default {
             if (question) return question;
             try {
                 // fetch from server
-                question = await fb.fetchResource('questions', id)
+                const value = await fb.fetchResource('questions', id)
+                question = {...value, id}
                 commit(mutations.APPEND_QUESTION, question)
                 return question
             } catch (err) {

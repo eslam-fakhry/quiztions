@@ -103,6 +103,18 @@ const router = new Router({
             },
         },
         {
+            path: '/enrollment',
+            name: 'enrollment',
+            props: {
+                default:true,
+            },
+            components: {
+                default: () => import('./views/Enrollment.vue'),
+                toolbar: Toolbar,
+            },
+        },
+
+        {
             path: '/not-found',
             name: 'not-found',
             components: {

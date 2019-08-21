@@ -143,6 +143,15 @@ export default {
                 })
             commit(mutations.SET_PHOTO_URL, photoURL)
         },
+
+        async enrollInCourse({state},{id}){
+            await fb.db.ref('students')
+                .child(state.uid)
+                .child('courses')
+                .child(id)
+                .set({name:'huge1'})
+            console.log('enrolled');
+        },
     },
     getters: {
         loggedIn(state) {

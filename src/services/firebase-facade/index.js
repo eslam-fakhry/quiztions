@@ -1,7 +1,7 @@
 import fb from './firebaseConfig'
 import helpers from './helpers'
 
-const allowableRefs = ['questions', 'lessons', 'courses', 'teachers', 'students']
+const allowableRefs = ['questions', 'lessons', 'courses', 'teachers', 'students', 'rightAnswers']
 
 // todo move this ta an appropriate place
 function fetchResource(resourceName, id) {
@@ -12,15 +12,15 @@ function fetchResource(resourceName, id) {
         .once('value')
         .then(snap => {
             if (!snap.val()) return Promise.reject('no such thing')
-            return {...snap.val(), id}
+            return snap.val()
         })
 }
 
-function fetchSyncedResource(resourceName, id,cb) {
+function fetchSyncedResource(resourceName, id, cb) {
     if (!allowableRefs.includes(resourceName)) throw new Error('Reference name is not allowed')
     fb.db.ref(resourceName)
         .child(id)
-        .on('value',cb)
+        .on('value', cb)
 }
 
 function fetchUserCourses(job, cb) {

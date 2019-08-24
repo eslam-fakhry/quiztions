@@ -2,7 +2,7 @@ import Vue from 'vue'
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
 import router from "@/router";
-
+import {showSnackbar} from "@/utils";
 
 export default {
     namespaced: true,
@@ -30,13 +30,24 @@ export default {
                 commit(mutations.APPEND_COURSE, {...snap.val(), id})
             })
         },
+       async fetchCourses({commit}) {
+            try {
+                // fetch from server
+                const courses = await fb.fetchCourses()
+                Object.entries(courses).forEach((courseEntry)=>{
+                    commit(mutations.APPEND_COURSE, {...courseEntry[1],id:courseEntry[0] })
+                })
+            } catch (err) {
+               // otherwise show 404 page
+               showSnackbar('Error fetching courses','error')
+            }
+        },
 
         async createCourse({commit, state, rootState}, {name}) {
             return fb.createCourse({name})
             // otherwise show user-friendly error
                 .catch(err => {
-                    console.error(err)
-                    // todo: show user-friendly error
+                    showSnackbar('Something went wrong','error')
                 })
         },
 

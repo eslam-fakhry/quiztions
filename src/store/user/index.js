@@ -1,6 +1,6 @@
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
-import {showSnackbar} from "@/utils";
+// import {showSnackbar} from "@/utils";
 
 export default {
     namespaced: true,
@@ -13,7 +13,7 @@ export default {
         job: '',
         gender: '',
         birthday: '',
-        courses: [],
+        courses: {},
 
     },
     mutations: {
@@ -144,18 +144,21 @@ export default {
             commit(mutations.SET_PHOTO_URL, photoURL)
         },
 
-        async enrollInCourse({state},{id}){
-            await fb.db.ref('students')
-                .child(state.uid)
-                .child('courses')
-                .child(id)
-                .set({name:'huge1'})
-            console.log('enrolled');
+        async enrollInCourse({state},{id,name}){
+            await fb.enrollInCourse({id,name})
+        },
+        async leaveCourse({state},{id}){
+            await fb.leaveCourse({id})
         },
     },
     getters: {
         loggedIn(state) {
             return state.logged
         },
+        isEnrolled(state){
+            return courseId => {
+                return Object.keys(state.courses).includes(courseId)
+            }
+        }
     },
 }

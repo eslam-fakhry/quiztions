@@ -178,7 +178,7 @@
                 const {body, questionTemplate, renderedLocally, timed} = this.$data
                 return {
                     body: body[0],
-                    questionTemplate,
+                    template:questionTemplate,
                     renderedLocally,
                     timed,
                     type: 'completion',

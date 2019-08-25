@@ -25,12 +25,33 @@
             </v-flex>
 
             <v-flex>
+                <v-layout column style="height: 100%">
+                    <v-flex shrink>
+                        <!--<slot v-bind="{question,userAnswer,uiState,updateAnswer}"></slot>-->
+                        <component
+                                :is="answerComponentName"
+                                ref="Answer"
+                                @continue="$emit('continue')"
+                                @result="$emit('result',$event)"
+                                :key="question.id"
+                                v-model="userAnswer"
+                                :ui-state="uiState"
+                        ></component>
 
-                <Answer
-                        @continue="$emit('continue')"
-                        @result="$emit('result',$event)"
-                />
-
+                    </v-flex>
+                    <v-flex grow class="d-flex justify-center align-center">
+                       <QuestionFeedback :ui-state="uiState" :feedback="feedback"/>
+                    </v-flex>
+                    <v-flex shrink class="text-center pb-4">
+                        <v-btn
+                                outlined
+                                @click="answer"
+                                :disabled="uiState.NOT_ANSWERED"
+                                :loading="validatingAnswer"
+                                v-text="submitBtnText"
+                        />
+                    </v-flex>
+                </v-layout>
             </v-flex>
 
         </v-layout>
@@ -40,18 +61,39 @@
 <script>
     import {createNamespacedHelpers} from 'vuex'
 
-    const {mapActions} = createNamespacedHelpers('questions')
-
-    import Answer from "../components/Answer";
     import Loading from './Loading'
+
+    import QuestionMixin from "./mixins/Question"
+    import QuestionFeedback from "./QuestionFeedback";
+
+    import SelectionAnswer from "@/components/SelectionAnswer";
+    import CompletionAnswer from "@/components/CompletionAnswer";
+    import InputAnswer from "@/components/InputAnswer";
+
+
+    const {mapActions} = createNamespacedHelpers('questions')
+    const {mapGetters} = createNamespacedHelpers('answers')
+
+    // Todo: Add answer component in a separate folder and import them dynamically
+    const answerComponents = {
+        'selection': SelectionAnswer,
+        'completion': CompletionAnswer,
+        'input': InputAnswer,
+    }
 
     export default {
         name: "Question",
-        components: {
-            Answer,
-            Loading,
 
+        mixins:[QuestionMixin,],
+
+        components: {
+            Loading,
+            QuestionFeedback,
+            SelectionAnswer,
+            CompletionAnswer,
+            InputAnswer,
         },
+
         props: {
             questionId: {type: String}
         },
@@ -61,6 +103,7 @@
                 question: this.question
             }
         },
+
         data() {
             return {
                 loading: true,
@@ -71,10 +114,20 @@
         methods: mapActions(['fetchQuestion']),
 
         computed: {
+            ...mapGetters(['getRightAnswer']),
+
+            /**
+             * @return {string}
+             */
+            answerComponentName() {
+                return answerComponents[this.question.type];
+                // return _.camelCase(this.question.type) + "Answer";
+            },
             isBodyString() {
                 return typeof this.question.body === 'string';
             },
         },
+
         watch: {
             questionId: {
                 immediate: true,

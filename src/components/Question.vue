@@ -12,11 +12,11 @@
         >
 
             <v-flex shrink v-if="isBodyString">
-                <div class="text-center pb-6 mt-6">{{fetchedQuestion.body}}</div>
+                <div class="text-center pb-6 mt-6">{{question.body}}</div>
             </v-flex>
             <v-flex shrink v-else>
                 <div
-                        v-for="(bodyItem,i) in  fetchedQuestion.body"
+                        v-for="(bodyItem,i) in  question.body"
                         class="text-center pb-6 mt-6"
                         :key="`bodyItem--${i}`"
                 >
@@ -55,15 +55,16 @@
         props: {
             questionId: {type: String}
         },
+
         provide() {
             return {
-                question: this.fetchedQuestion
+                question: this.question
             }
         },
         data() {
             return {
-                loading: false,
-                fetchedQuestion: {},
+                loading: true,
+                question: {},
             }
         },
 
@@ -71,8 +72,8 @@
 
         computed: {
             isBodyString() {
-                return typeof this.fetchedQuestion.body === 'string';
-            }
+                return typeof this.question.body === 'string';
+            },
         },
         watch: {
             questionId: {
@@ -81,16 +82,14 @@
                     this.loading = true
                     const question = await this.fetchQuestion({id: val})
                     if (question) {
+                        // noinspection JSUnusedGlobalSymbols
                         this._provided = {question}
-                        this.fetchedQuestion = Object.assign({}, question);
+                        this.question = Object.assign({}, question);
                         this.loading = false
                     }
                 }
-
-            }
+            },
         },
-
-
     }
 </script>
 

@@ -46,18 +46,18 @@
      or to set max to 0 when not caching
 
      */
-    import {createNamespacedHelpers } from 'vuex'
+    import {createNamespacedHelpers} from 'vuex'
 
     import Question from '@/components/Question'
     import ResultMessage from '@/components/ResultMessage'
     import Loading from '@/components/Loading'
 
 
-    const { mapActions} = createNamespacedHelpers('lessons')
+    const {mapActions} = createNamespacedHelpers('lessons')
 
     export default {
         name: "Lesson",
-        performance:true,
+        performance: true,
 
         components: {
             Question,
@@ -66,9 +66,9 @@
         },
 
         props: {
-            lesson_id:{
-                type:String,
-                required:true,
+            lesson_id: {
+                type: String,
+                required: true,
             }
             // todo: add shuffle on retake option
         },
@@ -103,7 +103,7 @@
                 return this.canNavigate ? this.currentIndex : 'component'
             },
             progressPercentage() {
-                return this.score.length / (this.lesson.questions.length) * 100
+                return this.score.length / (this.questions.length) * 100
             },
             uiState() {
                 return {
@@ -123,7 +123,7 @@
                 return this.failed && this.isLastSlide
             },
             completed() {
-                return !this.failed && (this.score.length === (this.lesson.questions.length))
+                return !this.failed && (this.score.length === (this.questions.length))
             },
             failed() {
                 return this.wrongAnswerNum > (this.tolerance || 3)
@@ -145,20 +145,20 @@
                 return this.currentIndex === this.lastSlideIndex
             },
             lastSlideIndex() {
-                return this.failed ? this.score.length : this.lesson.questions.length;
+                return this.failed ? this.score.length : this.questions.length;
             },
-            canNavigate(){
+            canNavigate() {
                 return true
             },
-            tolerance(){
+            tolerance() {
                 return 1
             },
-            lesson(){
+            lesson() {
                 return this.$store.state.lessons.lessons[this.lesson_id]
             },
-            questions(){
+            questions() {
                 const questions = this.lesson.questions
-                if (questions){
+                if (questions) {
                     return Object.values(this.lesson.questions)
                 }
                 return []
@@ -171,7 +171,7 @@
                 async handler(id) {
                     this.loading = true;
                     await this.fetchLesson({id});
-                    if (this.lesson)this.loading = false;
+                    if (this.lesson) this.loading = false;
                 }
             },
             currentIndex(newValue) {

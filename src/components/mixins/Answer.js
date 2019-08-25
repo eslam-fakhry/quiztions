@@ -3,16 +3,21 @@ const {mapActions} = createNamespacedHelpers('answers')
 export default {
     data() {
         return {
-
+            userAnswer: [],
         }
     },
     methods: {
         ...mapActions(['fetchRightAnswer']),
-        validateAnswer(userAnswer, questionId) {
+        validateAnswer(questionId) {
             return this.fetchRightAnswer({id: questionId})
                 .then((rightAnswer) =>{
-                    return JSON.stringify(userAnswer) === JSON.stringify(rightAnswer);
+                    return JSON.stringify(this.userAnswer) === JSON.stringify(rightAnswer);
                 })
+        },
+        answer(value){
+            this.userAnswer = value
+            this.$emit('answered')
         }
     },
 }
+// TODO: customize userAnswer

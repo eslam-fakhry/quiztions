@@ -1,6 +1,7 @@
 <template>
             <SelectionOptions
-                    v-model="value[0]"
+                    :value="userAnswer[0]"
+                    @input="answer([$event])"
                     :ui-state="uiState"
                     :disabled="uiState.ANSWER_CHECKED"
             />
@@ -21,6 +22,14 @@
         },
 
         components: {SelectionOptions},
+
+        methods: {
+            // answer(value){
+            //
+            //     this.$emit('answered')
+            //     this.$emit('input',value)
+            // }
+        },
 
     }
 </script>

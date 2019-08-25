@@ -27,14 +27,11 @@
             <v-flex>
                 <v-layout column style="height: 100%">
                     <v-flex shrink>
-                        <!--<slot v-bind="{question,userAnswer,uiState,updateAnswer}"></slot>-->
                         <component
                                 :is="answerComponentName"
                                 ref="Answer"
-                                @continue="$emit('continue')"
-                                @result="$emit('result',$event)"
+                                @answered="answered = true"
                                 :key="question.id"
-                                v-model="userAnswer"
                                 :ui-state="uiState"
                         ></component>
 

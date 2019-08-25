@@ -2,7 +2,7 @@
 export default {
     data() {
         return {
-            userAnswer: [],
+            answered:false,
             correct: false,
             answerChecked: false,
             validatingAnswer: false,
@@ -11,15 +11,16 @@ export default {
     },
     methods: {
         async answer() {
-            if (!this.notAnswered && !this.answerChecked) {
+            if (!this.answered) return ;
+            if (!this.answerChecked) {
                 await this.validate()
-            } else if (!this.notAnswered && this.answerChecked) {
+            } else if (this.answerChecked) {
                 this.continueNext()
             }
         },
         async validate() {
             this.validatingAnswer = true;
-            this.correct = await this.$refs.Answer.validateAnswer(this.userAnswer, this.question.id)
+            this.correct = await this.$refs.Answer.validateAnswer(this.question.id)
             this.$emit('result', {
                 question:this.question,
                 result:this.correct ? 'right' : 'wrong'
@@ -36,22 +37,16 @@ export default {
         continueNext() {
             this.$emit('continue')
         },
-        updateAnswer(e){
-            this.userAnswer = e
-        },
     },
     computed: {
         uiState() {
             return {
-                NOT_ANSWERED: this.notAnswered,
-                ANSWER_NOT_CHECKED: !this.notAnswered && !this.answerChecked,
-                ANSWER_CHECKED: !this.notAnswered && this.answerChecked,
+                NOT_ANSWERED: !this.answered,
+                ANSWER_NOT_CHECKED: this.answered && !this.answerChecked,
+                ANSWER_CHECKED: this.answered && this.answerChecked,
                 ANSWERED_CORRECTLY: this.answerChecked && this.correct,
                 ANSWERED_WRONG: this.answerChecked && !this.correct,
             }
-        },
-        notAnswered() {
-            return !this.userAnswer.length
         },
         submitBtnText() {
             return this.uiState.ANSWER_CHECKED ? 'continue' : 'check'

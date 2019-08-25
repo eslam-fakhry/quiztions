@@ -1,7 +1,7 @@
 <template>
             <QuestionTemplate
-                    :value="[...value]"
-                    @input="$emit('input',$event)"
+                    :value="[...userAnswer]"
+                    @input="answer"
                     :key="question.id"
                     :ui-state="uiState"
             />
@@ -15,7 +15,6 @@
         inject:['question'],
 
         props: {
-            value: {},
             uiState:{},
         },
 

@@ -8,7 +8,6 @@ export default {
             answerChecked: false,
             loading: false,
             feedback: '',
-            timed: !!this.question.time,
         }
     },
     methods: {
@@ -58,6 +57,9 @@ export default {
         },
         submitBtnText() {
             return this.uiState.ANSWER_CHECKED ? 'continue' : 'check'
+        },
+        timed(){
+            return !!this.question.time
         },
     },
 

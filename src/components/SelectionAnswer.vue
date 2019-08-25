@@ -8,9 +8,13 @@
 <script>
 
     import SelectionOptions from "./SelectionOptions"
+    import AnswerMixin from "./mixins/Answer"
 
     export default {
         name: 'SelectionAnswer',
+
+        mixins:[AnswerMixin],
+
         props: {
             value: {},
             uiState:{},

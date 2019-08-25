@@ -11,8 +11,12 @@
 </template>
 <script>
     // todo fix modifying props.value directly
+    import AnswerMixin from "./mixins/Answer"
     export default {
         name: 'InputAnswer',
+
+        mixins:[AnswerMixin],
+
         props: {
             value: {},
             uiState: {},

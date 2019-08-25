@@ -1,4 +1,3 @@
-import questionValidator from '../../services/question-validator'
 
 export default {
     data() {
@@ -6,7 +5,7 @@ export default {
             userAnswer: [],
             correct: false,
             answerChecked: false,
-            loading: false,
+            validatingAnswer: false,
             feedback: '',
         }
     },
@@ -19,16 +18,15 @@ export default {
             }
         },
         async validate() {
-            this.loading = true;
-            this.correct = await questionValidator.validate(this.userAnswer, this.question.id)
-
+            this.validatingAnswer = true;
+            this.correct = await this.$refs.Answer.validateAnswer(this.userAnswer, this.question.id)
             this.$emit('result', {
                 question:this.question,
                 result:this.correct ? 'right' : 'wrong'
             });
             this.answerChecked = true;
             this.setFeedback();
-            this.loading = false
+            this.validatingAnswer = false
         },
         setFeedback() {
             if (this.answerChecked) {
@@ -64,7 +62,7 @@ export default {
     },
 
     created() {
-        const enterPressHandler = ()=>{
+        const enterPressHandler = (event)=>{
 
             if (event.key === 'Enter') {
                 event.preventDefault()

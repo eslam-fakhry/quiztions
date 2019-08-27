@@ -12,7 +12,6 @@
     </div>
 </template>
 <script>
-    // todo: make this component renderless
     import SingleSelectionOption from "./SingleSelectionOption";
 
     export default {
@@ -37,7 +36,7 @@
         },
 
         created() {
-            const NumberPressHandler = () => {
+            const NumberPressHandler = (event) => {
                 if (['1', '2', '3', '4', '5', '6', '7'].includes(event.key)) {
                     const index = Number(event.key) - 1
                     event.preventDefault()

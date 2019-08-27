@@ -23,7 +23,7 @@ export default {
             if (course) return course
             commit(mutations.APPEND_COURSE, {lessons: [], id})
             // fetch from server
-            fb.fetchSyncedResource('courses', id, (snap) => {
+            await fb.fetchSyncedResource('courses', id, (snap) => {
                 if (!snap.val()) {
                     return router.replace({name: 'not-found'})
                 }

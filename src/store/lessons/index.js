@@ -21,7 +21,7 @@ export default {
             if (lesson) return lesson
             commit(mutations.APPEND_LESSON, {questions: [], id})
 
-            fb.fetchSyncedResource('lessons', id, (snap) => {
+            await fb.fetchSyncedResource('lessons', id, (snap) => {
                 if (!snap.val()) {
                     return router.replace({name: 'not-found'})
                 }

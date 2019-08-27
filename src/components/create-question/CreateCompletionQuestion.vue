@@ -19,18 +19,50 @@
     import CreateCompletionTemplate from '@/components/create-question/CreateCompletionTemplate'
     export default {
         name: "CreateCompletionQuestion",
+
         components: {
             CreateCompletionTemplate,
             CompletionRightAnswers,
         },
+
         props: {
             rightAnswer: {},
         },
+
         data() {
             return {
                 answer: [],
                 questionTemplate:''
             }
+        },
+
+       computed:{
+           blankNum() {
+               // noinspection JSCheckFunctionSignatures
+               const re = new RegExp("--blank--", "g");
+               return (this.questionTemplate.match(re) || []).length
+           },
+       },
+
+        watch:{
+            rightAnswer:{
+                immediate:true,
+                handler(val){
+                    this.answer =  val && Array.isArray(val)
+                        ? val
+                        : []
+                }
+            },
+            questionTemplate(){
+                this.update()
+            },
+            answer(){
+                this.update()
+            },
+        },
+
+        mounted() {
+            this.$emit('update:valid', !this.$v.$invalid)
         },
 
         methods: {
@@ -43,15 +75,6 @@
                 this.$emit('update:valid', !this.$v.$invalid)
             }
         },
-
-       computed:{
-
-           blankNum() {
-               // noinspection JSCheckFunctionSignatures
-               const re = new RegExp("--blank--", "g");
-               return (this.questionTemplate.match(re) || []).length
-           },
-       },
 
         validations: {
             questionTemplate: {
@@ -70,26 +93,5 @@
                 }
             }
         },
-
-        mounted() {
-            this.$emit('update:valid', !this.$v.$invalid)
-        },
-
-        watch:{
-            rightAnswer:{
-                immediate:true,
-                handler(val){
-                    this.answer =  val && Array.isArray(val)
-                        ? val
-                        : []
-                }
-            },
-            questionTemplate(){
-                this.update()
-            },
-            answer(){
-                this.update()
-            },
-        }
     }
 </script>

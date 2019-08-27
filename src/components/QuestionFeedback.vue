@@ -16,6 +16,7 @@
 <script>
     export default {
         name: 'QuestionFeedback',
+
         props: {
             uiState: {
                 type: Object,

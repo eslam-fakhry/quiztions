@@ -11,15 +11,17 @@
     import AnswerMixin from "./mixins/Answer"
     export default {
         name: 'CompletionAnswer',
+
+        components: {
+            QuestionTemplate,
+        },
+
         mixins:[AnswerMixin],
+
         inject:['question'],
 
         props: {
             uiState:{},
-        },
-
-        components: {
-            QuestionTemplate,
         },
 
         methods: {

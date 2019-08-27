@@ -17,9 +17,21 @@
         props: {
             rightAnswer: {},
         },
+
         data() {
             return {
                 answer: [],
+            }
+        },
+
+        watch:{
+            rightAnswer:{
+                immediate:true,
+                handler(val){
+                    this.answer =  val && Array.isArray(val)
+                        ? val
+                        : []
+                }
             }
         },
 
@@ -34,12 +46,6 @@
             }
         },
 
-        computed: {
-            valid() {
-                return !this.$v.$invalid;
-            },
-        },
-
         validations: {
             answer: {
                 required,
@@ -48,16 +54,5 @@
                 }
             }
         },
-
-        watch:{
-            rightAnswer:{
-                immediate:true,
-                handler(val){
-                    this.answer =  val && Array.isArray(val)
-                        ? val
-                        : []
-                }
-            }
-        }
     }
 </script>

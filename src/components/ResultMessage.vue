@@ -14,16 +14,14 @@
 <script>
     export default {
         name: "ResultMessage",
+
         props: {
             message: {type: String},
             result: {
                 type: String,
                 required: true
             }
-        }
+        },
     }
 </script>
 
-<style scoped>
-
-</style>

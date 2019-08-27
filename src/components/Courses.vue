@@ -23,23 +23,23 @@
 
 <script>
     import {createNamespacedHelpers} from 'vuex'
-
     const {mapState, mapActions} = createNamespacedHelpers('user')
-
 
     export default {
         name: "Courses",
+
         computed: {
             // todo add loading state
             ...mapState(['courses']),
         },
-        methods: {
-            ...mapActions(['fetchUserCourses']),
-
-        },
 
         created() {
             this.fetchUserCourses()
+        },
+
+        methods: {
+            ...mapActions(['fetchUserCourses']),
+
         },
     }
 </script>

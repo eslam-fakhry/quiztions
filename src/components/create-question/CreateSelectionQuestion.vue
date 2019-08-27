@@ -23,17 +23,41 @@
 
     export default {
         name: "CreateCompletionQuestion",
+
         components: {
             CreateList,
         },
+
         props: {
             rightAnswer: {},
         },
+
         data() {
             return {
                 answer: [],
                 options: [],
             }
+        },
+
+        watch:{
+            rightAnswer:{
+                immediate:true,
+                handler(val){
+                    this.answer =  val && Array.isArray(val)
+                        ? val
+                        : []
+                }
+            },
+            options(){
+                this.update()
+            },
+            answer(){
+                this.update()
+            },
+        },
+
+        mounted() {
+            this.$emit('update:valid', !this.$v.$invalid)
         },
 
         methods: {
@@ -67,26 +91,5 @@
                 }
             }
         },
-
-        mounted() {
-            this.$emit('update:valid', !this.$v.$invalid)
-        },
-
-        watch:{
-            rightAnswer:{
-                immediate:true,
-                handler(val){
-                    this.answer =  val && Array.isArray(val)
-                        ? val
-                        : []
-                }
-            },
-            options(){
-                this.update()
-            },
-            answer(){
-                this.update()
-            },
-        }
     }
 </script>

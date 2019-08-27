@@ -1,11 +1,13 @@
 import {createNamespacedHelpers} from 'vuex'
 const {mapActions} = createNamespacedHelpers('answers')
+
 export default {
     data() {
         return {
             userAnswer: [],
         }
     },
+
     methods: {
         ...mapActions(['fetchRightAnswer']),
         validateAnswer(questionId) {

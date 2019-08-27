@@ -20,8 +20,8 @@
 
 <script>
     import {createNamespacedHelpers} from 'vuex'
-
     const {mapActions} = createNamespacedHelpers('courses')
+
     export default {
         name: "EditCourse",
 
@@ -51,6 +51,3 @@
     }
 </script>
 
-<style scoped>
-
-</style>

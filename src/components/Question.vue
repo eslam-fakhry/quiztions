@@ -67,7 +67,6 @@
     import CompletionAnswer from "@/components/CompletionAnswer";
     import InputAnswer from "@/components/InputAnswer";
 
-
     const {mapActions} = createNamespacedHelpers('questions')
     const {mapGetters} = createNamespacedHelpers('answers')
 
@@ -81,8 +80,6 @@
     export default {
         name: "Question",
 
-        mixins:[QuestionMixin,],
-
         components: {
             Loading,
             QuestionFeedback,
@@ -90,6 +87,8 @@
             CompletionAnswer,
             InputAnswer,
         },
+
+        mixins:[QuestionMixin,],
 
         props: {
             questionId: {type: String}
@@ -108,11 +107,8 @@
             }
         },
 
-        methods: mapActions(['fetchQuestion']),
-
         computed: {
             ...mapGetters(['getRightAnswer']),
-
             /**
              * @return {string}
              */
@@ -140,6 +136,8 @@
                 }
             },
         },
+
+        methods: mapActions(['fetchQuestion']),
     }
 </script>
 

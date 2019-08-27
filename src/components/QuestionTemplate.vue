@@ -24,11 +24,13 @@
 
     </div>
 </template>
+
 <script>
     import {getTextWidth} from "../utils";
 
     export default {
         name: 'QuestionTemplate',
+
         inject:['question'],
 
         props: {
@@ -42,13 +44,7 @@
                 required: true
             },
         },
-        methods: {
-            update(e, i) {
-                const tmpValue = [...this.value]
-                tmpValue[i] = e
-                this.$emit('input', tmpValue)
-            },
-        },
+
         computed: {
             templateParts() {
                 return this.question.template.split('--blank--');
@@ -68,5 +64,14 @@
                 }
             }
         },
+
+        methods: {
+            update(e, i) {
+                const tmpValue = [...this.value]
+                tmpValue[i] = e
+                this.$emit('input', tmpValue)
+            },
+        },
     }
 </script>
+

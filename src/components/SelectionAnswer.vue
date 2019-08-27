@@ -14,14 +14,14 @@
     export default {
         name: 'SelectionAnswer',
 
+        components: {SelectionOptions},
+
         mixins:[AnswerMixin],
 
         props: {
             value: {},
             uiState:{},
         },
-
-        components: {SelectionOptions},
 
         methods: {
             // answer(value){
@@ -30,6 +30,5 @@
             //     this.$emit('input',value)
             // }
         },
-
     }
 </script>

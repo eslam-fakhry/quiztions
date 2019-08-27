@@ -111,59 +111,6 @@
         }),
 
 
-        created() {
-            this.fetchUserCourses()
-        },
-
-        methods: {
-            ...mapActions(['fetchUserCourses']),
-            ...mapCoursesActions(['createCourse']),
-            onRowClick(ev) {
-                console.log(ev);
-            },
-            initialize() {
-            },
-
-            editItem(item) {
-                this.$router.push({name: 'edit-course', params: {course_id: item.id}})
-                // this.editedIndex = this.courses.indexOf(item)
-                // this.editedItem = Object.assign({}, item)
-                // this.dialog = true
-            },
-
-            deleteItem(item) {
-                const index = this.courses.indexOf(item)
-                if (confirm('Are you sure you want to delete this item?')) {
-
-                    console.log('deleting ', this.courses[index]);
-                }
-                // confirm('Are you sure you want to delete this item?') && this.courses.splice(index, 1)
-            },
-
-            close() {
-                this.dialog = false
-                setTimeout(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
-                }, 300)
-            },
-
-            save() {
-                if (this.editedIndex > -1) {
-                    console.log('editing a course');
-                    // Object.assign(this.courses[this.editedIndex], this.editedItem)
-
-
-                } else {
-                    console.log('creating  a new course');
-                    // this.courses.push(this.editedItem)
-                    this.createCourse({name: this.editedItem.name}).then((id) => {
-                        this.$router.push({name: 'edit-course', params: {course_id: id}})
-                    })
-                }
-                this.close()
-            },
-        },
         computed: {
             // todo add loading state
             ...mapState({
@@ -179,9 +126,58 @@
                 }
             }),
         },
+
         watch: {
             dialog(val) {
                 val || this.close()
+            },
+        },
+
+        created() {
+            this.fetchUserCourses()
+        },
+
+        methods: {
+            ...mapActions(['fetchUserCourses']),
+            ...mapCoursesActions(['createCourse']),
+            onRowClick(ev) {
+                console.log(ev);
+            },
+            initialize() {
+            },
+            editItem(item) {
+                this.$router.push({name: 'edit-course', params: {course_id: item.id}})
+                // this.editedIndex = this.courses.indexOf(item)
+                // this.editedItem = Object.assign({}, item)
+                // this.dialog = true
+            },
+            deleteItem(item) {
+                const index = this.courses.indexOf(item)
+                if (confirm('Are you sure you want to delete this item?')) {
+
+                    console.log('deleting ', this.courses[index]);
+                }
+                // confirm('Are you sure you want to delete this item?') && this.courses.splice(index, 1)
+            },
+            close() {
+                this.dialog = false
+                setTimeout(() => {
+                    this.editedItem = Object.assign({}, this.defaultItem)
+                    this.editedIndex = -1
+                }, 300)
+            },
+            save() {
+                if (this.editedIndex > -1) {
+                    console.log('editing a course');
+                    // Object.assign(this.courses[this.editedIndex], this.editedItem)
+                } else {
+                    console.log('creating  a new course');
+                    // this.courses.push(this.editedItem)
+                    this.createCourse({name: this.editedItem.name}).then((id) => {
+                        this.$router.push({name: 'edit-course', params: {course_id: id}})
+                    })
+                }
+                this.close()
             },
         },
     }

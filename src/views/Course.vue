@@ -87,7 +87,3 @@
         methods: mapActions(['fetchCourse']),
     }
 </script>
-
-<style scoped>
-
-</style>

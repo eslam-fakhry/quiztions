@@ -37,12 +37,18 @@ async function fetchSyncedResource(resourceName, id, cb) {
     })
 }
 
-function fetchUserCourses(job, cb) {
-    if (!['student', 'teacher'].includes(job)) throw new Error('Reference name is not allowed')
-    fb.db.ref(job + 's')
-        .child(fb.auth.currentUser.uid)
-        .child('courses')
-        .on('value', cb)
+async function fetchUserCourses(job, cb) {
+    return await new Promise((resolve, reject) => {
+        if (!['student', 'teacher'].includes(job)) reject('Reference name is not allowed')
+        fb.db.ref(job + 's')
+            .child(fb.auth.currentUser.uid)
+            .child('courses')
+
+            .on('value', (snap) => {
+                cb(snap)
+                resolve()
+            })
+    })
 }
 
 

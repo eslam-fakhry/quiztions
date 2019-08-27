@@ -68,26 +68,19 @@ export default {
         signIn({commit}, {email, password}) {
             return fb.auth.signInWithEmailAndPassword(email, password)
         },
-
         signUp({commit}, {email, password}) {
             return fb.auth.createUserWithEmailAndPassword(email, password)
         },
-
         signOut({commit}) {
             return fb.auth.signOut()
         },
-
-
-        fetchUserCourses({state, commit}) {
+        async fetchUserCourses({state, commit}) {
             // fetch from server
-            fb.fetchUserCourses(state.job, function (snap) {
-
+            await fb.fetchUserCourses(state.job, function (snap) {
                     commit(mutations.SET_USER_COURSES, snap.val() || [])
                 })
             // otherwise show user-friendly error
-
         },
-
         async setUserProfile({state, commit}, user) {
             commit(mutations.SET_USER, user)
             if (! user) return;
@@ -97,10 +90,7 @@ export default {
             } catch (e) {
                 console.error('[setUserProfile]', e);
             }
-
-
         },
-
         async setUserJob({state, commit}, {job}) {
             await fb.functions.httpsCallable('setJob')({job})
             commit(mutations.SET_JOB, job)
@@ -112,7 +102,6 @@ export default {
                 })
             await fb.auth.currentUser.getIdToken(true)
         },
-
         async updateUserInfo({state, commit}, {fullName, gender, birthday}) {
             await fb.auth.currentUser.updateProfile({
                 displayName: fullName,
@@ -128,9 +117,7 @@ export default {
             commit(mutations.SET_DISPLAY_NAME, fullName)
             commit(mutations.SET_GENDER, gender)
             commit(mutations.SET_BIRTHDAY, birthday)
-
         },
-
         async updatePhotoURL({state, commit}, photoURL) {
             await fb.auth.currentUser.updateProfile({
                 photoURL,
@@ -143,7 +130,6 @@ export default {
                 })
             commit(mutations.SET_PHOTO_URL, photoURL)
         },
-
         async enrollInCourse({state},{id,name}){
             await fb.enrollInCourse({id,name})
         },

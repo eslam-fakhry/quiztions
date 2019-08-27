@@ -2,7 +2,7 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div>
         <Loading v-if="loading"></Loading>
-        <v-container>
+        <v-container v-else>
             <h1 class="text-center">Teacher Courses</h1>
 
 
@@ -79,12 +79,19 @@
 <script>
     import {createNamespacedHelpers} from 'vuex'
     import Loading from './Loading'
+    import CoursesMixin from '@/components/mixins/Courses'
 
-    const {mapState, mapActions} = createNamespacedHelpers('user')
+    const {mapState} = createNamespacedHelpers('user')
     const {mapActions: mapCoursesActions} = createNamespacedHelpers('courses')
 
     export default {
         name: "Courses",
+
+        components: {
+            Loading,
+        },
+
+        mixins: [CoursesMixin],
 
         data: () => ({
             loading: true,
@@ -115,9 +122,7 @@
             },
         }),
 
-
         computed: {
-            // todo add loading state
             ...mapState({
                 courses: state => {
                     return Object.keys(state.courses).map((key) => {
@@ -138,14 +143,8 @@
             },
         },
 
-        async created() {
-            this.loading = true
-            await this.fetchUserCourses()
-            this.loading = false
-        },
 
         methods: {
-            ...mapActions(['fetchUserCourses']),
             ...mapCoursesActions(['createCourse']),
             onRowClick(ev) {
                 console.log(ev);
@@ -161,7 +160,6 @@
             deleteItem(item) {
                 const index = this.courses.indexOf(item)
                 if (confirm('Are you sure you want to delete this item?')) {
-
                     console.log('deleting ', this.courses[index]);
                 }
                 // confirm('Are you sure you want to delete this item?') && this.courses.splice(index, 1)

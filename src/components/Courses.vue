@@ -27,8 +27,9 @@
 <script>
     import {createNamespacedHelpers} from 'vuex'
     import Loading from './Loading'
+    import CoursesMixin from '@/components/mixins/Courses'
 
-    const {mapState, mapActions} = createNamespacedHelpers('user')
+    const {mapState} = createNamespacedHelpers('user')
 
     export default {
         name: "Courses",
@@ -36,25 +37,15 @@
         components: {
             Loading,
         },
-        data() {
-            return {
+
+        mixins: [CoursesMixin],
+
+        data:()=> ({
                 loading: true
-            }
-        },
+        }),
 
         computed: {
             ...mapState(['courses']),
-        },
-
-        async created() {
-            this.loading = true
-            await this.fetchUserCourses()
-            this.loading = false
-        },
-
-        methods: {
-            ...mapActions(['fetchUserCourses']),
-
         },
     }
 </script>

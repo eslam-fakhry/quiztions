@@ -176,29 +176,22 @@
             },
             currentIndex(newValue) {
                 if (this.failed) return;
-
                 // control the range of currentIndex property
                 if (newValue < 0) {
                     this.currentIndex = 0
                 } else if (newValue > this.lastSlideIndex) {
                     this.currentIndex = this.lastSlideIndex
                 }
-
-
             },
         },
 
-        // beforeRouteLeave (to, from, next) {
-        //     const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-        //     if (answer) {
-        //         next()
-        //     } else {
-        //         // next(false)
-        //     }
-        // },
-
-
-
+        beforeRouteLeave (to, from, next) {
+            if (this.completed || this.failed) {
+                next()
+                return
+            }
+             window.confirm('Do you really want to leave? you will lose progress!') && next()
+        },
     }
 </script>
 

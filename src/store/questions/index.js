@@ -32,11 +32,8 @@ export default {
             }
         },
 
-        async createQuestion({commit, state, rootState}, {question, rightAnswer, lessonId}) {
+       createQuestion({commit, state, rootState}, {question, rightAnswer, lessonId}) {
             return fb.createQuestion({question, rightAnswer, lessonId})
-                .catch(err => {
-                    console.error(err)
-                })
         },
 
     },

@@ -47,6 +47,10 @@ export default {
             return fb.createCourse({name})
             // otherwise show user-friendly error
                 .catch(err => {
+                    if (err.code === "PERMISSION_DENIED") {
+                        showSnackbar('You have no authentication to complete this process', 'error')
+                        return
+                    }
                     showSnackbar('Something went wrong','error')
                 })
         },

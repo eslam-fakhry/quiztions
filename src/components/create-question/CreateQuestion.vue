@@ -132,18 +132,33 @@
         methods: {
             ...mapActions(['createQuestion']),
             async save() {
-                await this.createQuestion({
-                    question: this.questionObj,
-                    rightAnswer: this.rightAnswer,
-                    lessonId: this.lesson_id,
-                })
-                showSnackbar('Question is successfully created', 'success')
-                // noinspection JSCheckFunctionSignatures
-                this.$router.push({name: 'edit-lesson', params: {lesson_id: this.lesson_id}})
+                try {
+
+                    await this.createQuestion({
+                        question: this.questionObj,
+                        rightAnswer: this.rightAnswer,
+                        lessonId: this.lesson_id,
+                    })
+                    showSnackbar('Question is successfully created', 'success')
+                    // noinspection JSCheckFunctionSignatures
+                    this.$router.push({name: 'edit-lesson', params: {lesson_id: this.lesson_id}})
+                } catch (e) {
+                    // TODO: Remove console.log
+                    console.log(e.code);
+                    if (e.code === "PERMISSION_DENIED") {
+                        showSnackbar('You have no authentication to complete this process', 'error')
+                        return
+                    }
+                    showSnackbar('Something went wrong', 'error')
+
+                }
             },
-            cancel(){
+            cancel() {
                 // noinspection JSCheckFunctionSignatures
-                confirm('Discard changes?') && this.$router.push({name: 'edit-lesson', params: {lesson_id: this.lesson_id}})
+                confirm('Discard changes?') && this.$router.push({
+                    name: 'edit-lesson',
+                    params: {lesson_id: this.lesson_id}
+                })
             },
         },
 

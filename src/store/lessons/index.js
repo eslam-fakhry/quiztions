@@ -2,6 +2,7 @@ import Vue from 'vue'
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
 import router from "../../router";
+import {showSnackbar} from "@/utils";
 
 export default {
     namespaced: true,
@@ -37,8 +38,11 @@ export default {
                 })
                 // otherwise show user-friendly error
                 .catch(err => {
-                    // todo: show user-friendly error
-                    console.error(err)
+                    if (err.code === "PERMISSION_DENIED") {
+                        showSnackbar('You have no authentication to complete this process', 'error')
+                        return
+                    }
+                    showSnackbar('Something went wrong','error')
                 })
         },
         // async deleteLesson({commit, state, rootState}, {id}) {

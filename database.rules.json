@@ -1,0 +1,80 @@
+{
+  "rules": {
+    "courses": {
+      ".read": "auth != null",
+      "$courseId": {
+        ".write": "(auth.token.job === 'teacher') && (!data.exists() || ! newData.exists() || (data.child('teacherId').val() === auth.uid ))",
+        ".validate": "newData.hasChildren(['name','teacherId'])",
+        "teacherId": {
+          ".validate": "newData.val() === auth.uid"
+        }
+      }
+    },
+    "lessons": {
+      "$lessonId": {
+        ".read": "auth != null",
+        ".write": "(auth.token.job === 'teacher') && (!data.exists() || ! newData.exists() || (data.child('teacherId').val() === auth.uid ))",
+        ".validate": "newData.hasChildren(['name','teacherId'])",
+        "teacherId": {
+          ".validate": "newData.val() === auth.uid"
+        }
+      }
+    },
+    "questions": {
+      "$questionId": {
+        ".read": "auth != null",
+        ".write": "(auth.token.job === 'teacher') && (!data.exists() || ! newData.exists() || ( data.child('teacherId').val() === auth.uid ))",
+        ".validate": "newData.hasChildren(['body','type','teacherId'])",
+        "teacherId": {
+          ".validate": "newData.val() === auth.uid"
+        }
+      }
+    },
+    "students": {
+      "$studentId": {
+        ".read": "$studentId === auth.uid",
+        ".write": "$studentId === auth.uid",
+        "courses": {
+          "$courseId": {
+            ".read": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",
+            ".write": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",
+            ".validate": "newData.hasChild('name')",
+            "name": {
+              ".validate": "newData.isString()"
+            }
+          }
+        }
+      }
+    },
+    "teachers": {
+      "$teacherId": {
+        ".read": "$teacherId === auth.uid",
+        ".write": "$teacherId === auth.uid",
+        "courses": {
+          "$courseId": {
+            ".validate": "newData.hasChild('name')",
+            "name": {
+              ".validate": "newData.isString()"
+            }
+          }
+        }
+      }
+    },
+    "rightAnswers": {
+      "$questionId": {
+        ".read": "auth != null",
+        ".write": "(!data.exists() && (auth.token.job === 'teacher')) || root.child('questions/'+$questionId+'/teacherId').val() === auth.uid "
+      }
+    },
+    "courseUsers": {
+      "$courseId": {
+        ".read": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",
+        ".write": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",
+        "$studentId": {
+          ".read": "$studentId === auth.uid",
+          ".write": "$studentId === auth.uid"
+        }
+      }
+    }
+  }
+}

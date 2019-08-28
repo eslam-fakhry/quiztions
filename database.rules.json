@@ -24,7 +24,7 @@
       "$questionId": {
         ".read": "auth != null",
         ".write": "(auth.token.job === 'teacher') && (!data.exists() || ! newData.exists() || ( data.child('teacherId').val() === auth.uid ))",
-        ".validate": "newData.hasChildren(['body','type','teacherId'])",
+        ".validate": "newData.hasChildren(['body','type','teacherId','lessonId'])",
         "teacherId": {
           ".validate": "newData.val() === auth.uid"
         }

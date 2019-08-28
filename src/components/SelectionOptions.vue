@@ -12,12 +12,13 @@
     </div>
 </template>
 <script>
-    // todo: make this component renderless
     import SingleSelectionOption from "./SingleSelectionOption";
 
     export default {
         name: 'SelectionOptions',
+
         components: {SingleSelectionOption},
+
         inject:['question'],
 
         props: {
@@ -33,28 +34,19 @@
                 default: false
             }
         },
-        methods: {
-            choose(option) {
-                !this.disabled && this.$emit('input', option)
-            }
-        },
 
         created() {
-
-            const NumberPressHandler = () => {
+            const NumberPressHandler = (event) => {
                 if (['1', '2', '3', '4', '5', '6', '7'].includes(event.key)) {
                     const index = Number(event.key) - 1
                     event.preventDefault()
                     this.question.options[index] && this.choose(this.question.options[index])
                 }
             }
-
             document.addEventListener('keypress', NumberPressHandler)
             this.$once('hook:activated', () => {
                 document.addEventListener('keypress', NumberPressHandler)
             })
-
-
             this.$once('hook:deactivated', () => {
                 document.removeEventListener('keypress', NumberPressHandler)
             })
@@ -63,6 +55,10 @@
             })
         },
 
-
+        methods: {
+            choose(option) {
+                !this.disabled && this.$emit('input', option)
+            }
+        },
     }
 </script>

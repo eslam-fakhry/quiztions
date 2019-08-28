@@ -153,6 +153,22 @@
             }
         },
 
+        computed: {
+            ...mapState({
+                userUid: state => state.uid
+            }),
+            showFullNameError() {
+                return this.$v.form.fullName.$dirty && this.$v.form.fullName.$invalid;
+            },
+            fullNameError() {
+                if (this.$v.form.fullName.$dirty && !this.$v.form.fullName.minLength) {
+
+                    return "minimum 3 characters"
+                }
+                return '';
+            },
+        },
+
         methods: {
             ...mapActions([
                 'updateUserInfo',
@@ -171,22 +187,6 @@
                 }
             },
 
-        },
-
-        computed: {
-            ...mapState({
-                userUid: state => state.uid
-            }),
-            showFullNameError() {
-                return this.$v.form.fullName.$dirty && this.$v.form.fullName.$invalid;
-            },
-            fullNameError() {
-                if (this.$v.form.fullName.$dirty && !this.$v.form.fullName.minLength) {
-
-                    return "minimum 3 characters"
-                }
-                return '';
-            },
         },
 
         validations: {

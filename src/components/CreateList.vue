@@ -45,6 +45,7 @@
 <script>
     export default {
         name: "CreateList",
+
         props: {
             value: {
                 type: Array,
@@ -60,25 +61,11 @@
             },
 
         },
+
         data() {
             return {
                 items: this.value,
             }
-        },
-        methods: {
-            update(event, index) {
-                this.items[index] = event
-                this.$emit('input', this.items)
-            },
-            addItem() {
-                this.items.push('')
-                this.$emit('input', this.items)
-
-            },
-            removeItem(index) {
-                this.items.splice(index, 1)
-                this.$emit('input', this.items)
-            },
         },
 
         computed: {
@@ -89,6 +76,7 @@
                 return this.items.length >= this.max;
             }
         },
+
         watch:{
             value:{
                 immediate:true,
@@ -104,9 +92,22 @@
                 }
             },
         },
+
+        methods: {
+            update(event, index) {
+                this.items[index] = event
+                this.$emit('input', this.items)
+            },
+            addItem() {
+                this.items.push('')
+                this.$emit('input', this.items)
+
+            },
+            removeItem(index) {
+                this.items.splice(index, 1)
+                this.$emit('input', this.items)
+            },
+        },
     }
 </script>
 
-<style scoped>
-
-</style>

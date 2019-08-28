@@ -38,6 +38,7 @@
 
     export default {
         name: "AccountTypeStep",
+
         data() {
             return {
                 job: 'student'
@@ -57,14 +58,9 @@
                     } else {
                         showSnackbar('Something went wrong', 'error')
                     }
-
-
                 }
             },
         },
     }
 </script>
 
-<style scoped>
-
-</style>

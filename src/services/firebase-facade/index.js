@@ -25,19 +25,30 @@ function fetchCourses() {
         })
 }
 
-function fetchSyncedResource(resourceName, id, cb) {
-    if (!allowableRefs.includes(resourceName)) throw new Error('Reference name is not allowed')
-    fb.db.ref(resourceName)
-        .child(id)
-        .on('value', cb)
+async function fetchSyncedResource(resourceName, id, cb) {
+    return await new Promise((resolve, reject) => {
+        if (!allowableRefs.includes(resourceName)) reject('Reference name is not allowed')
+        fb.db.ref(resourceName)
+            .child(id)
+            .on('value', (snap) => {
+                cb(snap)
+                resolve()
+            })
+    })
 }
 
-function fetchUserCourses(job, cb) {
-    if (!['student', 'teacher'].includes(job)) throw new Error('Reference name is not allowed')
-    fb.db.ref(job + 's')
-        .child(fb.auth.currentUser.uid)
-        .child('courses')
-        .on('value', cb)
+async function fetchUserCourses(job, cb) {
+    return await new Promise((resolve, reject) => {
+        if (!['student', 'teacher'].includes(job)) reject('Reference name is not allowed')
+        fb.db.ref(job + 's')
+            .child(fb.auth.currentUser.uid)
+            .child('courses')
+
+            .on('value', (snap) => {
+                cb(snap)
+                resolve()
+            })
+    })
 }
 
 

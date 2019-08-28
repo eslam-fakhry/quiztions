@@ -9,6 +9,7 @@
 <script>
     export default {
         name: 'SingleSelectionOption',
+
         props: {
             option: {
                 type: String,
@@ -22,6 +23,7 @@
                 type: Boolean, default: false
             },
         },
+
         computed: {
             classes() {
                 return {
@@ -40,5 +42,5 @@
         border-radius: 3000px;
         cursor: pointer;
     }
-
 </style>
+

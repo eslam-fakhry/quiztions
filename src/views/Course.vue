@@ -50,22 +50,22 @@
     // todo test fetchCourse
     export default {
         name: "Course",
+
+        components: {
+            Loading
+        },
+
         props: {
             course_id: {
                 required: true
             }
         },
 
-        components: {
-            Loading
-        },
         data() {
             return {
                 loading: false,
             }
         },
-
-        methods: mapActions(['fetchCourse']),
 
         computed: {
             course() {
@@ -84,10 +84,6 @@
             }
         },
 
-
+        methods: mapActions(['fetchCourse']),
     }
 </script>
-
-<style scoped>
-
-</style>

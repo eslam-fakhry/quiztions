@@ -53,6 +53,7 @@
 <script>
     export default {
         name: "CompletionRightAnswers",
+
         props: {
             template: {
                 type: String,
@@ -67,15 +68,10 @@
                 default: '--blank--'
             }
         },
+
         data() {
             return {
                 items: this.value
-            }
-        },
-
-        methods: {
-            focusTextField(index) {
-                this.$nextTick(this.$refs.blankTextField[index-1].focus)
             }
         },
 
@@ -99,9 +95,12 @@
                 }
             }
         },
+
+        methods: {
+            focusTextField(index) {
+                this.$nextTick(this.$refs.blankTextField[index-1].focus)
+            }
+        },
     }
 </script>
 
-<style scoped>
-
-</style>

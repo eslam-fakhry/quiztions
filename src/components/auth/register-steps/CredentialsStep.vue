@@ -122,6 +122,7 @@
                 }
             },
         },
+
         data() {
             return {
                 form: {
@@ -134,40 +135,6 @@
                 registering: false,
                 existingEmail: 'eslam1000man@gmail.com',
             }
-        },
-        methods: {
-            // to delay client-side validation for better user experience
-            delayTouch($v) {
-                $v.$reset();
-                if (touchMap.has($v)) clearTimeout(touchMap.get($v));
-                touchMap.set($v, setTimeout($v.$touch, 1000));
-            },
-            // to delay server-side validation for performance
-            onEmailInput: _.debounce(function (event) {
-                this.$v.form.email.$model = event
-            }, 1000),
-            register() {
-                if (!this.$v.$invalid) {
-                    this.registering = true;
-                    this.$store.dispatch('user/signUp', {
-                        email: this.form.email,
-                        password: this.form.password1,
-                    })
-                        .then(() => {
-                            this.registering = false;
-                            this.$emit('continue');
-                        })
-                        .catch(err => {
-                            console.log('err: ', err);
-                            if (err.code === 'auth/email-already-in-use') {
-                                this.errors.email = "User already registered"
-                            } else if (err.code === "auth/weak-password") {
-                                this.errors.password1 = "Weak password"
-                            }
-                            this.registering = false;
-                        })
-                }
-            },
         },
 
         computed: {
@@ -209,6 +176,41 @@
                     return 'passwords must match'
                 }
                 return ''
+            },
+        },
+
+        methods: {
+            // to delay client-side validation for better user experience
+            delayTouch($v) {
+                $v.$reset();
+                if (touchMap.has($v)) clearTimeout(touchMap.get($v));
+                touchMap.set($v, setTimeout($v.$touch, 1000));
+            },
+            // to delay server-side validation for performance
+            onEmailInput: _.debounce(function (event) {
+                this.$v.form.email.$model = event
+            }, 1000),
+            register() {
+                if (!this.$v.$invalid) {
+                    this.registering = true;
+                    this.$store.dispatch('user/signUp', {
+                        email: this.form.email,
+                        password: this.form.password1,
+                    })
+                        .then(() => {
+                            this.registering = false;
+                            this.$emit('continue');
+                        })
+                        .catch(err => {
+                            console.log('err: ', err);
+                            if (err.code === 'auth/email-already-in-use') {
+                                this.errors.email = "User already registered"
+                            } else if (err.code === "auth/weak-password") {
+                                this.errors.password1 = "Weak password"
+                            }
+                            this.registering = false;
+                        })
+                }
             },
         },
 

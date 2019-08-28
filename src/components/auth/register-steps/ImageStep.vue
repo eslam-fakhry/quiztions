@@ -44,11 +44,11 @@
 <script>
     import {createNamespacedHelpers} from 'vuex'
     import fb from '@/services/firebase-facade'
-
     const {mapActions} = createNamespacedHelpers('user')
 
     export default {
         name: "ImageStep",
+
         data() {
             return {
                 file: null,
@@ -57,6 +57,19 @@
                 fullPath: ''
             }
         },
+
+        computed: {
+            loading() {
+                return this.percentage > 0;
+            }
+        },
+
+        watch: {
+            file(newValue) {
+                this.createImage(newValue)
+            }
+        },
+
         methods: {
             ...mapActions(['updatePhotoURL']),
             createImage(file) {
@@ -95,22 +108,8 @@
                 this.updatePhotoURL(this.fullPath).then(() => {
                     this.$emit('continue')
                 })
-
             },
-        },
-        computed: {
-            loading() {
-                return this.percentage > 0;
-            }
-        },
-        watch: {
-            file(newValue) {
-                this.createImage(newValue)
-            }
         },
     }
 </script>
 
-<style scoped>
-
-</style>

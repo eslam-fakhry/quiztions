@@ -41,35 +41,12 @@ export default {
                         showSnackbar('You have no authentication to complete this process', 'error')
                         return
                     }
-                    showSnackbar('Something went wrong','error')
+                    showSnackbar('Something went wrong', 'error')
                 })
         },
 
         async deleteLesson({commit, state, rootState}, {lessonId}) {
-
-            const value = await fb.fetchResource('lessons', lessonId)
-            const questions = value.questions ? Object.keys(value.questions) : []
-            const courseId = value.courseId
-
-            const updates = {};
-            updates['/lessons/' + lessonId] = null;
-            updates['/courses/' + courseId + '/lessons/' + lessonId] = null;
-            questions.forEach((questionId) => {
-                updates['/questions/' + questionId] = null;
-                updates['/rightAnswers/' + questionId] = null;
-            })
-
-            fb.db.ref('lessons/' + lessonId).off('value')
-
-            try {
-                await fb.db.ref().update(updates);
-            } catch (e) {
-                if (e.code === "PERMISSION_DENIED") {
-                    showSnackbar('You have no authentication to complete this process', 'error')
-                    return
-                }
-                showSnackbar('Something went wrong', 'error')
-            }
+            await fb.deleteLesson(lessonId)
         },
     },
 }

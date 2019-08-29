@@ -38,19 +38,8 @@ export default {
         },
 
         async deleteQuestion({commit, state, rootState}, {questionId, lessonId}) {
-            const updates = {};
-            updates['/questions/' + questionId] = null;
-            updates['/lessons/' + lessonId + '/questions/' + questionId] = null;
-            updates['/rightAnswers/' + questionId] = null;
-            try {
-                await fb.db.ref().update(updates);
-            } catch (e) {
-                if (e.code === "PERMISSION_DENIED") {
-                    showSnackbar('You have no authentication to complete this process', 'error')
-                    return
-                }
-                showSnackbar('Something went wrong', 'error')
-            }
+            await fb.deleteQuestion(questionId, lessonId)
+
         },
     },
 }

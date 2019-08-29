@@ -107,10 +107,10 @@ async function toggleEnrollmentInCourse({courseId, name}, toEnroll = true) {
     const userId = fb.auth.currentUser.uid
     const updates = {}
     if (toEnroll) {
-        updates[`/courseUsers/${courseId}/${userId}`] = true
+        updates[`/courseStudents/${courseId}/${userId}`] = true
         updates[`students/${userId}/courses/${courseId}`] = {name}
     } else {
-        updates[`/courseUsers/${courseId}/${userId}`] = null
+        updates[`/courseStudents/${courseId}/${userId}`] = null
         updates[`students/${userId}/courses/${courseId}`] = null
     }
     await fb.db.ref().update(updates)

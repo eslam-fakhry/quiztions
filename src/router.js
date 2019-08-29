@@ -35,6 +35,17 @@ const router = new Router({
             },
         },
         {
+            path: '/explore',
+            name: 'explore',
+            props: {
+                default: true,
+            },
+            components: {
+                default: () => import('./views/Explore.vue'),
+                toolbar: Toolbar,
+            },
+        },
+        {
             path: '/course/:course_id',
             name: 'course',
             props: {
@@ -101,18 +112,6 @@ const router = new Router({
                 default: () => import('./components/create-question/CreateQuestion.vue'),
                 toolbar: Toolbar,
             },
-        },
-        {
-            path: '/enrollment',
-            name: 'enrollment',
-            props: {
-                default:true,
-            },
-            components: {
-                default: () => import('./views/Enrollment.vue'),
-                toolbar: Toolbar,
-            },
-        },
 
         {
             path: '/not-found',
@@ -123,8 +122,8 @@ const router = new Router({
             },
         },
         {
-            path:'*',
-            redirect:'not-found'
+            path: '*',
+            redirect: 'not-found'
         }
     ]
 });
@@ -141,6 +140,5 @@ router.beforeEach((to, from, next) => {
         next()
     }
 })
-
 
 export default router

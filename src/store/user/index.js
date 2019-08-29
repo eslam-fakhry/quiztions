@@ -1,6 +1,6 @@
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
-// import {showSnackbar} from "@/utils";
+import {showSnackbar} from "@/utils";
 
 export default {
     namespaced: true,
@@ -88,7 +88,7 @@ export default {
                 const idTokenResult = await fb.auth.currentUser.getIdTokenResult()
                 commit(mutations.SET_JOB, idTokenResult.claims.job)
             } catch (e) {
-                console.error('[setUserProfile]', e);
+                showSnackbar("Something went wrong","error")
             }
         },
         async setUserJob({state, commit}, {job}) {

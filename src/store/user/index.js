@@ -71,7 +71,7 @@ export default {
         signUp({commit}, {email, password}) {
             return fb.auth.createUserWithEmailAndPassword(email, password)
         },
-        signOut({commit}) {
+        signOut() {
             return fb.auth.signOut()
         },
         async fetchUserCourses({state, commit}) {

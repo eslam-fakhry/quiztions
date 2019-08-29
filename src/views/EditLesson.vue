@@ -44,7 +44,7 @@
                     </v-icon>
                     <v-icon
                             small
-                            @click.stop="deleteItem(item)"
+                            @click.stop="removeQuestion(item)"
                     >
                         delete
                     </v-icon>
@@ -64,6 +64,7 @@
     import Loading from '@/components/Loading'
 
     const {mapState, mapActions} = createNamespacedHelpers('lessons')
+    const {mapActions: mapQuestionsActions} = createNamespacedHelpers('questions')
 
     export default {
         name: "EditLesson",
@@ -126,15 +127,28 @@
             },
         },
 
+
+        watch: {
+            lesson_id: {
+                immediate: true,
+                async handler(id) {
+                    this.loading = true;
+                    await this.fetchLesson({id});
+                    this.loading = false;
+                }
+            },
+            dialog(val) {
+                val || this.close()
+            },
+        },
+
         methods: {
             ...mapActions(['fetchLesson']),
+            ...mapQuestionsActions(['deleteQuestion']),
 
             onRowClick(ev) {
                 console.log(ev);
             },
-            initialize() {
-            },
-
             editItem(item) {
                 console.log('edit question');
                 // this.$router.push({name:'edit-question',params:{question_id:item.id}})
@@ -144,10 +158,14 @@
                 // this.dialog = true
             },
 
-            deleteItem(item) {
-                const index = this.questions.indexOf(item)
-                confirm('Are you sure you want to delete this item?') && console.log('deleting ', this.questions[index]);
-                // confirm('Are you sure you want to delete this item?') && this.courses.splice(index, 1)
+            removeQuestion(question) {
+                if (confirm('Are you sure you want to delete this question?')) {
+                    console.log('deleting ');
+                    this.deleteQuestion({
+                        questionId: question.id,
+                        lessonId: this.lesson_id
+                    })
+                }
             },
 
             close() {
@@ -170,22 +188,5 @@
             },
         },
 
-        watch: {
-            lesson_id: {
-                immediate: true,
-                async handler(id) {
-                    this.loading = true;
-                    await this.fetchLesson({id});
-                    this.loading = false;
-                }
-            },
-            dialog(val) {
-                val || this.close()
-            },
-        },
     }
 </script>
-
-<style scoped>
-
-</style>

@@ -1,5 +1,6 @@
 import fb from './firebaseConfig'
 import helpers from './helpers'
+import {showSnackbar} from "@/utils";
 
 const allowableRefs = ['questions', 'lessons', 'courses', 'teachers', 'students', 'rightAnswers']
 
@@ -102,26 +103,132 @@ async function createCourse({name}) {
     return newCourseKey
 }
 
-
-async function toggleEnrollmentInCourse({courseId, name}, toEnroll = true) {
-    const userId = fb.auth.currentUser.uid
-    const updates = {}
-    if (toEnroll) {
-        updates[`/courseUsers/${courseId}/${userId}`] = true
-        updates[`students/${userId}/courses/${courseId}`] = {name}
-    } else {
-        updates[`/courseUsers/${courseId}/${userId}`] = null
-        updates[`students/${userId}/courses/${courseId}`] = null
-    }
-    await fb.db.ref().update(updates)
-}
-
 function enrollInCourse({id: courseId, name}) {
     return toggleEnrollmentInCourse({courseId, name})
 }
 
 function leaveCourse({id: courseId}) {
     return toggleEnrollmentInCourse({courseId}, false)
+}
+
+async function toggleEnrollmentInCourse({courseId, name}, toEnroll = true) {
+    const userId = fb.auth.currentUser.uid
+    const updates = {}
+    if (toEnroll) {
+        updates[`/courseStudents/${courseId}/${userId}`] = true
+        updates[`students/${userId}/courses/${courseId}`] = {name}
+    } else {
+        updates[`/courseStudents/${courseId}/${userId}`] = null
+        updates[`students/${userId}/courses/${courseId}`] = null
+    }
+    await fb.db.ref().update(updates)
+}
+
+async function deleteQuestion(questionId, lessonId) {
+    let updates = {};
+    updates['/lessons/' + lessonId + '/questions/' + questionId] = null;
+    updates = Object.assign(updates, questionDeletionDependencies(questionId))
+
+    try {
+        await fb.db.ref().update(updates);
+    } catch (e) {
+        if (e.code === "PERMISSION_DENIED") {
+            showSnackbar('You have no authentication to complete this process', 'error')
+            return
+        }
+        showSnackbar('Something went wrong', 'error')
+    }
+}
+
+async function deleteLesson(lessonId) {
+    const value = await fetchResource('lessons', lessonId)
+    const questions = value.questions ? Object.keys(value.questions) : []
+    const courseId = value.courseId
+
+    let updates = {};
+    updates['/courses/' + courseId + '/lessons/' + lessonId] = null;
+    updates = Object.assign(updates, lessonDeletionDependencies(lessonId, questions))
+
+    fb.db.ref('lessons/' + lessonId).off('value')
+
+    try {
+        await fb.db.ref().update(updates);
+    } catch (e) {
+        if (e.code === "PERMISSION_DENIED") {
+            showSnackbar('You have no authentication to complete this process', 'error')
+            return
+        }
+        showSnackbar('Something went wrong', 'error')
+    }
+}
+
+async function deleteCourse(courseId) {
+    const course = await fetchResource('courses', courseId)
+    const lessons = course.lessons ? Object.keys(course.lessons) : []
+
+    let updates = {};
+    updates = Object.assign(updates, await courseDeletionDependencies(courseId, lessons))
+    updates = Object.assign(updates, await courseEnrolledDeletionDependencies(courseId))
+    updates['/teachers/' + fb.auth.currentUser.uid + '/courses/' + courseId] = null;
+
+    fb.db.ref('courses/' + courseId).off('value')
+
+    try {
+        await fb.db.ref().update(updates);
+    } catch (e) {
+        if (e.code === "PERMISSION_DENIED") {
+            showSnackbar('You have no authentication to complete this process', 'error')
+            return
+        }
+        showSnackbar('Something went wrong', 'error')
+    }
+}
+
+/*
+* Deletion dependencies
+* For multi-path update
+*/
+function questionDeletionDependencies(id) {
+    const updates = {}
+    updates['/questions/' + id] = null
+    updates['/rightAnswers/' + id] = null
+    return updates
+}
+
+function lessonDeletionDependencies(lessonId, questions) {
+    fb.db.ref('lessons/' + lessonId).off('value')
+    let updates = {};
+    updates['/lessons/' + lessonId] = null;
+    questions.forEach((questionId) => {
+        updates = Object.assign(updates, questionDeletionDependencies(questionId))
+    })
+    return updates
+}
+
+async function courseDeletionDependencies(courseId, lessons) {
+    fb.db.ref('courses/' + courseId).off('value')
+    let updates = {};
+    updates['/courses/' + courseId] = null;
+
+    await Promise.all(lessons.map(async (lessonId) => {
+        const lesson = await fetchResource('lessons', lessonId)
+        const questions = lesson.questions ? Object.keys(lesson.questions) : []
+        updates = Object.assign(updates, await lessonDeletionDependencies(lessonId, questions))
+    }))
+    return updates
+}
+
+async function courseEnrolledDeletionDependencies(courseId) {
+    let updates = {};
+
+    const enrolledStudents = (await fb.db.ref('courseStudents/' + courseId).once("value")).val()
+    if (enrolledStudents) {
+        updates['/courseStudents/' + courseId] = null
+        Object.keys(enrolledStudents).forEach((studentId) => {
+            updates['/students/' + studentId + '/courses/' + courseId] = null
+        })
+    }
+    return updates
 }
 
 export default {
@@ -136,4 +243,7 @@ export default {
     fetchCourses,
     enrollInCourse,
     leaveCourse,
+    deleteQuestion,
+    deleteLesson,
+    deleteCourse,
 }

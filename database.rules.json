@@ -14,7 +14,7 @@
       "$lessonId": {
         ".read": "auth != null",
         ".write": "(auth.token.job === 'teacher') && (!data.exists() || ! newData.exists() || (data.child('teacherId').val() === auth.uid ))",
-        ".validate": "newData.hasChildren(['name','teacherId'])",
+        ".validate": "newData.hasChildren(['name','teacherId','courseId'])",
         "teacherId": {
           ".validate": "newData.val() === auth.uid"
         }
@@ -24,7 +24,7 @@
       "$questionId": {
         ".read": "auth != null",
         ".write": "(auth.token.job === 'teacher') && (!data.exists() || ! newData.exists() || ( data.child('teacherId').val() === auth.uid ))",
-        ".validate": "newData.hasChildren(['body','type','teacherId'])",
+        ".validate": "newData.hasChildren(['body','type','teacherId','lessonId'])",
         "teacherId": {
           ".validate": "newData.val() === auth.uid"
         }
@@ -66,7 +66,7 @@
         ".write": "(!data.exists() && (auth.token.job === 'teacher')) || root.child('questions/'+$questionId+'/teacherId').val() === auth.uid "
       }
     },
-    "courseUsers": {
+    "courseStudents": {
       "$courseId": {
         ".read": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",
         ".write": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",

@@ -33,7 +33,6 @@ export default {
             return fb.createLesson({name, courseId})
                 .then(({key, lesson}) => {
                     commit(mutations.APPEND_LESSON, lesson)
-                    // commit('course/UPDATE_COURSE')
                     return key
                 })
                 // otherwise show user-friendly error
@@ -42,20 +41,12 @@ export default {
                         showSnackbar('You have no authentication to complete this process', 'error')
                         return
                     }
-                    showSnackbar('Something went wrong','error')
+                    showSnackbar('Something went wrong', 'error')
                 })
         },
-        // async deleteLesson({commit, state, rootState}, {id}) {
-        //
-        //     // Get a key for a new Lesson.
-        //     // const newLessonKey = fb.db.ref().child('courses').push().key;
-        //
-        //     // Write the new course's data simultaneously in the courses list and the user's course list.
-        //
-        //     const updates = {};
-        //     updates['/courses/' + id] = null;
-        //     updates['/teachers/' + rootState.user.uid + '/courses/' + id] = null;
-        //     await fb.db.ref().update(updates);
-        // },
+
+        async deleteLesson({commit, state, rootState}, {lessonId}) {
+            await fb.deleteLesson(lessonId)
+        },
     },
 }

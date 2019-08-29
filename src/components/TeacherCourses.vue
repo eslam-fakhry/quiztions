@@ -62,7 +62,7 @@
                         </v-icon>
                         <v-icon
                                 small
-                                @click.stop="deleteItem(item)"
+                                @click.stop="removeCourse(item)"
                         >
                             delete
                         </v-icon>
@@ -145,7 +145,7 @@
 
 
         methods: {
-            ...mapCoursesActions(['createCourse']),
+            ...mapCoursesActions(['createCourse','deleteCourse']),
             onRowClick(ev) {
                 console.log(ev);
             },
@@ -157,10 +157,11 @@
                 // this.editedItem = Object.assign({}, item)
                 // this.dialog = true
             },
-            deleteItem(item) {
-                const index = this.courses.indexOf(item)
-                if (confirm('Are you sure you want to delete this item?')) {
-                    console.log('deleting ', this.courses[index]);
+            async removeCourse(course) {
+                if (confirm('Are you sure you want to delete this course? All it\'s lessons and questions will be deleted!')) {
+                    await this.deleteCourse({
+                        courseId: course.id
+                    })
                 }
                 // confirm('Are you sure you want to delete this item?') && this.courses.splice(index, 1)
             },

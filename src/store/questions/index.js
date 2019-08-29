@@ -2,6 +2,7 @@ import fb from '@/services/firebase-facade'
 import Vue from 'vue'
 import mutations from '../mutation-types'
 import router from "../../router";
+import {showSnackbar} from "@/utils";
 
 export default {
     namespaced: true,
@@ -32,9 +33,13 @@ export default {
             }
         },
 
-       createQuestion({commit, state, rootState}, {question, rightAnswer, lessonId}) {
+        createQuestion({commit, state, rootState}, {question, rightAnswer, lessonId}) {
             return fb.createQuestion({question, rightAnswer, lessonId})
         },
 
+        async deleteQuestion({commit, state, rootState}, {questionId, lessonId}) {
+            await fb.deleteQuestion(questionId, lessonId)
+
+        },
     },
 }

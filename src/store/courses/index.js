@@ -30,16 +30,16 @@ export default {
                 commit(mutations.APPEND_COURSE, {...snap.val(), id})
             })
         },
-       async fetchCourses({commit}) {
+        async fetchCourses({commit}) {
             try {
                 // fetch from server
                 const courses = await fb.fetchCourses()
-                Object.entries(courses).forEach((courseEntry)=>{
-                    commit(mutations.APPEND_COURSE, {...courseEntry[1],id:courseEntry[0] })
+                Object.entries(courses).forEach((courseEntry) => {
+                    commit(mutations.APPEND_COURSE, {...courseEntry[1], id: courseEntry[0]})
                 })
             } catch (err) {
-               // otherwise show 404 page
-               showSnackbar('Error fetching courses','error')
+                // otherwise show 404 page
+                showSnackbar('Error fetching courses', 'error')
             }
         },
 
@@ -51,24 +51,12 @@ export default {
                         showSnackbar('You have no authentication to complete this process', 'error')
                         return
                     }
-                    showSnackbar('Something went wrong','error')
+                    showSnackbar('Something went wrong', 'error')
                 })
         },
 
-        // async deleteCourse({commit, state, rootState}, {id}) {
-        //
-        //     return;
-        //     // Get a key for a new Course.
-        //     // const newCourseKey = fb.db.ref().child('courses').push().key;
-        //
-        //     // Write the new course's data simultaneously in the courses list and the user's course list.
-        //
-        //     const updates = {};
-        //     updates['/courses/' + id] = null;
-        //     updates['/teachers/' + rootState.user.uid + '/courses/' + id] = null;
-        //     await fb.db.ref().update(updates);
-        // },
-
-
+        async deleteCourse({commit, state, rootState}, {courseId}) {
+           await fb.deleteCourse(courseId)
+        },
     },
 }

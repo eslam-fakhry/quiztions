@@ -33,7 +33,6 @@ export default {
             return fb.createLesson({name, courseId})
                 .then(({key, lesson}) => {
                     commit(mutations.APPEND_LESSON, lesson)
-                    // commit('course/UPDATE_COURSE')
                     return key
                 })
                 // otherwise show user-friendly error
@@ -45,17 +44,32 @@ export default {
                     showSnackbar('Something went wrong','error')
                 })
         },
-        // async deleteLesson({commit, state, rootState}, {id}) {
-        //
-        //     // Get a key for a new Lesson.
-        //     // const newLessonKey = fb.db.ref().child('courses').push().key;
-        //
-        //     // Write the new course's data simultaneously in the courses list and the user's course list.
-        //
-        //     const updates = {};
-        //     updates['/courses/' + id] = null;
-        //     updates['/teachers/' + rootState.user.uid + '/courses/' + id] = null;
-        //     await fb.db.ref().update(updates);
-        // },
+
+        async deleteLesson({commit, state, rootState}, {lessonId}) {
+
+            const value = await fb.fetchResource('lessons', lessonId)
+            const questions = value.questions ? Object.keys(value.questions) : []
+            const courseId = value.courseId
+
+            const updates = {};
+            updates['/lessons/' + lessonId] = null;
+            updates['/courses/' + courseId + '/lessons/' + lessonId] = null;
+            questions.forEach((questionId) => {
+                updates['/questions/' + questionId] = null;
+                updates['/rightAnswers/' + questionId] = null;
+            })
+
+            fb.db.ref('lessons/' + lessonId).off('value')
+
+            try {
+                await fb.db.ref().update(updates);
+            } catch (e) {
+                if (e.code === "PERMISSION_DENIED") {
+                    showSnackbar('You have no authentication to complete this process', 'error')
+                    return
+                }
+                showSnackbar('Something went wrong', 'error')
+            }
+        },
     },
 }

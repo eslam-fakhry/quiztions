@@ -2,9 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store'
 import Home from './views/Home.vue'
-import Toolbar  from "./layouts/TheToolbar";
-
-
+import Toolbar from "./layouts/TheToolbar";
+import fb from './services/firebase-facade'
+import mutations from "@/store/mutation-types";
+import {showSnackbar} from "@/utils";
 
 
 Vue.use(Router)
@@ -49,7 +50,7 @@ const router = new Router({
             path: '/course/:course_id',
             name: 'course',
             props: {
-                default:true,
+                default: true,
             },
             components: {
                 default: () => import('./views/Course.vue'),
@@ -79,40 +80,51 @@ const router = new Router({
 
         },
         {
-            path: '/course/edit/:course_id',
+            path: '/teacher/course/:course_id/edit',
             name: 'edit-course',
             props: {
-                default:true,
+                default: true,
             },
             components: {
                 default: () => import('./views/EditCourse.vue'),
                 toolbar: Toolbar,
             },
-            meta: {requiresAuth: true}
+            meta: {
+                requiresAuth: true,
+                requiresToBeTeacher: true
+            }
         },
         {
-            path: '/lesson/edit/:lesson_id',
+            path: '/teacher/lesson/:lesson_id/edit',
             name: 'edit-lesson',
             props: {
-                default:true,
+                default: true,
             },
             components: {
                 default: () => import('./views/EditLesson.vue'),
                 toolbar: Toolbar,
             },
-            meta: {requiresAuth: true}
+            meta: {
+                requiresAuth: true,
+                requiresToBeTeacher: true
+            }
         },
         {
-            path: '/question/create/:lesson_id',
+            path: '/teacher/question/:lesson_id/create',
             name: 'create-question',
             props: {
-                default:true,
+                default: true,
             },
             components: {
                 default: () => import('./components/create-question/CreateQuestion.vue'),
                 toolbar: Toolbar,
             },
 
+            meta: {
+                requiresAuth: true,
+                requiresToBeTeacher: true
+            }
+        },
         {
             path: '/not-found',
             name: 'not-found',
@@ -128,17 +140,27 @@ const router = new Router({
     ]
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
     const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
+    const requiresToBeTeacher = to.matched.some(x => x.meta.requiresToBeTeacher)
 
-    const loggedIn = store.getters['user/loggedIn']
-    if (requiresAuth && !loggedIn) {
+    if (requiresAuth && !fb.auth.currentUser) {
         next('/login')
-    } else if (requiresAuth && loggedIn) {
-        next()
-    } else {
-        next()
+        return
     }
+    if (requiresToBeTeacher) {
+        try {
+            const job = (await fb.auth.currentUser.getIdTokenResult()).claims.job
+            if (job !== 'teacher') {
+                showSnackbar("HEY! you're not supposed to go there", "warning")
+                next('/')
+            }
+        } catch (e) {
+            showSnackbar("Something went wrong", "error")
+            next('/')
+        }
+    }
+    next()
 })
 
 export default router

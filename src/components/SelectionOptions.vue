@@ -1,23 +1,29 @@
 <template>
-    <div style="width: 100vw;max-width: 300px;">
-        <SingleSelectionOption
-                class=" "
-                v-for="option in question.options"
-                :key="option"
-                :option="option"
-                @click="choose(option)"
-                :selected="option === value"
-                :ui-state="uiState"
-        />
-    </div>
+        <SlideUpTransition
+                tag="div"
+                appear
+                style="width: 100vw;max-width: 300px;"
+        >
+            <SingleSelectionOption
+                    class=" "
+                    v-for="( option,index ) in question.options"
+                    :key="option"
+                    :data-index="index"
+                    :option="option"
+                    @click="choose(option)"
+                    :selected="option === value"
+                    :ui-state="uiState"
+            />
+        </SlideUpTransition>
 </template>
 <script>
     import SingleSelectionOption from "./SingleSelectionOption";
+    import SlideUpTransition from "@/components/transitions/SlideUpTransition";
 
     export default {
         name: 'SelectionOptions',
 
-        components: {SingleSelectionOption},
+        components: {SlideUpTransition, SingleSelectionOption},
 
         inject:['question'],
 
@@ -62,3 +68,4 @@
         },
     }
 </script>
+

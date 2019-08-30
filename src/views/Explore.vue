@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="page">
         <Loading v-if="loading"></Loading>
         <v-layout v-else wrap>
             <v-flex xs12 sm6 md4 v-for="(course, id) in courses" :key="`course--${id}`">
@@ -61,4 +61,5 @@
             this.loading = false
         },
     }
+    // TODO: check the existence of the course before enrollment
 </script>

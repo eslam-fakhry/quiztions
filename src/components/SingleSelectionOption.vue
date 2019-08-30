@@ -22,14 +22,18 @@
             selected: {
                 type: Boolean, default: false
             },
+            disabled: {
+                type: Boolean,
+                default: false
+            }
         },
 
         computed: {
             classes() {
                 return {
-                    blue: this.uiState.ANSWER_NOT_CHECKED ,
-                    green: this.uiState.ANSWERED_CORRECTLY ,
-                    red: this.uiState.ANSWERED_WRONG ,
+                    blue: this.uiState.ANSWER_NOT_CHECKED,
+                    green: this.uiState.ANSWERED_CORRECTLY,
+                    red: this.uiState.ANSWERED_WRONG,
                 }
             }
         },
@@ -37,10 +41,15 @@
 </script>
 
 <style scoped>
-    .option{
+    .option {
         border: 1px solid #000;
         border-radius: 3000px;
         cursor: pointer;
+        transition: background-color .3s ease-in;
     }
+    .option:hover {
+        background: #e3e3e3;
+    }
+
 </style>
 

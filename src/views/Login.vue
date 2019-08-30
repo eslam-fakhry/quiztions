@@ -1,6 +1,6 @@
 <template>
 
-    <v-container d-flex justify-center>
+    <v-container d-flex justify-center class="page">
         <v-card
                 style="width: 100%; max-width: 400px;"
                 @input="resetServerMessages"

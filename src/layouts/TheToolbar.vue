@@ -1,6 +1,7 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div>
         <v-navigation-drawer
+                v-if="false"
                 v-model="drawer"
                 :clipped="$vuetify.breakpoint.lgAndUp"
                 app
@@ -78,14 +79,15 @@
         <v-app-bar
                 :clipped-left="$vuetify.breakpoint.lgAndUp"
                 app
-                color="blue darken-3"
+                color="orange darken-3"
                 dark
         >
+            <v-icon>help</v-icon>
             <v-toolbar-title
                     style="width: 300px"
                     class="ml-0 pl-4"
             >
-                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+                <!--                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>-->
                 <span class="hidden-sm-and-down">Quiztions</span>
             </v-toolbar-title>
 

@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 100%">
+    <div class="page">
         <Loading
                 v-if="loading"
         />
@@ -22,13 +22,18 @@
 
             <v-flex grow>
                 <keep-alive>
-                    <Question :key="componentKey"
-                              @result="addScoreResult"
-                              :question-id="questions[currentIndex]"
-                              @continue="currentIndex++"
-                              v-if="uiState.SHOW_QUESTION"
-                    ></Question>
+                    <FadeOut
+                            name="question"
+                            mode="out-in"
+                    >
+                        <Question :key="componentKey"
+                                  @result="addScoreResult"
+                                  :question-id="questions[currentIndex]"
+                                  @continue="currentIndex++"
+                                  v-if="uiState.SHOW_QUESTION"
+                        ></Question>
 
+                    </FadeOut>
                 </keep-alive>
 
                 <ResultMessage :result="uiState.SHOW_SUCCESS?'success':'failure'"
@@ -51,7 +56,7 @@
     import Question from '@/components/Question'
     import ResultMessage from '@/components/ResultMessage'
     import Loading from '@/components/Loading'
-
+    import FadeOut from '@/components/transitions/FadeOut'
 
     const {mapActions} = createNamespacedHelpers('lessons')
 
@@ -63,6 +68,7 @@
             Question,
             ResultMessage,
             Loading,
+            FadeOut,
         },
 
         props: {
@@ -185,13 +191,17 @@
             },
         },
 
-        beforeRouteLeave (to, from, next) {
+        beforeRouteLeave(to, from, next) {
             if (this.completed || this.failed) {
                 next()
                 return
             }
-             window.confirm('Do you really want to leave? you will lose progress!') && next()
+            window.confirm('Do you really want to leave? you will lose progress!') && next()
         },
     }
+    // TODO: fix can edit previously answered question
 </script>
 
+<style>
+
+</style>

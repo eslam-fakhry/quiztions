@@ -1,5 +1,5 @@
 <template>
-    <v-container d-flex justify-center>
+    <v-container d-flex justify-center class="page">
         <v-stepper alt-labels v-model="currentStep" style="width: 100%; max-width: 400px;">
             <v-stepper-header>
                 <template v-for="(step,index) in steps">

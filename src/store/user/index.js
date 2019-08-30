@@ -77,18 +77,17 @@ export default {
         async fetchUserCourses({state, commit}) {
             // fetch from server
             await fb.fetchUserCourses(state.job, function (snap) {
-                    commit(mutations.SET_USER_COURSES, snap.val() || [])
-                })
-            // otherwise show user-friendly error
+                commit(mutations.SET_USER_COURSES, snap.val() || [])
+            })
         },
         async setUserProfile({state, commit}, user) {
             commit(mutations.SET_USER, user)
-            if (! user) return;
+            if (!user) return;
             try {
                 const idTokenResult = await fb.auth.currentUser.getIdTokenResult()
                 commit(mutations.SET_JOB, idTokenResult.claims.job)
             } catch (e) {
-                showSnackbar("Something went wrong","error")
+                showSnackbar("Something went wrong", "error")
             }
         },
         async setUserJob({state, commit}, {job}) {
@@ -130,18 +129,26 @@ export default {
                 })
             commit(mutations.SET_PHOTO_URL, photoURL)
         },
-        async enrollInCourse({state},{id,name}){
-            await fb.enrollInCourse({id,name})
+        async enrollInCourse({state}, {id, name}) {
+            try {
+                await fb.enrollInCourse({id, name})
+            } catch (e) {
+                showSnackbar("Something went wrong", "error")
+            }
         },
-        async leaveCourse({state},{id}){
-            await fb.leaveCourse({id})
+        async leaveCourse({state}, {id}) {
+            try {
+                await fb.leaveCourse({id})
+            } catch (e) {
+                showSnackbar("Something went wrong", "error")
+            }
         },
     },
     getters: {
         loggedIn(state) {
             return state.logged
         },
-        isEnrolled(state){
+        isEnrolled(state) {
             return courseId => {
                 return Object.keys(state.courses).includes(courseId)
             }

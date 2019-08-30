@@ -38,7 +38,7 @@
           "$courseId": {
             ".read": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",
             ".write": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",
-            ".validate": "newData.hasChild('name')",
+            ".validate": "newData.hasChild('name') && root.child('courses/'+$courseId).exists()",
             "name": {
               ".validate": "newData.isString()"
             }
@@ -70,6 +70,7 @@
       "$courseId": {
         ".read": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",
         ".write": "root.child('courses/'+$courseId+'/teacherId').val() === auth.uid",
+        ".validate": "root.child('courses/'+$courseId).exists()",
         "$studentId": {
           ".read": "$studentId === auth.uid",
           ".write": "$studentId === auth.uid"

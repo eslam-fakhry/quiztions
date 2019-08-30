@@ -41,8 +41,3 @@ fb.auth.onAuthStateChanged(user => {
 window.onerror = function(message, source, lineNumber,collNumber, errorObject){
     showSnackbar('Something went wrong','error')
 }
-
-// TODO: change layout to named router-view
-
-// firebase rules todos
-//todo: only teachers can create courses, lessons, and questions

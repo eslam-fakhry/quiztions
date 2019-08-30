@@ -145,9 +145,6 @@ export default {
         },
     },
     getters: {
-        loggedIn(state) {
-            return state.logged
-        },
         isEnrolled(state) {
             return courseId => {
                 return Object.keys(state.courses).includes(courseId)

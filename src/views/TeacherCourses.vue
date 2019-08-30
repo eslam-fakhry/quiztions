@@ -1,10 +1,9 @@
 <!--suppress ALL -->
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <div>
+    <div class="page">
         <Loading v-if="loading"></Loading>
-        <v-container v-else>
+        <v-container v-else class="fill-height">
             <h1 class="text-center">Teacher Courses</h1>
-
 
             <v-data-table
                     :headers="headers"
@@ -78,14 +77,14 @@
 
 <script>
     import {createNamespacedHelpers} from 'vuex'
-    import Loading from './Loading'
+    import Loading from '@/components/Loading'
     import CoursesMixin from '@/components/mixins/Courses'
 
     const {mapState} = createNamespacedHelpers('user')
     const {mapActions: mapCoursesActions} = createNamespacedHelpers('courses')
 
     export default {
-        name: "Courses",
+        name: "TeacherCourses",
 
         components: {
             Loading,

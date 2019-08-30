@@ -1,49 +1,55 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
-    <v-container class="">
-        <h1 class="text-center">Lessons</h1>
-        <v-layout wrap v-if="! loading">
-            <v-flex class="child-flex" v-for="(lesson, id) in course.lessons" :key="id">
-                <!--v-model="value"-->
-                <v-menu
-                        :disabled="false"
-                        :absolute="false"
-                        open-on-hover
-                        :close-on-click="false"
-                        :close-on-content-click="false"
-                        :offset-y="true"
+    <v-container class="page">
+        <v-subheader>Lesson</v-subheader>
+        <Loading
+                v-if="loading"
+        />
+        <SlideUpTransition
+                v-else
+                appear
+                class="d-flex flex-wrap"
+        >
+            <v-flex
+                    xs12 sm6 md4
+                    v-for="(lesson, id, index) in course.lessons"
+                    :key="id"
+                    :data-index="index"
+            >
+                <v-card
+                        class="mx-4 my-2 py-6 px-4"
+                        :to="{name:'lesson',params:{lesson_id:id}}"
                 >
-                    <template v-slot:activator="{ on }">
-                        <v-layout column align-center class="ma-2">
+                    <v-layout
+                            items-center
+                    >
+                        <v-flex
+                                class="shrink"
+                        >
                             <v-avatar
-                                    v-on="on"
-                                    to="/"
-                                    :size="70"
-                                    color="indigo"
-                                    class="ma-2"
+                                    size="55"
+                                    class="orange
+                                     lighten-3"
                             >
-                                <v-icon>home</v-icon>
+                                <v-icon large>school</v-icon>
                             </v-avatar>
-                            <v-label class="text-center py-1" v-on="on">{{lesson.name}}</v-label>
-                        </v-layout>
-                    </template>
-                    <v-card>
-                        <v-card-text>
-                            laksdjfla
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn :to="{name:'lesson',params:{lesson_id:id}}">enter</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-menu>
+                        </v-flex>
+                        <v-flex class="d-flex">
+                            <span
+                                    class="ml-5 headline text-center my-auto"
+                                    v-text="lesson.name"
+                            />
+                        </v-flex>
+                    </v-layout>
+                </v-card>
             </v-flex>
-        </v-layout>
-        <Loading v-else></Loading>
+        </SlideUpTransition>
     </v-container>
 </template>
 
 <script>
     import {createNamespacedHelpers} from 'vuex'
     import Loading from '@/components/Loading'
+    import SlideUpTransition from '@/components/transitions/SlideUpTransition'
 
     const {mapActions} = createNamespacedHelpers('courses')
 
@@ -52,7 +58,8 @@
         name: "Course",
 
         components: {
-            Loading
+            Loading,
+            SlideUpTransition,
         },
 
         props: {
@@ -87,3 +94,4 @@
         methods: mapActions(['fetchCourse']),
     }
 </script>
+

@@ -1,10 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from './store'
-import Home from './views/Home.vue'
 import Toolbar from "./layouts/TheToolbar";
 import fb from './services/firebase-facade'
-import mutations from "@/store/mutation-types";
 import {showSnackbar} from "@/utils";
 
 
@@ -22,7 +19,16 @@ const router = new Router({
             path: '/',
             name: 'home',
             components: {
-                default: Home,
+                default: async () => {
+
+                    const job = (await fb.auth.currentUser.getIdTokenResult()).claims.job
+                    if (job === 'teacher') {
+                        return import('@/views/TeacherCourses')
+                    } else if (job === 'student') {
+                        return import('@/views/Courses')
+
+                    }
+                },
                 toolbar: Toolbar,
             },
             meta: {requiresAuth: true},

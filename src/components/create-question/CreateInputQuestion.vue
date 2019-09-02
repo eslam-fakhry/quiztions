@@ -35,6 +35,10 @@
             }
         },
 
+        mounted() {
+            this.$emit('update:valid', !this.$v.$invalid)
+        },
+
         methods: {
             update(answer) {
                 this.answer = [answer]

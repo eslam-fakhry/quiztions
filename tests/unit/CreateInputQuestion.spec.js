@@ -2,7 +2,6 @@ import {mount, createLocalVue} from '@vue/test-utils'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
 import Vuelidate from 'vuelidate'
-// import flushPromises from 'flush-promises'
 
 import helpers from '../helpers'
 import CreateInputQuestion from "@/components/create-question/CreateInputQuestion.vue"
@@ -27,7 +26,6 @@ describe('CreateInputQuestion.vue', () => {
     })
 
     it('shows a text input for the right answer', () => {
-
         wrapper = createWrapper()
 
         expect(wrapper.isVueInstance()).toBeTruthy()

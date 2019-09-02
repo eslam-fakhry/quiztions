@@ -82,17 +82,25 @@
                 color="orange darken-3"
                 dark
         >
-            <v-icon>help</v-icon>
             <v-toolbar-title
+                    items-center
                     style="width: 300px"
                     class="ml-0 pl-4"
+                    @click="$router.push({name:'home'})"
             >
+                <v-icon class="mr-2">help</v-icon>
                 <!--                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>-->
                 <span class="hidden-sm-and-down">Quiztions</span>
             </v-toolbar-title>
 
             <v-spacer></v-spacer>
-
+            <v-btn
+                    icon
+                    small
+                    :to="{name:'explore'}"
+            >
+                <v-icon>explore</v-icon>
+            </v-btn>
 
             <v-menu open-on-hover1 buttom offset-y>
                 <template v-slot:activator="{ on }">
@@ -105,41 +113,32 @@
                                 size="32px"
                                 item
                         >
-                            <v-img
-                                    src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
-                                    alt="Vuetify"
-                            >
-                            </v-img>
+                            <UserPicture/>
                         </v-avatar>
                     </v-btn>
-
                 </template>
 
                 <v-list :min-width="200">
-                    <!--v-for="(item, index) in items"-->
-                    <!--:key="index"-->
                     <v-list-item
                             @click=""
                     >
                         <LogoutBtn>
                             <v-list-item-title>logout</v-list-item-title>
-                            <!--<v-btn>logout</v-btn>-->
                         </LogoutBtn>
                     </v-list-item>
                 </v-list>
             </v-menu>
-
-
         </v-app-bar>
     </div>
 </template>
 
 <script>
     import LogoutBtn from '@/components/auth/LogoutBtn'
+    import UserPicture from "@/components/UserPicture";
 
     export default {
         name: "TheToolbar",
-        components: {LogoutBtn},
+        components: {UserPicture, LogoutBtn},
         data: () => ({
             dialog: false,
             drawer: null,
@@ -162,6 +161,3 @@
     }
 </script>
 
-<style scoped>
-
-</style>

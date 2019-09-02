@@ -53,7 +53,6 @@
 
     const {mapActions} = createNamespacedHelpers('courses')
 
-    // todo test fetchCourse
     export default {
         name: "Course",
 

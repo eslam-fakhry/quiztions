@@ -143,8 +143,6 @@
                     // noinspection JSCheckFunctionSignatures
                     this.$router.push({name: 'edit-lesson', params: {lesson_id: this.lesson_id}})
                 } catch (e) {
-                    // TODO: Remove console.log
-                    console.log(e.code);
                     if (e.code === "PERMISSION_DENIED") {
                         showSnackbar('You have no authentication to complete this process', 'error')
                         return

@@ -16,6 +16,7 @@ export default {
         courses: {},
 
     },
+
     mutations: {
         [mutations.SET_USER](state, user) {
             if (user) {
@@ -43,12 +44,6 @@ export default {
         [mutations.SET_PHOTO_URL](state, url) {
             state.photoURL = url
         },
-        [mutations.SET_PHOTO_URL](state, url) {
-            state.photoURL = url
-        },
-        [mutations.SET_PHOTO_URL](state, url) {
-            state.photoURL = url
-        },
         [mutations.SET_JOB](state, job) {
             state.job = job
         },
@@ -61,10 +56,9 @@ export default {
         [mutations.SET_BIRTHDAY](state, birthday) {
             state.birthday = birthday
         },
-
     },
-    actions: {
 
+    actions: {
         signIn({commit}, {email, password}) {
             return fb.auth.signInWithEmailAndPassword(email, password)
         },
@@ -117,17 +111,22 @@ export default {
             commit(mutations.SET_GENDER, gender)
             commit(mutations.SET_BIRTHDAY, birthday)
         },
-        async updatePhotoURL({state, commit}, photoURL) {
-            await fb.auth.currentUser.updateProfile({
-                photoURL,
-            })
-            await fb.db.ref(state.job + 's')
-                .child(state.uid)
-                .update({
+        async updatePhotoURL({state, commit}, url) {
+            try {
+                const photoURL = await fb.storage.ref(url).getDownloadURL()
+                await fb.auth.currentUser.updateProfile({
                     photoURL,
-                    profileCompletion: 4,
                 })
-            commit(mutations.SET_PHOTO_URL, photoURL)
+                await fb.db.ref(state.job + 's')
+                    .child(state.uid)
+                    .update({
+                        photoURL,
+                        profileCompletion: 4,
+                    })
+                commit(mutations.SET_PHOTO_URL, photoURL)
+            } catch (e) {
+                showSnackbar("Something went wrong", "error")
+            }
         },
         async enrollInCourse({state}, {id, name}) {
             try {
@@ -144,6 +143,7 @@ export default {
             }
         },
     },
+
     getters: {
         isEnrolled(state) {
             return courseId => {

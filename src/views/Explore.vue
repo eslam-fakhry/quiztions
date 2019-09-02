@@ -61,5 +61,4 @@
             this.loading = false
         },
     }
-    // TODO: check the existence of the course before enrollment
 </script>

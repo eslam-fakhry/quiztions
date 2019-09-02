@@ -1,12 +1,9 @@
-// import Vue from 'vue'
 import Vuetify from 'vuetify'
 
 import {shallowMount, createLocalVue} from '@vue/test-utils'
 
 import SelectionOptions from "@/components/SelectionOptions.vue"
 import SingleSelectionOption from "@/components/SingleSelectionOption.vue"
-
-
 
 const localVue = createLocalVue()
 localVue.use(Vuetify)

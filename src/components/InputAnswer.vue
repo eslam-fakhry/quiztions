@@ -8,7 +8,7 @@
             style="width: 100vw;max-width: 300px;"
             autofocus
             outlined
-    ></v-textarea>
+    />
 </template>
 <script>
     // todo fix modifying props.value directly

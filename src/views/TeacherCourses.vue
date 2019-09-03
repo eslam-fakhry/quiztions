@@ -1,14 +1,10 @@
-<!--suppress ALL -->
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div class="page">
-        <Loading v-if="loading"></Loading>
-        <v-container v-else class="fill-height">
-            <h1 class="text-center">Teacher Courses</h1>
-
+        <Loading v-if="loading"/>
+        <div v-else class="fill-height ma-3">
             <v-data-table
                     :headers="headers"
                     :items="courses"
-                    sort-by="calories"
                     class="elevation-1"
                     @click:row="onRowClick"
             >
@@ -19,8 +15,8 @@
                                 class="mx-4"
                                 inset
                                 vertical
-                        ></v-divider>
-                        <v-spacer></v-spacer>
+                        />
+                        <v-spacer/>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="primary" dark class="mb-2" v-on="on">New Course</v-btn>
@@ -34,15 +30,17 @@
                                     <v-container grid-list-md>
                                         <v-layout wrap>
                                             <v-flex xs12 sm6 md4>
-                                                <v-text-field v-model="editedItem.name"
-                                                              label="Course name"></v-text-field>
+                                                <v-text-field
+                                                        v-model="editedItem.name"
+                                                        label="Course name"
+                                                />
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
                                 </v-card-text>
 
                                 <v-card-actions>
-                                    <v-spacer></v-spacer>
+                                    <v-spacer/>
                                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                                     <v-btn color="blue darken-1" text @click="save">Save</v-btn>
                                 </v-card-actions>
@@ -50,6 +48,7 @@
                         </v-dialog>
                     </v-toolbar>
                 </template>
+
                 <template v-slot:item.action="{ item }">
                     <div @click.stop class="d-flex items-center">
                         <v-btn
@@ -86,7 +85,7 @@
                     You have no course yet. why not making a new one
                 </template>
             </v-data-table>
-        </v-container>
+        </div>
     </div>
 </template>
 
@@ -113,42 +112,17 @@
             loading: true,
             dialog: false,
             headers: [
-                {
-                    text: 'Name)',
-                    align: 'left',
-                    sortable: false,
-                    value: 'name',
-                },
-                {text: 'Actions', value: 'action', sortable: false},
+                {text: 'Name', align: 'left', sortable: false, value: 'name',},
+                {text: 'Actions', align:'end',sortable: false, value: 'action', width:100},
             ],
-            editedIndex: -1,
-            editedItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
-            },
-            defaultItem: {
-                name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
-            },
+            editedItem: {name: '',},
+            defaultItem: {name: '',},
         }),
 
         computed: {
             ...mapState({
                 courses: state => {
-                    return Object.keys(state.courses).map((key) => {
-                        // console.log(index,key);
-
-                        return {
-                            id: key,
-                            ...state.courses[key]
-                        }
-                    })
+                    return Object.keys(state.courses).map(key => ({...state.courses[key], id: key,}))
                 }
             }),
         },
@@ -159,19 +133,10 @@
             },
         },
 
-
         methods: {
-            ...mapCoursesActions(['createCourse','deleteCourse']),
+            ...mapCoursesActions(['createCourse', 'deleteCourse']),
             onRowClick(ev) {
-                console.log(ev);
-            },
-            initialize() {
-            },
-            editItem(item) {
-                this.$router.push({name: 'edit-course', params: {course_id: item.id}})
-                // this.editedIndex = this.courses.indexOf(item)
-                // this.editedItem = Object.assign({}, item)
-                // this.dialog = true
+                // TODO: goto course stats
             },
             async removeCourse(course) {
                 await this.deleteCourse({courseId: course.id})
@@ -180,20 +145,12 @@
                 this.dialog = false
                 setTimeout(() => {
                     this.editedItem = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
                 }, 300)
             },
             save() {
-                if (this.editedIndex > -1) {
-                    console.log('editing a course');
-                    // Object.assign(this.courses[this.editedIndex], this.editedItem)
-                } else {
-                    console.log('creating  a new course');
-                    // this.courses.push(this.editedItem)
-                    this.createCourse({name: this.editedItem.name}).then((id) => {
-                        this.$router.push({name: 'edit-course', params: {course_id: id}})
-                    })
-                }
+                this.createCourse({name: this.editedItem.name}).then((id) => {
+                    this.$router.push({name: 'edit-course', params: {course_id: id}})
+                })
                 this.close()
             },
         },

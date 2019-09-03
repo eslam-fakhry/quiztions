@@ -2,30 +2,19 @@
     <div class="py-4 my-4 option text-center"
          @click="$emit('click')"
          :class="selected?classes:{}"
+         v-text="option"
          data-jest="option"
-    >{{option}}
-    </div>
+    />
 </template>
 <script>
     export default {
         name: 'SingleSelectionOption',
 
         props: {
-            option: {
-                type: String,
-                required: true
-            },
-            uiState: {
-                type: Object,
-                required: true
-            },
-            selected: {
-                type: Boolean, default: false
-            },
-            disabled: {
-                type: Boolean,
-                default: false
-            }
+            option: {type: String, required: true},
+            uiState: {type: Object, required: true},
+            selected: {type: Boolean, default: false},
+            disabled: {type: Boolean, default: false}
         },
 
         computed: {
@@ -47,9 +36,9 @@
         cursor: pointer;
         transition: background-color .3s ease-in;
     }
+
     .option:hover {
         background: #e3e3e3;
     }
-
 </style>
 

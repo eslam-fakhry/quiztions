@@ -1,24 +1,16 @@
 <template>
     <div class="d-flex justify-center align-center fill-height">
-<!--        <LoopingRhombusesSpinner-->
-<!--                :animation-duration="2500"-->
-<!--                :rhombus-size="15"-->
-<!--                color="#ff1d5"-->
-<!--        />-->
         <div class="looping-rhombuses-spinner">
-            <div class="rhombus"></div>
-            <div class="rhombus"></div>
-            <div class="rhombus"></div>
+            <div class="rhombus"/>
+            <div class="rhombus"/>
+            <div class="rhombus"/>
         </div>
     </div>
 </template>
 
 <script>
-    // import { LoopingRhombusesSpinner } from 'epic-spinners'
     export default {
         name: "Loading",
-
-        // components: {LoopingRhombusesSpinner},
     }
 </script>
 

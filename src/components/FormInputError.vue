@@ -1,16 +1,26 @@
 <!--suppress CheckEmptyScriptTag -->
-<template >
+<template>
     <p class="mb-0 ">
-        <v-progress-circular indeterminate v-if="loading"/>
-        <span class="error--text" v-text="message" v-else-if="active">
+        <v-progress-circular
+                v-if="loading"
+                indeterminate
+        />
+        <span
+                v-else-if="active"
+                class="error--text"
+                v-text="message"
+        >
             <router-link
                     v-if="showLink"
                     class="light-blue--text "
                     :to="route"
-            >{{ linkText }}
-            </router-link>
+                    v-text="linkText"
+            />
         </span>
-        <span v-else class="hidden-sm-and-up hidden-xs-only">
+        <span
+                v-else
+                class="hidden-sm-and-up hidden-xs-only"
+        >
             hidden
         </span>
     </p>
@@ -20,29 +30,13 @@
     export default {
         name: "FormInputError",
 
-        props:{
-            message:{
-                type:String,
-            },
-            active:{
-                type:Boolean,
-                default:true,
-            },
-            loading:{
-                type:Boolean,
-                default:false,
-            },
-            route:{
-                type:Object,
-            },
-            showLink:{
-                type:Boolean,
-                default:false,
-            },
-            linkText:{
-                type:String,
-            }
-
+        props: {
+            message: {type: String,},
+            active: {type: Boolean, default: true,},
+            loading: {type: Boolean, default: false,},
+            route: {type: Object,},
+            showLink: {type: Boolean, default: false,},
+            linkText: {type: String,}
         }
     }
 </script>

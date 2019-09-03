@@ -17,10 +17,7 @@
 
         props: {
             message: {type: String},
-            result: {
-                type: String,
-                required: true
-            }
+            result: { type: String, required: true },
         },
     }
 </script>

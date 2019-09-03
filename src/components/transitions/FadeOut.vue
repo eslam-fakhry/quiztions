@@ -2,7 +2,7 @@
     <transition
             name="fade-out"
     >
-        <slot></slot>
+        <slot/>
     </transition>
 </template>
 
@@ -13,10 +13,13 @@
 </script>
 
 <style scoped>
-    .fade-out-enter-active, .fade-out-leave-active{
+    .fade-out-enter-active,
+    .fade-out-leave-active {
         transition: opacity .3s ease;
     }
-    .fade-out-enter, .fade-out-leave-to{
+
+    .fade-out-enter,
+    .fade-out-leave-to {
         opacity: 0;
     }
 </style>

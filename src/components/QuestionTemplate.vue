@@ -13,7 +13,7 @@
                     single-line
                     hide-details
                     data-jest="blank"
-            ></v-text-field>
+            />
             <span
                     :key="`${part}--${i}`"
                     v-if="part.length"
@@ -35,14 +35,8 @@
 
         props: {
             chosenOption: {},
-            value: {
-                type: Array,
-                required: true
-            },
-            uiState: {
-                type: Object,
-                required: true
-            },
+            value: { type: Array, required: true },
+            uiState: { type: Object, required: true },
         },
 
         computed: {

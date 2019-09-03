@@ -8,24 +8,19 @@
         <div
                 class="text-wrap feedback-text"
                 style="max-width: 300px"
+                v-text="feedback"
                 data-jest="feedback-text"
-        >{{feedback}}
-        </div>
+        />
     </v-alert>
 </template>
+
 <script>
     export default {
         name: 'QuestionFeedback',
 
         props: {
-            uiState: {
-                type: Object,
-                required: true
-            },
-            feedback: {
-                type: String,
-                required: true
-            },
+            uiState: { type: Object, required: true },
+            feedback: { type: String, required: true },
         },
 
         computed: {

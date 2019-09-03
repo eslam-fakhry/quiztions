@@ -1,15 +1,15 @@
-<template>
+<template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div class="page">
-        <Loading v-if="loading"></Loading>
+        <Loading v-if="loading"/>
         <v-layout v-else wrap>
             <v-flex xs12 sm6 md4 v-for="(course, id) in courses" :key="`course--${id}`">
                 <v-card
-                        :elevation="0"
-                        outlined
-                        flat
                         class="mx-4 my-4 pt-6 pb-10 px-4"
                 >
-                    <span class="headline">{{course.name}}</span>
+                    <span
+                            class="headline"
+                            v-text="course.name"
+                    />
                     <v-card-actions>
                         <ConfirmModal v-if="isEnrolled(id)" @confirmed="leave(id)">
                             <template v-slot:activator="{on}">
@@ -39,7 +39,9 @@
 <script>
     import {createNamespacedHelpers} from 'vuex'
     import Loading from '@/components/Loading'
-    const {mapActions: mapUserActions, mapGetters:mapUserGetters} = createNamespacedHelpers('user')
+    import ConfirmModal from "@/components/ConfirmModal";
+
+    const {mapActions: mapUserActions, mapGetters: mapUserGetters} = createNamespacedHelpers('user')
     const {mapActions: mapCoursesActions, mapState} = createNamespacedHelpers('courses')
 
     export default {
@@ -55,10 +57,10 @@
         }),
 
         methods: {
-            ...mapUserActions(['enrollInCourse','leaveCourse','fetchUserCourses']),
+            ...mapUserActions(['enrollInCourse', 'leaveCourse', 'fetchUserCourses']),
             ...mapCoursesActions(['fetchCourses']),
-            enroll(id,name) {
-                this.enrollInCourse({id,name})
+            enroll(id, name) {
+                this.enrollInCourse({id, name})
             },
             leave(id) {
                 this.leaveCourse({id})
@@ -67,7 +69,7 @@
 
         computed: {
             ...mapState({
-                courses:state=>state.courses,
+                courses: state => state.courses,
             }),
             ...mapUserGetters(['isEnrolled'])
         },
@@ -80,3 +82,4 @@
         },
     }
 </script>
+

@@ -1,21 +1,12 @@
-<!--suppress ALL -->
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div class="page">
         <Loading v-if="loading"/>
-        <v-container v-else class="">
-
-
-            <h1 class="text-center">{{course.name}}</h1>
-
-
+        <div v-else class="fill-height ma-3">
             <v-data-table
                     :headers="headers"
                     :items="lessons"
-                    sort-by="calories"
                     class="elevation-1"
                     @click:row="onRowClick"
-                    :loading="loading"
-                    loading-text="Loading... Please wait"
             >
                 <template v-slot:top>
                     <v-toolbar flat color="white">
@@ -24,8 +15,8 @@
                                 class="mx-4"
                                 inset
                                 vertical
-                        ></v-divider>
-                        <v-spacer></v-spacer>
+                        />
+                        <v-spacer/>
                         <v-dialog v-model="dialog" max-width="500px">
                             <template v-slot:activator="{ on }">
                                 <v-btn color="primary" dark class="mb-2" v-on="on">New Lesson</v-btn>
@@ -34,26 +25,26 @@
                                 <v-card-title>
                                     <span class="headline">New Lesson</span>
                                 </v-card-title>
-
                                 <v-card-text>
                                     <v-container grid-list-md>
                                         <v-layout wrap>
                                             <v-flex xs12 sm6 md4>
-                                                <v-text-field v-model="editedItem.name"
-                                                              label="lesson name"></v-text-field>
+                                                <v-text-field
+                                                        v-model="editedItem.name"
+                                                        label="lesson name"
+                                                />
                                             </v-flex>
                                             <v-flex xs12 sm6 md4>
                                                 <v-switch
                                                         v-model="editedItem.canNavigate"
                                                         :label="`can ${editedItem.canNavigate?'':'not'} navigate`"
-                                                ></v-switch>
+                                                />
                                             </v-flex>
                                         </v-layout>
                                     </v-container>
                                 </v-card-text>
-
                                 <v-card-actions>
-                                    <v-spacer></v-spacer>
+                                    <v-spacer/>
                                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                                     <v-btn color="blue darken-1" text @click="save">Save</v-btn>
                                 </v-card-actions>
@@ -90,13 +81,12 @@
                             All it's questions will be deleted!
                         </ConfirmModal>
                     </div>
-
                 </template>
                 <template v-slot:no-data>
                     This course has no lessons yet.
                 </template>
             </v-data-table>
-        </v-container>
+        </div>
     </div>
 </template>
 
@@ -105,17 +95,15 @@
     import Loading from '@/components/Loading'
     import ConfirmModal from "@/components/ConfirmModal";
 
-    const {mapState, mapActions} = createNamespacedHelpers('courses')
+    const {mapActions} = createNamespacedHelpers('courses')
     const {mapActions: mapLessonsActions} = createNamespacedHelpers('lessons')
 
     export default {
         name: "EditCourse",
-        props: {
-            course_id: {
-                required: true
-            }
-        },
 
+        props: {
+            course_id: { type: String, required: true }
+        },
 
         components: {
             ConfirmModal,
@@ -127,28 +115,11 @@
                 loading: false,
                 dialog: false,
                 headers: [
-                    {
-                        text: 'Name)',
-                        align: 'left',
-                        sortable: false,
-                        value: 'name',
-                    },
-                    // { text: 'Calories', value: 'calories' },
-                    // { text: 'Fat (g)', value: 'fat' },
-                    // { text: 'Carbs (g)', value: 'carbs' },
-                    // { text: 'Protein (g)', value: 'protein' },
-                    {text: 'Actions', value: 'action', sortable: false},
+                    {text: 'Name', align: 'left', sortable: false, value: 'name',},
+                    {text: 'Actions', align:'end',sortable: false, value: 'action', width:100},
                 ],
-                // courses: [],
-                editedIndex: -1,
-                editedItem: {
-                    name: '',
-                    canNavigate: true,
-                },
-                defaultItem: {
-                    name: '',
-                    canNavigate: true,
-                },
+                editedItem: {name: '', canNavigate: true,},
+                defaultItem: {name: '', canNavigate: true,},
             }
         },
 
@@ -158,13 +129,9 @@
             },
             lessons() {
                 const lessons = this.course.lessons
-
                 if (lessons) {
                     return Object.keys(lessons).map(key => {
-                        return {
-                            ...lessons[key],
-                            id: key,
-                        }
+                        return {...lessons[key], id: key,}
                     })
                 } else {
                     return []
@@ -174,19 +141,11 @@
 
         methods: {
             ...mapActions(['fetchCourse']),
-            ...mapLessonsActions(['createLesson','deleteLesson']),
+            ...mapLessonsActions(['createLesson', 'deleteLesson']),
 
             onRowClick(ev) {
-                console.log(ev)
-            },
-            initialize() {
-            },
-
-            editItem(item) {
-                this.$router.push({name: 'edit-lesson', params: {lesson_id: item.id}})
-                // this.editedIndex = this.courses.indexOf(item)
-                // this.editedItem = Object.assign({}, item)
-                // this.dialog = true
+                // TODO: goto lesson stats
+                // console.log(ev)
             },
 
             async removeLesson(lesson) {
@@ -197,26 +156,14 @@
                 this.dialog = false
                 setTimeout(() => {
                     this.editedItem = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
                 }, 300)
             },
 
             save() {
-                if (this.editedIndex > -1) {
-                    console.log('editing a lesson')
-                    // Object.assign(this.courses[this.editedIndex], this.editedItem)
-                } else {
-                    console.log('creating  a new lesson')
-                    // this.courses.push(this.editedItem)
-                    this.createLesson({
-                        name: this.editedItem.name,
-                        courseId: this.course_id
-
+                this.createLesson({name: this.editedItem.name, courseId: this.course_id})
+                    .then(id => {
+                        this.$router.push({name: 'edit-lesson', params: {lesson_id: id}})
                     })
-                        .then((id) => {
-                            this.$router.push({name: 'edit-lesson', params: {lesson_id: id}})
-                        })
-                }
                 this.close()
             },
         },

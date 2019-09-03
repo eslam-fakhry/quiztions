@@ -28,17 +28,9 @@
         inject:['question'],
 
         props: {
-            uiState: {
-                type: Object,
-                required: true
-            },
-            value: {
-                type: String
-            },
-            disabled: {
-                type: Boolean,
-                default: false
-            }
+            uiState: { type: Object, required: true },
+            value: { type: String },
+            disabled: { type: Boolean, default: false }
         },
 
         created() {

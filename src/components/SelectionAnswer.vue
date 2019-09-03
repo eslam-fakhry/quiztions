@@ -18,10 +18,7 @@
 
         mixins:[AnswerMixin],
 
-        props: {
-            value: {},
-            uiState:{},
-        },
+        props: { value: {}, uiState:{}, },
 
         methods: {
             // answer(value){

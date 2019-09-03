@@ -7,7 +7,7 @@
             v-on:enter="enter"
             v-on:leave="leave"
     >
-        <slot></slot>
+        <slot/>
     </transition-group>
 </template>
 
@@ -18,14 +18,8 @@
         name: "SlideUpTransition",
 
         props: {
-            tag: {
-                type: String,
-                default: "div"
-            },
-            appear:{
-                type:Boolean,
-                default:false
-            }
+            tag: { type: String, default: "div", },
+            appear:{ type:Boolean, default:false, }
         },
 
         methods: {
@@ -58,6 +52,3 @@
     }
 </script>
 
-<style scoped>
-
-</style>

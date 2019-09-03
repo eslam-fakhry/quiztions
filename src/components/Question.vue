@@ -2,24 +2,19 @@
     <div style="height: 100%">
         <Loading
                 v-if="loading"
-        >
-        </Loading>
+        />
         <v-layout
                 v-else
                 column
                 class=" justify-center align-center "
                 style="height: 100%"
         >
-
-            <v-flex
-                    shrink
-            >
+            <v-flex shrink >
                 <div
                         v-if="isBodyString"
                         class="text-center pb-6 mt-6"
-                >
-                    {{question.body}}
-                </div>
+                        v-text="question.body"
+                />
                 <div
                         v-else
                         v-for="(bodyItem,i) in  question.body"
@@ -33,16 +28,14 @@
                 </div>
             </v-flex>
 
-            <v-flex
-                    shrink
-            >
+            <v-flex shrink >
                 <component
                         :is="answerComponentName"
                         ref="Answer"
                         @answered="answered = true"
                         :key="question.id"
                         :ui-state="uiState"
-                ></component>
+                />
             </v-flex>
 
             <v-flex

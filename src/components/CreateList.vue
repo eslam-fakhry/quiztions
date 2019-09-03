@@ -47,26 +47,14 @@
         name: "CreateList",
 
         props: {
-            value: {
-                type: Array,
-                required: true,
-            },
-            min: {
-                type: Number,
-                required: true,
-            },
-            max: {
-                type: Number,
-                required: true,
-            },
-
+            value: {type: Array, required: true,},
+            min: {type: Number, required: true,},
+            max: {type: Number, required: true,},
         },
 
-        data() {
-            return {
-                items: this.value,
-            }
-        },
+        data: () => ({
+            items: this.value,
+        }),
 
         computed: {
             deleteDisabled() {
@@ -77,13 +65,13 @@
             }
         },
 
-        watch:{
-            value:{
-                immediate:true,
-                handler(newValue){
+        watch: {
+            value: {
+                immediate: true,
+                handler(newValue) {
                     if (newValue.length < this.min) {
                         const diff = this.min - newValue.length
-                        for (let i=0;i<diff;i++){
+                        for (let i = 0; i < diff; i++) {
                             newValue.push('')
                         }
                         this.items = newValue;

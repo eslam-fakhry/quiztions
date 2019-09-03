@@ -14,9 +14,10 @@
                             align-center
                     >
                         <v-flex xs6>
-                            <v-subheader v-if="item.heading">
-                                {{ item.heading }}
-                            </v-subheader>
+                            <v-subheader
+                                    v-if="item.heading"
+                                    v-text="item.heading"
+                            />
                         </v-flex>
                         <v-flex
                                 xs6
@@ -25,7 +26,9 @@
                             <a
                                     href="#!"
                                     class="body-2 black--text"
-                            >EDIT</a>
+                            >
+                                EDIT
+                            </a>
                         </v-flex>
                     </v-layout>
                     <v-list-group
@@ -38,9 +41,9 @@
                         <template v-slot:activator>
                             <v-list-item>
                                 <v-list-item-content>
-                                    <v-list-item-title>
-                                        {{ item.text }}
-                                    </v-list-item-title>
+                                    <v-list-item-title
+                                            v-text="item.text"
+                                    />
                                 </v-list-item-content>
                             </v-list-item>
                         </template>
@@ -53,9 +56,9 @@
                                 <v-icon>{{ child.icon }}</v-icon>
                             </v-list-item-action>
                             <v-list-item-content>
-                                <v-list-item-title>
-                                    {{ child.text }}
-                                </v-list-item-title>
+                                <v-list-item-title
+                                        v-text="child.text"
+                                />
                             </v-list-item-content>
                         </v-list-item>
                     </v-list-group>
@@ -65,12 +68,14 @@
                             @click=""
                     >
                         <v-list-item-action>
-                            <v-icon>{{ item.icon }}</v-icon>
+                            <v-icon
+                                    v-text="item.icon"
+                            />
                         </v-list-item-action>
                         <v-list-item-content>
-                            <v-list-item-title>
-                                {{ item.text }}
-                            </v-list-item-title>
+                            <v-list-item-title
+                           v-text="item.text"
+                            />
                         </v-list-item-content>
                     </v-list-item>
                 </template>
@@ -84,16 +89,15 @@
         >
             <v-toolbar-title
                     items-center
-                    style="width: 300px"
+                    style="width: 300px;cursor:pointer;"
                     class="ml-0 pl-4"
                     @click="$router.push({name:'home'})"
             >
                 <v-icon class="mr-2">help</v-icon>
-                <!--                <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>-->
                 <span class="hidden-sm-and-down">Quiztions</span>
             </v-toolbar-title>
 
-            <v-spacer></v-spacer>
+            <v-spacer/>
             <v-btn
                     icon
                     small
@@ -110,7 +114,7 @@
                             v-on="on"
                     >
                         <v-avatar
-                                size="32px"
+                                size="45px"
                                 item
                         >
                             <UserPicture/>
@@ -138,7 +142,9 @@
 
     export default {
         name: "TheToolbar",
+
         components: {UserPicture, LogoutBtn},
+
         data: () => ({
             dialog: false,
             drawer: null,
@@ -155,7 +161,6 @@
                 //         {icon: 'add', text: 'Create label'},
                 //     ],
                 // },
-
             ],
         }),
     }

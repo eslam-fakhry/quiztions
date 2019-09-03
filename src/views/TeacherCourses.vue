@@ -51,20 +51,35 @@
                     </v-toolbar>
                 </template>
                 <template v-slot:item.action="{ item }">
-                    <div @click.stop>
-                        <v-icon
-                                small
+                    <div @click.stop class="d-flex items-center">
+                        <v-btn
+                                icon
                                 class="mr-2"
-                                @click.stop="editItem(item)"
+                                :to="{name: 'edit-course', params: {course_id: item.id}}"
                         >
-                            edit
-                        </v-icon>
-                        <v-icon
-                                small
-                                @click.stop="removeCourse(item)"
-                        >
-                            delete
-                        </v-icon>
+                            <v-icon small>
+                                edit
+                            </v-icon>
+                        </v-btn>
+
+                        <ConfirmModal @confirmed="removeCourse(item)">
+                            <template v-slot:activator="{on}">
+                                <v-btn
+                                        icon
+                                        class="mr-2"
+                                        v-on="on"
+                                >
+                                    <v-icon small>
+                                        delete
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <template v-slot:title>
+                                Confirm Deletion
+                            </template>
+                            Are you sure you want to delete this course?<br>
+                            All it's lessons and questions will be deleted!
+                        </ConfirmModal>
                     </div>
                 </template>
                 <template v-slot:no-data>
@@ -79,6 +94,7 @@
     import {createNamespacedHelpers} from 'vuex'
     import Loading from '@/components/Loading'
     import CoursesMixin from '@/components/mixins/Courses'
+    import ConfirmModal from "@/components/ConfirmModal";
 
     const {mapState} = createNamespacedHelpers('user')
     const {mapActions: mapCoursesActions} = createNamespacedHelpers('courses')
@@ -87,6 +103,7 @@
         name: "TeacherCourses",
 
         components: {
+            ConfirmModal,
             Loading,
         },
 
@@ -157,12 +174,7 @@
                 // this.dialog = true
             },
             async removeCourse(course) {
-                if (confirm('Are you sure you want to delete this course? All it\'s lessons and questions will be deleted!')) {
-                    await this.deleteCourse({
-                        courseId: course.id
-                    })
-                }
-                // confirm('Are you sure you want to delete this item?') && this.courses.splice(index, 1)
+                await this.deleteCourse({courseId: course.id})
             },
             close() {
                 this.dialog = false

@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex justify-center align-center page">
     <div class="text-center">
-      <h1>404</h1>
-      this page not found
+      <img :src="require('@/assets/404.svg')" width="300" alt="page not found">
+      <div class="pt-4">Page not found <router-link :to="{name:'home'}">Home</router-link></div>
     </div>
   </div>
 </template>

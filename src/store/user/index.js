@@ -1,6 +1,7 @@
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
 import {showSnackbar} from "@/utils";
+import router from "@/router";
 
 export default {
     namespaced: true,
@@ -65,8 +66,9 @@ export default {
         signUp({commit}, {email, password}) {
             return fb.auth.createUserWithEmailAndPassword(email, password)
         },
-        signOut() {
-            return fb.auth.signOut()
+        async signOut() {
+            await fb.auth.signOut()
+            router.replace({name:'login'})
         },
         async fetchUserCourses({state, commit}) {
             // fetch from server

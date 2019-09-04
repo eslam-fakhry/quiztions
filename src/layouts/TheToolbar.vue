@@ -8,12 +8,16 @@
         >
             <v-toolbar-title
                     items-center
-                    style="width: 300px;cursor:pointer;"
-                    class="ml-0 pl-4"
+                    style="cursor:pointer;"
+                    class="ml-0 pl-4 d-flex items-center"
                     @click="$router.push({name:'home'})"
             >
-                <v-icon class="mr-2">help</v-icon>
-                <span class="hidden-sm-and-down">Quiztions</span>
+                <v-img
+                        :src="require('@/assets/logo.svg')"
+                        :width="30"
+                        class="d-inline-block mr-1"
+                />
+                <span class="hidden-sm-and-down black--text">Quiztions</span>
             </v-toolbar-title>
 
             <v-spacer/>

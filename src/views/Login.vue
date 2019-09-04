@@ -1,72 +1,86 @@
 <template>
-
-    <v-container d-flex justify-center class="page">
+    <v-container
+            class="fill-height d-flex justify-center"
+    >
         <v-card
-                style="width: 100%; max-width: 400px;"
                 @input="resetServerMessages"
         >
-            <p class="mt-4 mb-2 text-center grey--text body-1"><span>Not registered? </span>
-                <router-link class="light-blue--text " :to="{name:'register'}">register</router-link>
-            </p>
-
-            <v-card-text class="form-group">
-                <v-label class="">Email</v-label>
-
-                <v-text-field
-                        class="my-2 form-text-input"
-                        outlined
-                        single-line
-                        placeholder="email@example.com"
-                        v-model="$v.form.email.$model"
-                        hide-details
-                        :error="showEmailError"
-                        :success="! $v.form.email.$invalid"
-                        @keyup.enter="login"
-
-                ></v-text-field>
-                <form-input-error
-                        :active="showEmailError"
-                        :message="emailError.message"
-                        :route="{name:'register',params:{init_email: form.email}}"
-                        :show-link="emailError.showLink "
-                        link-text="register"
-                        @input="serverMessages.email = null"
-                />
-
-            </v-card-text>
-            <v-card-text class="form-group">
-                <v-label class="mb-2">Password</v-label>
-                <v-text-field
-                        class="my-2 "
-                        outlined
-                        single-line
-                        placeholder="enter password here"
-                        hide-details
-                        v-model="$v.form.password.$model"
-                        type="password"
-                        :error="showPasswordError"
-                        :success="! $v.form.password.$invalid"
-                        @keyup.enter="login"
-                ></v-text-field>
-
-                <form-input-error
-                        :active="showPasswordError"
-                        :message="passwordError"
-                        @input="serverMessages.password = ''"
-                />
-
-            </v-card-text>
-            <v-card-actions class="pa-4">
-                <v-btn
-                        outlined
-                        @click="login"
+            <v-layout wrap>
+                <v-flex
+                        xs12 md6
+                        class="hidden-sm-and-down"
+                        style=" width: 400px;"
                 >
-                    Login
-                </v-btn>
-                <v-spacer/>
-                <router-link class="light-blue--text " :to="{name:'home'}">Forgot password?</router-link>
-            </v-card-actions>
+                    <v-container class="fill-height">
+                        <v-img
+                                :src="require('@/assets/logo.svg')"
+                                gradient="to top right, rgba(250,250,250,0), rgba(250,250,250,.8)"
+                        />
+                    </v-container>
+                </v-flex>
+                <v-flex
+                        xs12 md6
+                        style=" width: 400px;"
+                >
+                    <p class="mt-4 mb-2 text-center grey--text body-1">
+                        <span>Not registered? </span>
+                        <router-link class="light-blue--text " :to="{name:'register'}">register</router-link>
+                    </p>
+                    <v-card-text class="form-group">
+                        <v-label>Email</v-label>
+                        <v-text-field
+                                class="my-2 form-text-input"
+                                outlined
+                                single-line
+                                placeholder="email@example.com"
+                                v-model="$v.form.email.$model"
+                                hide-details
+                                :error="showEmailError"
+                                :success="! $v.form.email.$invalid"
+                                @keyup.enter="login"
 
+                        />
+                        <form-input-error
+                                :active="showEmailError"
+                                :message="emailError.message"
+                                :route="{name:'register',params:{init_email: form.email}}"
+                                :show-link="emailError.showLink "
+                                link-text="register"
+                                @input="serverMessages.email = null"
+                        />
+                    </v-card-text>
+                    <v-card-text class="form-group">
+                        <v-label class="mb-2">Password</v-label>
+                        <v-text-field
+                                class="my-2 "
+                                outlined
+                                single-line
+                                placeholder="enter password here"
+                                hide-details
+                                v-model="$v.form.password.$model"
+                                type="password"
+                                :error="showPasswordError"
+                                :success="! $v.form.password.$invalid"
+                                @keyup.enter="login"
+                        />
+                        <form-input-error
+                                :active="showPasswordError"
+                                :message="passwordError"
+                                @input="serverMessages.password = ''"
+                        />
+                    </v-card-text>
+                    <v-card-actions class="pa-4">
+                        <v-btn
+                                outlined
+                                @click="login"
+                        >
+                            Login
+                        </v-btn>
+                        <v-spacer/>
+                        <router-link class="light-blue--text " :to="{name:'home'}">Forgot password?</router-link>
+                    </v-card-actions>
+                </v-flex>
+            </v-layout>
         </v-card>
     </v-container>
 </template>
@@ -74,7 +88,7 @@
 <script>
     import {required, minLength, email} from 'vuelidate/lib/validators'
     import FormInputError from '@/components/FormInputError'
-    import {showSnackbar} from "../utils";
+    import {showSnackbar} from "../utils"
 
     export default {
         name: "Login",
@@ -97,39 +111,6 @@
                     email: '',
                     password: '',
                 }
-            }
-        },
-
-        methods: {
-            login() {
-                if (!this.$v.$invalid) {
-                    this.$store.dispatch('user/signIn', {
-                        email: this.form.email,
-                        password: this.form.password,
-                    })
-                        .then(() => {
-                            showSnackbar("you're successfully logged in",'success')
-                            this.$router.replace('/')
-                        })
-                        .catch(err => {
-                            // console.log('err: ', err);
-                            if (err.code === 'auth/user-not-found') {
-                                this.serverMessages.email = {
-                                    message: "User not found",
-                                    showLink: true
-                                }
-                            } else if (err.code === "auth/wrong-password") {
-                                this.serverMessages.password = "Wrong password"
-
-                            }
-                        })
-
-                }
-            },
-            resetServerMessages() {
-                this.serverMessages.email = ''
-                this.serverMessages.password = ''
-
             }
         },
 
@@ -162,6 +143,38 @@
             },
         },
 
+        methods: {
+            login() {
+                if (!this.$v.$invalid) {
+                    this.$store.dispatch('user/signIn', {
+                        email: this.form.email,
+                        password: this.form.password,
+                    })
+                        .then(() => {
+                            showSnackbar("you're successfully logged in", 'success')
+                            this.$router.replace('/')
+                        })
+                        .catch(err => {
+                            if (err.code === 'auth/user-not-found') {
+                                this.serverMessages.email = {
+                                    message: "User not found",
+                                    showLink: true
+                                }
+                            } else if (err.code === "auth/wrong-password") {
+                                this.serverMessages.password = "Wrong password"
+
+                            }
+                        })
+
+                }
+            },
+            resetServerMessages() {
+                this.serverMessages.email = ''
+                this.serverMessages.password = ''
+
+            }
+        },
+
         validations: {
             form: {
                 email: {
@@ -176,3 +189,4 @@
         },
     }
 </script>
+

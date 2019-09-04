@@ -74,6 +74,5 @@
         },
 
     }
-    // TODO: Add Explore btn in toolbar
 </script>
 

@@ -9,7 +9,7 @@
                 class=" justify-center align-center "
                 style="height: 100%"
         >
-            <v-flex shrink >
+            <v-flex shrink>
                 <div
                         v-if="isBodyString"
                         class="text-center pb-6 mt-6"
@@ -24,11 +24,11 @@
                     <span
                             v-if="bodyItem.text"
                             v-text="bodyItem.text"
-                   />
+                    />
                 </div>
             </v-flex>
 
-            <v-flex shrink >
+            <v-flex shrink>
                 <component
                         :is="answerComponentName"
                         ref="Answer"
@@ -63,24 +63,17 @@
 
 <script>
     import {createNamespacedHelpers} from 'vuex'
-
-    import Loading from './Loading'
-
     import QuestionMixin from "./mixins/Question"
+    import Loading from './Loading'
     import QuestionFeedback from "./QuestionFeedback";
-
-    import SelectionAnswer from "@/components/SelectionAnswer";
-    import CompletionAnswer from "@/components/CompletionAnswer";
-    import InputAnswer from "@/components/InputAnswer";
 
     const {mapActions} = createNamespacedHelpers('questions')
     const {mapGetters} = createNamespacedHelpers('answers')
 
-    // Todo: Add answer component in a separate folder and import them dynamically
-    const answerComponents = {
-        'selection': SelectionAnswer,
-        'completion': CompletionAnswer,
-        'input': InputAnswer,
+    const answerComponentsLoader = {
+        'selection': () => import( "@/components/SelectionAnswer"),
+        'completion': () => import( "@/components/CompletionAnswer"),
+        'input': () => import( "@/components/InputAnswer"),
     }
 
     export default {
@@ -89,9 +82,6 @@
         components: {
             Loading,
             QuestionFeedback,
-            SelectionAnswer,
-            CompletionAnswer,
-            InputAnswer,
         },
 
         mixins: [QuestionMixin,],
@@ -119,7 +109,7 @@
              * @return {string}
              */
             answerComponentName() {
-                return answerComponents[this.question.type];
+                return answerComponentsLoader[this.question.type];
                 // return _.camelCase(this.question.type) + "Answer";
             },
             isBodyString() {

@@ -1,50 +1,57 @@
 <template>
-    <v-list dense>
-        <v-list-item
+    <div>
+        <v-layout
                 v-for="(option, index) in items"
                 :key="`option--${option}--${index}`"
                 data-jest="item"
+                items-center
+                class="py-1"
         >
-            <v-list-item-content>
-                <v-text-field
-                        solo
-                        hide-details
+            <v-flex grow>
+                <TheTextField
                         :value="items[index]"
                         @change="update($event,index)"
                 />
-            </v-list-item-content>
+            </v-flex>
+            <v-flex shrink class="px-2 d-flex justify-center items-center">
 
-            <v-list-item-icon>
-                <v-btn
-                        icon
-                        @click="removeItem(index)"
-                        :disabled="deleteDisabled"
-                >
-                    <v-icon color="error">delete</v-icon>
-                </v-btn>
-            </v-list-item-icon>
-        </v-list-item>
+                <v-container class="fill-height">
+                    <v-btn
+                            icon
+                            @click="removeItem(index)"
+                            :disabled="deleteDisabled"
+                    >
+                        <v-icon color="error">delete</v-icon>
+                    </v-btn>
+                </v-container>
+            </v-flex>
+        </v-layout>
 
-        <v-list-item>
-            <v-list-item-icon class="py-1">
-                <v-btn
-                        icon
-                        @click="addItem"
-                        :disabled="addItemDisabled"
-                        data-jest="add-item"
-
-                >
-                    <v-icon>add</v-icon>
-                </v-btn>
-            </v-list-item-icon>
-        </v-list-item>
-
-    </v-list>
+        <v-layout class="pt-1 pb-3">
+            <v-spacer/>
+            <v-flex shrink class="px-2">
+                <v-container class="fill-height">
+                    <v-btn
+                            icon
+                            @click="addItem"
+                            :disabled="addItemDisabled"
+                            data-jest="add-item"
+                    >
+                        <v-icon>add</v-icon>
+                    </v-btn>
+                </v-container>
+            </v-flex>
+        </v-layout>
+    </div>
 </template>
 
 <script>
+    import TheTextField from "@/components/TheTextField";
+
     export default {
         name: "CreateList",
+
+        components: {TheTextField},
 
         props: {
             value: {type: Array, required: true,},
@@ -52,9 +59,12 @@
             max: {type: Number, required: true,},
         },
 
-        data: () => ({
-            items: this.value,
-        }),
+        data() {
+            return {
+                items: this.value,
+
+            }
+        },
 
         computed: {
             deleteDisabled() {

@@ -1,14 +1,18 @@
 <template>
     <div>
-        <v-text-field v-model="template" @input="$emit('input',$event)"></v-text-field>
+        <TheTextField
+                v-model="template"
+                @input="$emit('input',$event)"
+        />
         <v-btn>add blank</v-btn>
     </div>
 </template>
 
 <script>
+    import TheTextField from "@/components/TheTextField";
     export default {
         name: "CreateCompletionTemplate",
-
+        components: {TheTextField},
         props: {
             value:{
                 type:String,

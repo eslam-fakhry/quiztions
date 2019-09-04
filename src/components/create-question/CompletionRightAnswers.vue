@@ -20,7 +20,31 @@
                 />
             </template>
         </div>
-        <v-list dense>
+
+        <div>
+            <v-layout
+                    v-for=" index in blankNum"
+                    :key="index"
+                    class="py-1"
+            >
+                <v-flex shrink><v-container class="fill-height">
+                    <v-chip
+                            v-text="index"
+                            @click="focusTextField(index)"
+                            class="mx-2 px-4"
+                            outlined
+                    />
+                </v-container></v-flex>
+                <v-flex>
+                    <TheTextField
+                            v-model="items[index-1]"
+                            ref="blankTextField"
+                            data-jest="blank-text-field"
+                    />
+                </v-flex>
+            </v-layout>
+        </div>
+        <v-list dense v-if="false">
             <v-list-item
                     v-for=" index in blankNum"
                     :key="`blank-text-field--${index}`"
@@ -51,9 +75,10 @@
     </div>
 </template>
 <script>
+    import TheTextField from "@/components/TheTextField";
     export default {
         name: "CompletionRightAnswers",
-
+        components: {TheTextField},
         props: {
             template: {
                 type: String,

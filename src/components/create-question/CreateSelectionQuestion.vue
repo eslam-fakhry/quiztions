@@ -6,12 +6,10 @@
                 :max="5"
                 @input="options=[...$event]"
         />
-<!--                data-jest="options"-->
-        <v-select
+        <TheSelectField
                 :items="[...options]"
                 @input="answer = [$event]"
                 label="select the right answer"
-                solo
                 data-jest="right-answer"
         />
     </div>
@@ -20,11 +18,13 @@
 <script>
     import {required, minLength, maxLength} from 'vuelidate/lib/validators'
     import CreateList from '@/components/CreateList'
+    import TheSelectField from "@/components/TheSelectField";
 
     export default {
         name: "CreateCompletionQuestion",
 
         components: {
+            TheSelectField,
             CreateList,
         },
 

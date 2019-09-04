@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-text-field
+        <TheTextField
                 :value="answer[0]"
                 @input="update"
                 data-jest="right-answer"
@@ -10,10 +10,11 @@
 
 <script>
     import {required} from 'vuelidate/lib/validators'
+    import TheTextField from "@/components/TheTextField";
 
     export default {
         name: "CreateInputQuestion",
-
+        components: {TheTextField},
         props: {
             rightAnswer: {},
         },
@@ -24,11 +25,11 @@
             }
         },
 
-        watch:{
-            rightAnswer:{
-                immediate:true,
-                handler(val){
-                    this.answer =  val && Array.isArray(val)
+        watch: {
+            rightAnswer: {
+                immediate: true,
+                handler(val) {
+                    this.answer = val && Array.isArray(val)
                         ? val
                         : []
                 }

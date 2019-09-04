@@ -1,66 +1,103 @@
 <template>
     <v-container>
+        <v-card>
+            <v-layout wrap class="pt-4 pb-8">
+                <v-flex xs12 lg3>
+                    <v-subheader>
+                        Question Type
+                    </v-subheader>
+                </v-flex>
+                <v-flex xs12 lg9>
+                    <TheSelectField
+                            :items="answerTypes"
+                            label="Type"
+                            v-model="selectedAnswerType"
+                            data-jest="select-question-type"
+                    />
+                </v-flex>
+            </v-layout>
 
-        <h2>Question Type</h2>
-        <v-card flat>
-            <v-select
-                    :items="answerTypes"
-                    label="Answer type"
-                    solo
-                    hide-details
-                    v-model="selectedAnswerType"
-                    data-jest="select-question-type"
-            ></v-select>
+            <v-divider/>
+
+            <v-layout wrap class="pt-4 pb-8 ">
+                <v-flex xs12 lg3>
+                    <v-subheader>
+                        Question Body
+                    </v-subheader>
+                </v-flex>
+                <v-flex xs12 lg9>
+                    <TheTextField
+                            :value="body[0]"
+                            @input="body =[$event]"
+                            label="Body"
+                            data-jest="question-body"
+                    />
+                </v-flex>
+            </v-layout>
+
+            <v-divider/>
+
+            <v-layout wrap class="pt-4 pb-8">
+                <v-flex xs12 lg3>
+                    <v-subheader>
+                        Question Information
+                    </v-subheader>
+                </v-flex>
+                <v-flex xs12 lg9>
+                    <component
+                            :is="answerComponentName"
+                            @update:questionPart="questionPart = $event"
+                            @update:valid="questionTypeValid = $event"
+                            @update:rightAnswer="rightAnswer = $event"
+                    />
+                </v-flex>
+            </v-layout>
+
+            <v-divider/>
+
+            <v-layout wrap class="pt-4 pb-8" v-if="false">
+                <v-flex xs12 lg3>
+                    <v-subheader>
+                        Extra Information
+                    </v-subheader>
+                </v-flex>
+                <v-flex xs12 lg9>
+                    <v-switch
+                            v-model="extra.renderedLocally"
+                            :label="`Is ${extra.renderedLocally?'':'not'} rendered locally`"
+                            hide-details
+                    />
+                    <v-switch
+                            v-model="extra.timed"
+                            :label="`Is ${extra.timed?'':'not'} timed`"
+                            hide-details
+                    />
+                </v-flex>
+            </v-layout>
+
+            <v-divider/>
+
+            <v-layout wrap class="pt-4 pb-8">
+                <v-spacer/>
+                <v-flex xs12 lg9>
+                    <div>
+                        <v-btn
+                                color="primary"
+                                @click="save"
+                                data-jest="save-btn"
+                        >
+                            Save
+                        </v-btn>
+                        <v-btn
+                                text
+                                @click="cancel"
+                        >
+                            cancel
+                        </v-btn>
+                    </div>
+                </v-flex>
+            </v-layout>
         </v-card>
-
-        <h2>Question Body</h2>
-        <v-card flat>
-            <v-text-field
-                    :value="body[0]"
-                    @input="body =[$event]"
-                    outlined
-                    hide-details
-                    data-jest="question-body"
-            />
-        </v-card>
-
-        <h2>Question Information</h2>
-        <component
-                :is="answerComponentName"
-                @update:questionPart="questionPart = $event"
-                @update:valid="questionTypeValid = $event"
-                @update:rightAnswer="rightAnswer = $event"
-        ></component>
-
-        <h2>Extra Information</h2>
-        <v-card flat>
-            <v-switch
-                    v-model="extra.renderedLocally"
-                    :label="`Is ${extra.renderedLocally?'':'not'} rendered locally`"
-            ></v-switch>
-            <v-switch
-                    v-model="extra.timed"
-                    :label="`Is ${extra.timed?'':'not'} timed`"
-            ></v-switch>
-
-        </v-card>
-
-        <div>
-            <v-btn
-                    color="primary"
-                    @click="save"
-                    data-jest="save-btn"
-            >
-                Save
-            </v-btn>
-            <v-btn
-                    text
-                    @click="cancel"
-            >
-                cancel
-            </v-btn>
-        </div>
-
     </v-container>
 </template>
 
@@ -72,6 +109,8 @@
     import CreateCompletionQuestion from '@/components/create-question/CreateCompletionQuestion'
     import CreateInputQuestion from '@/components/create-question/CreateInputQuestion'
     import CreateSelectionQuestion from '@/components/create-question/CreateSelectionQuestion'
+    import TheTextField from "@/components/TheTextField";
+    import TheSelectField from "@/components/TheSelectField";
 
 
     const {mapActions} = createNamespacedHelpers('questions')
@@ -86,16 +125,15 @@
         name: "CreateQuestion",
 
         components: {
+            TheSelectField,
+            TheTextField,
             CreateCompletionQuestion,
             CreateInputQuestion,
             CreateSelectionQuestion,
         },
 
         props: {
-            lesson_id: {
-                type: String,
-                required: true,
-            }
+            lesson_id: { type: String, required: true, }
         },
 
         data() {
@@ -133,7 +171,6 @@
             ...mapActions(['createQuestion']),
             async save() {
                 try {
-
                     await this.createQuestion({
                         question: this.questionObj,
                         rightAnswer: this.rightAnswer,
@@ -141,7 +178,7 @@
                     })
                     showSnackbar('Question is successfully created', 'success')
                     // noinspection JSCheckFunctionSignatures
-                    this.$router.push({name: 'edit-lesson', params: {lesson_id: this.lesson_id}})
+                    this.$router.replace({name: 'edit-lesson', params: {lesson_id: this.lesson_id}})
                 } catch (e) {
                     if (e.code === "PERMISSION_DENIED") {
                         showSnackbar('You have no authentication to complete this process', 'error')
@@ -153,7 +190,7 @@
             },
             cancel() {
                 // noinspection JSCheckFunctionSignatures
-                confirm('Discard changes?') && this.$router.push({
+                confirm('Discard changes?') && this.$router.replace({
                     name: 'edit-lesson',
                     params: {lesson_id: this.lesson_id}
                 })

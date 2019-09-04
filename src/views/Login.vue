@@ -109,7 +109,7 @@
                     })
                         .then(() => {
                             showSnackbar("you're successfully logged in",'success')
-                            this.$router.push('/')
+                            this.$router.replace('/')
                         })
                         .catch(err => {
                             // console.log('err: ', err);

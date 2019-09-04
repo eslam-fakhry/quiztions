@@ -60,7 +60,7 @@
         },
         methods: {
             goNext() {
-                if (this.isLastStep) return this.$router.push('/');
+                if (this.isLastStep) return this.$router.replace('/');
                 this.currentStep++
             },
         },

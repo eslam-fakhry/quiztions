@@ -1,6 +1,6 @@
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
-import {showSnackbar} from "@/utils";
+import {showError} from "@/utils";
 import router from "@/router";
 
 export default {
@@ -83,7 +83,7 @@ export default {
                 const idTokenResult = await fb.auth.currentUser.getIdTokenResult()
                 commit(mutations.SET_JOB, idTokenResult.claims.job)
             } catch (e) {
-                showSnackbar("Something went wrong", "error")
+                showError()
             }
         },
         async setUserJob({state, commit}, {job}) {
@@ -127,21 +127,21 @@ export default {
                     })
                 commit(mutations.SET_PHOTO_URL, photoURL)
             } catch (e) {
-                showSnackbar("Something went wrong", "error")
+                showError()
             }
         },
         async enrollInCourse({state}, {id, name}) {
             try {
                 await fb.enrollInCourse({id, name})
             } catch (e) {
-                showSnackbar("Something went wrong", "error")
+                showError()
             }
         },
         async leaveCourse({state}, {id}) {
             try {
                 await fb.leaveCourse({id})
             } catch (e) {
-                showSnackbar("Something went wrong", "error")
+                showError()
             }
         },
     },

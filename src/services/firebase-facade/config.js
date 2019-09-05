@@ -22,35 +22,9 @@ const auth = firebase.auth()
 const functions = firebase.functions()
 const storage = firebase.storage()
 
-// functions.httpsCallable('setJob')('Student').then(res=>{
-//     console.log(res);
-// })
-
-// firebase collections
-const coursesRef = db.ref('courses')
-const lessonsRef = db.ref('lessons')
-const questionsRef = db.ref('questions')
-const rightAnswersRef = db.ref('rightAnswers')
-const studentsRef = db.ref('students')
-const teachersRef = db.ref('teachers')
-
-// studentsRef.child("mv0x7P86mLTCfpMF0lQVeyAfsEu2").update({email:'green'}).then(res=>{
-//     console.log(res);
-// })
-
-
 export default {
     db,
     auth,
     functions,
     storage,
-    refs: {
-        coursesRef,
-        lessonsRef,
-        questionsRef,
-        rightAnswersRef,
-        studentsRef,
-        teachersRef,
-    },
-
 };

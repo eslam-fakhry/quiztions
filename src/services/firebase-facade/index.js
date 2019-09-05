@@ -1,6 +1,5 @@
-import fb from './firebaseConfig'
-import helpers from './helpers'
-import {showSnackbar} from "@/utils";
+import fb from './config'
+import {showError} from "@/utils";
 
 const allowableRefs = ['questions', 'lessons', 'courses', 'teachers', 'students', 'rightAnswers']
 
@@ -37,68 +36,15 @@ function fetchCourses() {
 async function fetchUserCourses(job, cb) {
     return await new Promise((resolve, reject) => {
         if (!['student', 'teacher'].includes(job)) reject('Reference name is not allowed')
+        const userId = fb.auth.currentUser.uid;
         fb.db.ref(job + 's')
-            .child(fb.auth.currentUser.uid)
+            .child(userId)
             .child('courses')
             .on('value', (snap) => {
                 cb(snap)
                 resolve()
             })
     })
-}
-
-async function createQuestion({question, rightAnswer, lessonId}) {
-    const questionData = {
-        ...question,
-        lessonId,
-        teacherId: fb.auth.currentUser.uid,
-    }
-    const newQuestionKey = fb.db.ref('questions').push().key
-    const updates = buildNewQuestionUpdates(newQuestionKey, questionData, lessonId, rightAnswer);
-    await fb.db.ref().update(updates)
-    return newQuestionKey
-}
-
-function buildNewQuestionUpdates(questionId, questionData, lessonId, rightAnswer) {
-    const updates = {}
-    updates[`/questions/${questionId}`] = questionData
-    updates[`/lessons/${lessonId}/questions/${questionId}`] = questionId
-    updates[`/rightAnswers/${questionId}`] = rightAnswer
-    return updates;
-}
-
-async function createLesson({name, courseId}) {
-    const lessonData = {
-        name,
-        courseId,
-        teacherId: fb.auth.currentUser.uid,
-    }
-    const newLessonKey = fb.db.ref('lessons').push().key
-    const updates = buildNewLessonUpdates(newLessonKey, lessonData, courseId, name);
-    await fb.db.ref().update(updates)
-    return {key: newLessonKey, lesson: lessonData,}
-}
-
-function buildNewLessonUpdates(lessonId, lessonData, courseId, name) {
-    const updates = {}
-    updates[`/lessons/${lessonId}`] = lessonData
-    updates[`/courses/${courseId}/lessons/${lessonId}`] = {name,}
-    return updates;
-}
-
-async function createCourse({name}) {
-    const newCourseKey = fb.db.ref('courses').push().key
-    const updates = buildNewCourseUpdates(newCourseKey, name);
-    await fb.db.ref().update(updates)
-    return newCourseKey
-}
-
-function buildNewCourseUpdates(courseId, name) {
-    const updates = {}
-    const teacherId = fb.auth.currentUser.uid;
-    updates[`/courses/${courseId}`] = {name, teacherId,}
-    updates[`/teachers/${teacherId}/courses/${courseId}`] = {name,}
-    return updates;
 }
 
 function enrollInCourse({id: courseId, name}) {
@@ -115,11 +61,36 @@ async function toggleEnrollmentInCourse({courseId, name}, toEnroll = true) {
     await fb.db.ref().update(updates)
 }
 
-function buildCourseEnrollmentUpdates(toEnroll, courseId, userId, name) {
-    const updates = {}
-    updates[`/courseStudents/${courseId}/${userId}`] = toEnroll ? true : null
-    updates[`students/${userId}/courses/${courseId}`] = toEnroll ? {name} : null
-    return updates;
+async function createCourse({name}) {
+    const newCourseKey = fb.db.ref('courses').push().key
+    const updates = buildNewCourseUpdates(newCourseKey, name);
+    await fb.db.ref().update(updates)
+    return newCourseKey
+}
+
+async function createLesson({name, courseId}) {
+    const teacherId = fb.auth.currentUser.uid;
+    const lessonData = {
+        name,
+        courseId,
+        teacherId,
+    }
+    const newLessonKey = fb.db.ref('lessons').push().key
+    const updates = buildNewLessonUpdates(newLessonKey, lessonData, courseId, name);
+    await fb.db.ref().update(updates)
+    return {key: newLessonKey, lesson: lessonData,}
+}
+
+async function createQuestion({question, rightAnswer, lessonId}) {
+    const questionData = {
+        ...question,
+        lessonId,
+        teacherId: fb.auth.currentUser.uid,
+    }
+    const newQuestionKey = fb.db.ref('questions').push().key
+    const updates = buildNewQuestionUpdates(newQuestionKey, questionData, lessonId, rightAnswer);
+    await fb.db.ref().update(updates)
+    return newQuestionKey
 }
 
 async function deleteCourse(courseId) {
@@ -129,21 +100,8 @@ async function deleteCourse(courseId) {
     try {
         await fb.db.ref().update(updates);
     } catch (e) {
-        if (e.code === "PERMISSION_DENIED") {
-            showSnackbar('You have no authentication to complete this process', 'error')
-            return
-        }
-        showSnackbar('Something went wrong', 'error')
+        showError(e.code);
     }
-}
-
-async function buildCourseDeletionUpdates(courseId, lessons) {
-    let updates = {};
-    const teacherId = fb.auth.currentUser.uid
-    updates = Object.assign(updates, await courseDeletionDependencies(courseId, lessons))
-    updates = Object.assign(updates, await courseEnrolledDeletionDependencies(courseId))
-    updates[`/teachers/${teacherId}/courses/${courseId}`] = null;
-    return updates;
 }
 
 async function deleteLesson(lessonId) {
@@ -156,19 +114,8 @@ async function deleteLesson(lessonId) {
     try {
         await fb.db.ref().update(updates);
     } catch (e) {
-        if (e.code === "PERMISSION_DENIED") {
-            showSnackbar('You have no authentication to complete this process', 'error')
-            return
-        }
-        showSnackbar('Something went wrong', 'error')
+        showError(e.code)
     }
-}
-
-function buildLessonDeletionUpdates(lessonId, courseId, questions) {
-    let updates = {};
-    updates[`/courses/${courseId}/lessons/${lessonId}`] = null;
-    updates = Object.assign(updates, lessonDeletionDependencies(lessonId, questions))
-    return updates;
 }
 
 async function deleteQuestion(questionId, lessonId) {
@@ -176,12 +123,54 @@ async function deleteQuestion(questionId, lessonId) {
     try {
         await fb.db.ref().update(updates);
     } catch (e) {
-        if (e.code === "PERMISSION_DENIED") {
-            showSnackbar('You have no authentication to complete this process', 'error')
-            return
-        }
-        showSnackbar('Something went wrong', 'error')
+       showError(e.code)
     }
+}
+
+function buildNewCourseUpdates(courseId, name) {
+    const updates = {}
+    const teacherId = fb.auth.currentUser.uid;
+    updates[`/courses/${courseId}`] = {name, teacherId,}
+    updates[`/teachers/${teacherId}/courses/${courseId}`] = {name,}
+    return updates;
+}
+
+function buildNewLessonUpdates(lessonId, lessonData, courseId, name) {
+    const updates = {}
+    updates[`/lessons/${lessonId}`] = lessonData
+    updates[`/courses/${courseId}/lessons/${lessonId}`] = {name,}
+    return updates;
+}
+
+function buildNewQuestionUpdates(questionId, questionData, lessonId, rightAnswer) {
+    const updates = {}
+    updates[`/questions/${questionId}`] = questionData
+    updates[`/lessons/${lessonId}/questions/${questionId}`] = questionId
+    updates[`/rightAnswers/${questionId}`] = rightAnswer
+    return updates;
+}
+
+function buildCourseEnrollmentUpdates(toEnroll, courseId, userId, name) {
+    const updates = {}
+    updates[`/courseStudents/${courseId}/${userId}`] = toEnroll ? true : null
+    updates[`students/${userId}/courses/${courseId}`] = toEnroll ? {name} : null
+    return updates;
+}
+
+async function buildCourseDeletionUpdates(courseId, lessons) {
+    let updates = {};
+    const teacherId = fb.auth.currentUser.uid
+    updates = Object.assign(updates, await courseDeletionDependencies(courseId, lessons))
+    updates = Object.assign(updates, await courseEnrolledDeletionDependencies(courseId))
+    updates[`/teachers/${teacherId}/courses/${courseId}`] = null;
+    return updates;
+}
+
+function buildLessonDeletionUpdates(lessonId, courseId, questions) {
+    let updates = {};
+    updates[`/courses/${courseId}/lessons/${lessonId}`] = null;
+    updates = Object.assign(updates, lessonDeletionDependencies(lessonId, questions))
+    return updates;
 }
 
 function buildQuestionDeletionUpdates(lessonId, questionId) {
@@ -234,18 +223,26 @@ async function courseEnrolledDeletionDependencies(courseId) {
     return updates
 }
 
+//check if email exists
+async function isEmailUnique(email) {
+    const methods = await fb.auth.fetchSignInMethodsForEmail(email)
+    return !methods.length
+}
+
+
+
 export default {
     ...fb,
-    ...helpers,
+    isEmailUnique,
     fetchResource,
+    fetchSyncedResource,
+    fetchCourses,
     fetchUserCourses,
+    enrollInCourse,
+    leaveCourse,
     createQuestion,
     createLesson,
     createCourse,
-    fetchSyncedResource,
-    fetchCourses,
-    enrollInCourse,
-    leaveCourse,
     deleteQuestion,
     deleteLesson,
     deleteCourse,

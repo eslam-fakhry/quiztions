@@ -18,8 +18,9 @@
                             :complete="currentStep > (index+1)"
                             :step="index+1"
                             :key="index"
-                            v-text="step.label"
-                    />
+                    >
+                        {{step.label}}
+                    </v-stepper-step>
                 </template>
             </v-stepper-header>
 
@@ -94,10 +95,10 @@
         computed: {
             steps() {
                 return [
-                    { component: CredentialsStep, label: 'Credentials' },
-                    { component: AccountTypeStep, label: 'Account Type' },
-                    { component: InformationStep, label: 'Information' },
-                    { component: ImageStep, label: 'Image' },
+                    {component: CredentialsStep, label: 'Credentials'},
+                    {component: AccountTypeStep, label: 'Account Type'},
+                    {component: InformationStep, label: 'Information'},
+                    {component: ImageStep, label: 'Image'},
                 ]
             },
             isLastStep() {

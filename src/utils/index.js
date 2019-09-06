@@ -14,6 +14,7 @@ function showError(code = 'GENERIC') {
             showSnackbar('You have no authentication to complete this process', 'error')
             break;
         case "GENERIC":
+        default:
             showSnackbar('Something went wrong', 'error')
             break;
     }

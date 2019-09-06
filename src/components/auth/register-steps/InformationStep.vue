@@ -133,6 +133,7 @@
     const {mapState, mapActions} = createNamespacedHelpers('user')
     import {minLength,} from 'vuelidate/lib/validators'
     import FormInputError from '@/components/FormInputError'
+    import {showError} from "@/utils";
 
 
     export default {
@@ -174,19 +175,15 @@
                 'updateUserInfo',
             ]),
             async updateUser() {
-                //  todo implement this function
                 if (!this.$v.$invalid) {
                     try {
                         await this.updateUserInfo(this.form)
                         this.$emit('continue')
                     } catch (e) {
-                        console.log('[InformationStep:error]',e);
+                        showError(e.code)
                     }
-
-
                 }
             },
-
         },
 
         validations: {

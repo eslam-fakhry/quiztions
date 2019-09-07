@@ -9,10 +9,11 @@
                     @input="update($event,i-1)"
                     :disabled="uiState.ANSWER_CHECKED"
                     :style="textInputStyle(value[i-1])"
-                    class="d-inline-block"
+                    class="d-inline-block deep-purple--text text--accent-4"
                     single-line
                     hide-details
                     data-jest="blank"
+
             />
             <span
                     :key="`${part}--${i}`"
@@ -52,8 +53,8 @@
             textInputStyle() {
                 return text => {
                     return {
-                        width: `${this.textInputWidth(text) + 30}px`,
-                        maxWidth: 300 + 'px'
+                        width: `${this.textInputWidth(text) }px`,
+                        maxWidth: '300px'
                     }
                 }
             }
@@ -67,6 +68,5 @@
             },
         },
     }
-    // TODO: Fix width of text fields
 </script>
 

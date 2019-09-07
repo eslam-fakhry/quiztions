@@ -42,9 +42,6 @@
                 }
             }
             document.addEventListener('keypress', NumberPressHandler)
-            this.$once('hook:activated', () => {
-                document.addEventListener('keypress', NumberPressHandler)
-            })
             this.$once('hook:deactivated', () => {
                 document.removeEventListener('keypress', NumberPressHandler)
             })

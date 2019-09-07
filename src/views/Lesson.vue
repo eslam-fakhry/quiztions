@@ -9,50 +9,74 @@
                 style="height: 100%"
         >
             <v-flex shrink>
-                <v-layout justify-space-between class="lesson-nav align-center" v-if="canNavigate">
-                    <v-btn icon small grey rounded @click="prevQuestion" :disabled="prevDisabled">
+                <v-layout justify-space-between class="lesson-nav align-center">
+                    <v-btn
+                            icon small grey rounded
+                            @click="prevQuestion"
+                            :disabled="prevDisabled"
+                            v-if="canNavigate"
+                    >
                         <v-icon>chevron_left</v-icon>
                     </v-btn>
                     <v-progress-linear :value="progressPercentage"></v-progress-linear>
-                    <v-btn icon small grey rounded @click="nextQuestion" :disabled="nextDisabled">
+                    <v-btn
+                            icon small grey rounded
+                            @click="nextQuestion"
+                            :disabled="nextDisabled"
+                            v-if="canNavigate"
+                    >
                         <v-icon>chevron_right</v-icon>
                     </v-btn>
                 </v-layout>
             </v-flex>
 
             <v-flex grow>
-                <keep-alive>
-                    <FadeOut
-                            name="question"
-                            mode="out-in"
+                <FadeOut
+                        name="question"
+                        mode="out-in"
+                >
+                    <!--Setting exclude=Question for optimization when navigation not allowed-->
+                    <keep-alive
+                            :exclude="!canNavigate?'Question':''"
                     >
-                        <Question :key="componentKey"
-                                  @result="addScoreResult"
-                                  :question-id="questions[currentIndex]"
-                                  @continue="currentIndex++"
-                                  v-if="uiState.SHOW_QUESTION"
-                        ></Question>
-
-                    </FadeOut>
-                </keep-alive>
-
-                <ResultMessage :result="uiState.SHOW_SUCCESS?'success':'failure'"
-                               v-if="uiState.SHOW_RESULT"
+                        <Question
+                                :key="`${keyPrefix}--${currentIndex}`"
+                                @result="addScoreResult"
+                                :question-id="questions[currentIndex]"
+                                @continue="currentIndex++"
+                                v-if="uiState.SHOW_QUESTION"
+                        />
+                    </keep-alive>
+                </FadeOut>
+                <ResultMessage
+                        :result="uiState.SHOW_SUCCESS?'success':'failure'"
+                        v-if="uiState.SHOW_RESULT"
                 />
             </v-flex>
         </v-layout>
+        <v-dialog
+                v-model="isConfirmationModalOpen"
+                persistent
+                max-width="350"
+        >
+            <v-card>
+                <v-card-title class="headline">
+                    Confirm
+                </v-card-title>
+                <v-card-text>Do you really want to leave? <br> You will lose progress!</v-card-text>
+                <v-card-actions>
+                    <div class="flex-grow-1"></div>
+                    <v-btn text @click="exit(false)">Cancel</v-btn>
+                    <v-btn color="error darken-1" @click="exit(true)">Exit</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
 <script>
-    //todo fix can-navigate
-    /*
-     we can use include or exclude props of keep alive to decide when to cache
-     or to set max to 0 when not caching
-
-     */
     import {createNamespacedHelpers} from 'vuex'
-
+    import {shuffle} from "@/utils";
     import Question from '@/components/Question'
     import ResultMessage from '@/components/ResultMessage'
     import Loading from '@/components/Loading'
@@ -72,42 +96,37 @@
         },
 
         props: {
-            lesson_id: {
-                type: String,
-                required: true,
-            }
-            // todo: add shuffle on retake option
+            lesson_id: {type: String, required: true,}
         },
 
         data() {
             return {
+                isConfirmationModalOpen: false,
                 loading: true,
                 currentIndex: 0,
                 score: [],
+                exitCallback: null,
+                // used to clear cached questions when lesson is retaken
+                keyPrefix: '--'
             }
         },
 
-        methods: {
-            ...mapActions(['fetchLesson']),
-            prevQuestion() {
-                this.currentIndex--
-            },
-            nextQuestion() {
-                this.canGoToNext && this.currentIndex++
-                // this.currentIndex++
-            },
-            addScoreResult(payload) {
-                this.score.push({
-                    ...payload,
-                    index: this.currentIndex,
-                })
-            },
-        },
-
         computed: {
-            componentKey() {
-                return this.canNavigate ? this.currentIndex : 'component'
+            lesson() {
+                return this.$store.state.lessons.lessons[this.lesson_id]
             },
+            questions() {
+                const questions = this.lesson.questions
+                // keyPrefix is used to reshuffle the questions when lesson is retaken
+                return (questions && this.keyPrefix) ? shuffle(Object.values(this.lesson.questions)) : []
+            },
+            canNavigate() {
+                return this.lesson.canNavigate
+            },
+            tolerance() {
+                return this.lesson.tolerance || 3
+            },
+
             progressPercentage() {
                 return this.score.length / (this.questions.length) * 100
             },
@@ -123,12 +142,12 @@
                 return !this.showSuccess && !this.showFailure
             },
             showSuccess() {
-                return this.completed && this.isLastSlide
+                return this.succeeded && this.isLastSlide
             },
             showFailure() {
                 return this.failed && this.isLastSlide
             },
-            completed() {
+            succeeded() {
                 return !this.failed && (this.score.length === (this.questions.length))
             },
             failed() {
@@ -144,7 +163,6 @@
                 return !this.canGoToNext || this.isLastSlide
             },
             canGoToNext() {
-                // todo check for failed to continue
                 return -1 !== this.score.findIndex(score => score.index === this.currentIndex)
             },
             isLastSlide() {
@@ -152,22 +170,6 @@
             },
             lastSlideIndex() {
                 return this.failed ? this.score.length : this.questions.length;
-            },
-            canNavigate() {
-                return true
-            },
-            tolerance() {
-                return 1
-            },
-            lesson() {
-                return this.$store.state.lessons.lessons[this.lesson_id]
-            },
-            questions() {
-                const questions = this.lesson.questions
-                if (questions) {
-                    return Object.values(this.lesson.questions)
-                }
-                return []
             },
         },
 
@@ -191,17 +193,51 @@
             },
         },
 
-        beforeRouteLeave(to, from, next) {
-            if (this.completed || this.failed) {
-                next()
-                return
-            }
-            window.confirm('Do you really want to leave? you will lose progress!') && next()
+        async beforeRouteLeave(to, from, next) {
+            if (this.succeeded || this.failed) next()
+            await this.confirm(next)
+        },
+
+        methods: {
+            ...mapActions(['fetchLesson']),
+            prevQuestion() {
+                this.currentIndex--
+            },
+            nextQuestion() {
+                this.canGoToNext && this.currentIndex++
+            },
+            addScoreResult(payload) {
+                this.score.push({
+                    ...payload,
+                    index: this.currentIndex,
+                })
+            },
+            confirm(cb) {
+                const vm = this
+                this.isConfirmationModalOpen = true;
+                return new Promise((resolve) => {
+                    vm.exitCallback = (toProceed) => {
+                        cb(toProceed)
+                        resolve()
+                    }
+                })
+            },
+            exit(toExit) {
+                if (this.exitCallback) this.exitCallback(toExit)
+                this.resetExitCallback()
+            },
+            resetExitCallback() {
+                this.exitCallback = null
+                this.isConfirmationModalOpen = false
+            },
+            reset() {
+                this.score = []
+                this.exitCallback = null
+                this.currentIndex = 0
+                this.isConfirmationModalOpen = false
+                this.keyPrefix = Math.random()+'--'
+            },
         },
     }
-    // TODO: fix can edit previously answered question
 </script>
 
-<style>
-
-</style>

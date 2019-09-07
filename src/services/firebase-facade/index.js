@@ -68,12 +68,14 @@ async function createCourse({name}) {
     return newCourseKey
 }
 
-async function createLesson({name, courseId}) {
+async function createLesson({name, courseId,canNavigate,tolerance}) {
     const teacherId = fb.auth.currentUser.uid;
     const lessonData = {
         name,
         courseId,
         teacherId,
+        canNavigate,
+        tolerance,
     }
     const newLessonKey = fb.db.ref('lessons').push().key
     const updates = buildNewLessonUpdates(newLessonKey, lessonData, courseId, name);

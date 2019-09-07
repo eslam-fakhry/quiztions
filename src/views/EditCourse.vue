@@ -31,7 +31,13 @@
                                             <v-flex xs12 sm6 md4>
                                                 <v-text-field
                                                         v-model="editedItem.name"
-                                                        label="lesson name"
+                                                        label="Lesson name"
+                                                />
+                                            </v-flex>
+                                            <v-flex xs12 sm6 md4>
+                                                <v-text-field
+                                                        v-model="editedItem.tolerance"
+                                                        label="Tolerance"
                                                 />
                                             </v-flex>
                                             <v-flex xs12 sm6 md4>
@@ -102,7 +108,7 @@
         name: "EditCourse",
 
         props: {
-            course_id: { type: String, required: true }
+            course_id: {type: String, required: true}
         },
 
         components: {
@@ -116,10 +122,10 @@
                 dialog: false,
                 headers: [
                     {text: 'Name', align: 'left', sortable: false, value: 'name',},
-                    {text: 'Actions', align:'end',sortable: false, value: 'action', width:100},
+                    {text: 'Actions', align: 'end', sortable: false, value: 'action', width: 100},
                 ],
-                editedItem: {name: '', canNavigate: true,},
-                defaultItem: {name: '', canNavigate: true,},
+                editedItem: {name: '', canNavigate: true, tolerance:3},
+                defaultItem: {name: '', canNavigate: true, tolerance:3},
             }
         },
 
@@ -160,7 +166,10 @@
             },
 
             save() {
-                this.createLesson({name: this.editedItem.name, courseId: this.course_id})
+                this.createLesson({
+                    ...this.editedItem,
+                    courseId: this.course_id
+                })
                     .then(id => {
                         this.$router.push({name: 'edit-lesson', params: {lesson_id: id}})
                     })

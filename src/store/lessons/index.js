@@ -29,8 +29,8 @@ export default {
                 commit(mutations.APPEND_LESSON, {...snap.val(), id})
             })
         },
-        async createLesson({commit, state, rootState}, {name, courseId}) {
-            return fb.createLesson({name, courseId})
+        async createLesson({commit, state, rootState}, {name, courseId,canNavigate,tolerance}) {
+            return fb.createLesson({name, courseId,canNavigate,tolerance})
                 .then(({key, lesson}) => {
                     commit(mutations.APPEND_LESSON, lesson)
                     return key

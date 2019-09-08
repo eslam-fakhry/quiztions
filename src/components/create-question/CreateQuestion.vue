@@ -46,6 +46,7 @@
                 <v-flex xs12 lg9>
                     <component
                             :is="answerComponentName"
+                            :right-answer="rightAnswer"
                             @update:questionPart="questionPart = $event"
                             @update:valid="questionTypeValid = $event"
                             @update:rightAnswer="rightAnswer = $event"

@@ -1,10 +1,10 @@
 <template>
-            <SelectionOptions
-                    :value="userAnswer[0]"
-                    @input="answer([$event])"
-                    :ui-state="uiState"
-                    :disabled="uiState.ANSWER_CHECKED"
-            />
+    <SelectionOptions
+            :value="userAnswer"
+            @input="answer"
+            :ui-state="uiState"
+            :disabled="uiState.ANSWER_CHECKED"
+    />
 </template>
 <script>
 
@@ -16,16 +16,10 @@
 
         components: {SelectionOptions},
 
-        mixins:[AnswerMixin],
+        mixins: [AnswerMixin],
 
-        props: { value: {}, uiState:{}, },
-
-        methods: {
-            // answer(value){
-            //
-            //     this.$emit('answered')
-            //     this.$emit('input',value)
-            // }
+        props: {
+            uiState: {type:Object,},
         },
     }
 </script>

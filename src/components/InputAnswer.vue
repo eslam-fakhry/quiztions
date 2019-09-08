@@ -1,26 +1,33 @@
 <template>
     <v-textarea
-            :value="userAnswer[0]"
-            @input="answer([$event])"
+            :value="userAnswer"
+            @input="answer"
             :disabled="uiState.ANSWER_CHECKED"
             :success="uiState.ANSWERED_CORRECTLY"
             :error="uiState.ANSWERED_WRONG"
-            style="width: 100vw;max-width: 300px;"
+            class="input-answer"
             autofocus
             outlined
     />
 </template>
+
 <script>
-    // todo fix modifying props.value directly
     import AnswerMixin from "./mixins/Answer"
+
     export default {
         name: 'InputAnswer',
 
-        mixins:[AnswerMixin],
+        mixins: [AnswerMixin],
 
         props: {
-            value: {},
-            uiState: {},
+            uiState: {type: Object,},
         },
     }
 </script>
+
+<style scoped>
+    .input-answer {
+        width: 100vw;
+        max-width: 300px;
+    }
+</style>

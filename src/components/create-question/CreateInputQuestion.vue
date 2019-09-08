@@ -1,7 +1,7 @@
 <template>
     <div>
         <TheTextField
-                :value="answer[0]"
+                :value="answer"
                 @input="update"
                 data-jest="right-answer"
         />
@@ -21,7 +21,7 @@
 
         data() {
             return {
-                answer: [],
+                answer: "",
             }
         },
 
@@ -29,9 +29,9 @@
             rightAnswer: {
                 immediate: true,
                 handler(val) {
-                    this.answer = val && Array.isArray(val)
+                    this.answer = val && (typeof val === "string")
                         ? val
-                        : []
+                        : ""
                 }
             }
         },
@@ -42,8 +42,8 @@
 
         methods: {
             update(answer) {
-                this.answer = [answer]
-                this.$emit('update:rightAnswer', [answer])
+                this.answer = answer
+                this.$emit('update:rightAnswer', answer)
                 this.$emit('update:questionPart', {
                     type: 'input'
                 })
@@ -54,9 +54,6 @@
         validations: {
             answer: {
                 required,
-                $each: {
-                    required,
-                }
             }
         },
     }

@@ -78,20 +78,13 @@
     import TheTextField from "@/components/TheTextField";
     export default {
         name: "CompletionRightAnswers",
+
         components: {TheTextField},
+
         props: {
-            template: {
-                type: String,
-                required: true
-            },
-            value:{
-                type:Array,
-                required: true,
-            },
-            blankSymbol: {
-                type: String,
-                default: '--blank--'
-            }
+            template: { type: String, required: true },
+            value:{ type:Array, required: true, },
+            blankSymbol: { type: String, default: '--blank--' }
         },
 
         data() {

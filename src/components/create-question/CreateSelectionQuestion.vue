@@ -8,7 +8,7 @@
         />
         <TheSelectField
                 :items="[...options]"
-                @input="answer = [$event]"
+                @input="answer = $event"
                 label="select the right answer"
                 data-jest="right-answer"
         />
@@ -34,7 +34,7 @@
 
         data() {
             return {
-                answer: [],
+                answer: "",
                 options: [],
             }
         },
@@ -43,9 +43,9 @@
             rightAnswer:{
                 immediate:true,
                 handler(val){
-                    this.answer =  val && Array.isArray(val)
+                    this.answer = val && (typeof val === "string")
                         ? val
-                        : []
+                        : ""
                 }
             },
             options(){
@@ -82,13 +82,9 @@
             },
             answer: {
                 required,
-                maxLength:maxLength(1),
                 validAnswer(value) {
-                    return this.options.includes(value[0])
+                    return this.options.includes(value)
                 },
-                $each: {
-                    required,
-                }
             }
         },
     }

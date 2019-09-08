@@ -1,14 +1,15 @@
 <template>
-            <QuestionTemplate
-                    :value="[...userAnswer]"
-                    @input="answer"
-                    :key="question.id"
-                    :ui-state="uiState"
-            />
+    <QuestionTemplate
+            :value="[...userAnswer]"
+            @input="answer"
+            :key="question.id"
+            :ui-state="uiState"
+    />
 </template>
 <script>
     import QuestionTemplate from "./QuestionTemplate"
     import AnswerMixin from "./mixins/Answer"
+
     export default {
         name: 'CompletionAnswer',
 
@@ -16,23 +17,17 @@
             QuestionTemplate,
         },
 
-        mixins:[AnswerMixin],
+        mixins: [AnswerMixin],
 
-        inject:['question'],
+        inject: ['question'],
 
         props: {
-            uiState:{},
+            uiState: {type:Object,},
         },
 
-        methods: {
-/*
-            validateAnswer(userAnswer, questionId) {
-                return this.$store.dispatch('answers/fetchRightAnswer', {id: questionId})
-                    .then((rightAnswer) =>{
-                        return JSON.stringify(userAnswer) === JSON.stringify(rightAnswer);
-                    })
-            }
-*/
-        },
+        data: () => ({
+            // replace the default type with array type.
+            userAnswer: [],
+        }),
     }
 </script>

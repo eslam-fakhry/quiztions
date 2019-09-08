@@ -44,6 +44,7 @@
                         <v-avatar
                                 size="45px"
                                 item
+                                color="white"
                         >
                             <UserPicture/>
                         </v-avatar>
@@ -51,13 +52,16 @@
                 </template>
 
                 <v-list :min-width="200">
-                    <v-list-item
-                            @click=""
-                    >
-                        <LogoutBtn>
-                            <v-list-item-title>logout</v-list-item-title>
-                        </LogoutBtn>
-                    </v-list-item>
+                    <LogoutBtn>
+                        <template v-slot="{logout}">
+                            <v-list-item @click="logout">
+                                <v-list-item-title>logout</v-list-item-title>
+                                <v-list-item-icon>
+                                    <v-icon>logout</v-icon>
+                                </v-list-item-icon>
+                            </v-list-item>
+                        </template>
+                    </LogoutBtn>
                 </v-list>
             </v-menu>
         </v-app-bar>

@@ -1,9 +1,3 @@
-<template>
-    <div @click="logout">
-        <slot></slot>
-    </div>
-</template>
-
 <script>
     export default {
         name: "LogoutBtn",
@@ -13,6 +7,12 @@
                 this.$store.dispatch('user/signOut')
             }
         },
+
+        render() {
+            return this.$scopedSlots.default({
+                logout:this.logout,
+            })
+        }
     }
 </script>
 

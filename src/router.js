@@ -13,65 +13,6 @@ const router = new Router({
     base: process.env.BASE_URL,
 
     routes: [
-
-
-        {
-            path: '/',
-            name: 'home',
-            components: {
-                default: async () => {
-
-                    const job = (await fb.auth.currentUser.getIdTokenResult()).claims.job
-                    if (job === 'teacher') {
-                        return import('@/views/TeacherCourses')
-                    } else if (job === 'student') {
-                        return import('@/views/Courses')
-
-                    }
-                },
-                toolbar: Toolbar,
-            },
-            meta: {requiresAuth: true},
-        },
-        {
-            path: '/about',
-            name: 'about',
-            components: {
-                default: () => import('./views/About.vue'),
-                toolbar: Toolbar,
-            },
-        },
-        {
-            path: '/explore',
-            name: 'explore',
-            props: {
-                default: true,
-            },
-            components: {
-                default: () => import('./views/Explore.vue'),
-                toolbar: Toolbar,
-            },
-        },
-        {
-            path: '/course/:course_id',
-            name: 'course',
-            props: {
-                default: true,
-            },
-            components: {
-                default: () => import('./views/Course.vue'),
-                toolbar: Toolbar,
-            },
-
-            meta: {requiresAuth: true},
-        },
-        {
-            path: '/lesson/:lesson_id',
-            name: 'lesson',
-            props: true,
-            component: () => import('./views/Lesson.vue'),
-            meta: {requiresAuth: true}
-        },
         {
             path: '/login',
             name: 'login',
@@ -83,53 +24,87 @@ const router = new Router({
             name: 'register',
             props: true,
             component: () => import('./views/Register.vue'),
-
+        },
+        {
+            path: '/',
+            name: 'home',
+            components: {
+                default: async () => {
+                    const job = (await fb.auth.currentUser.getIdTokenResult()).claims.job
+                    if (job === 'teacher') {
+                        return import('@/views/TeacherCourses')
+                    } else if (job === 'student') {
+                        return import('@/views/Courses')
+                    }
+                },
+                toolbar: Toolbar,
+            },
+            meta: {requiresAuth: true},
+        },
+        // {
+        //     path: '/about',
+        //     name: 'about',
+        //     components: {
+        //         default: () => import('./views/About.vue'),
+        //         toolbar: Toolbar,
+        //     },
+        // },
+        {
+            path: '/explore',
+            name: 'explore',
+            props: { default: true, },
+            components: {
+                default: () => import('./views/Explore.vue'),
+                toolbar: Toolbar,
+            },
+            meta: {requiresAuth: true, requiresToBeStudent: true},
+        },
+        {
+            path: '/course/:course_id',
+            name: 'course',
+            props: { default: true, },
+            components: {
+                default: () => import('./views/Course.vue'),
+                toolbar: Toolbar,
+            },
+            meta: {requiresAuth: true, requiresToBeStudent: true},
+        },
+        {
+            path: '/lesson/:lesson_id',
+            name: 'lesson',
+            props: true,
+            component: () => import('./views/Lesson.vue'),
+            meta: {requiresAuth: true, requiresToBeStudent: true},
         },
         {
             path: '/teacher/course/:course_id/edit',
             name: 'edit-course',
-            props: {
-                default: true,
-            },
+            props: { default: true, },
             components: {
                 default: () => import('./views/EditCourse.vue'),
                 toolbar: Toolbar,
             },
-            meta: {
-                requiresAuth: true,
-                requiresToBeTeacher: true
-            }
+            meta: {requiresAuth: true, requiresToBeTeacher: true}
         },
         {
             path: '/teacher/lesson/:lesson_id/edit',
             name: 'edit-lesson',
-            props: {
-                default: true,
-            },
+            props: { default: true, },
             components: {
                 default: () => import('./views/EditLesson.vue'),
                 toolbar: Toolbar,
             },
-            meta: {
-                requiresAuth: true,
-                requiresToBeTeacher: true
-            }
+            meta: {requiresAuth: true, requiresToBeTeacher: true}
         },
         {
             path: '/teacher/question/:lesson_id/create',
             name: 'create-question',
-            props: {
-                default: true,
-            },
+            props: { default: true, },
             components: {
                 default: () => import('./components/create-question/CreateQuestion.vue'),
                 toolbar: Toolbar,
             },
-
-            meta: {
-                requiresAuth: true,
-                requiresToBeTeacher: true
-            }
+            meta: {requiresAuth: true, requiresToBeTeacher: true}
         },
         {
             path: '/not-found',
@@ -149,21 +124,22 @@ const router = new Router({
 router.beforeEach(async (to, from, next) => {
     const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
     const requiresToBeTeacher = to.matched.some(x => x.meta.requiresToBeTeacher)
+    const requiresToBeStudent = to.matched.some(x => x.meta.requiresToBeStudent)
 
     if (requiresAuth && !fb.auth.currentUser) {
         next('/login')
         return
     }
-    if (requiresToBeTeacher) {
+    if (requiresToBeStudent || requiresToBeTeacher) {
+        const job = (await fb.auth.currentUser.getIdTokenResult()).claims.job
         try {
-            const job = (await fb.auth.currentUser.getIdTokenResult()).claims.job
-            if (job !== 'teacher') {
+            if ((requiresToBeTeacher && job !== 'teacher') || (requiresToBeStudent && job !== 'student')) {
                 showSnackbar("HEY! you're not supposed to go there", "warning")
-                next('/')
+                return next('/')
             }
         } catch (e) {
             showError()
-            next('/')
+            return next('/')
         }
     }
     next()

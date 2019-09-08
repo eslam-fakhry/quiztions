@@ -22,11 +22,16 @@
 
             <v-spacer/>
             <v-btn
-                    icon
+                    v-if="job === 'student'"
                     small
+                    text
+                    class="mx-2"
                     :to="{name:'explore'}"
             >
-                <v-icon>explore</v-icon>
+                <v-icon left>
+                    explore
+                </v-icon>
+                <span class="hidden-sm-and-down">explore</span>
             </v-btn>
 
             <v-menu open-on-hover1 buttom offset-y>
@@ -62,11 +67,14 @@
 <script>
     import LogoutBtn from '@/components/auth/LogoutBtn'
     import UserPicture from "@/components/UserPicture";
-
+    import {createNamespacedHelpers} from 'vuex'
+    const { mapState } = createNamespacedHelpers('user')
     export default {
         name: "TheToolbar",
 
         components: {UserPicture, LogoutBtn},
+
+        computed:mapState(['job']),
     }
 </script>
 

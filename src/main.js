@@ -8,7 +8,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import './assets/scss/app.scss'
-import {showSnackbar} from "./utils";
+import {showError} from "./utils";
 
 Vue.config.productionTip = false
 
@@ -39,5 +39,5 @@ fb.auth.onAuthStateChanged(user => {
 });
 
 window.onerror = function(message, source, lineNumber,collNumber, errorObject){
-    showSnackbar('Something went wrong','error')
+    showError()
 }

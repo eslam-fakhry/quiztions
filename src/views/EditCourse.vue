@@ -100,6 +100,7 @@
     import {createNamespacedHelpers} from 'vuex'
     import Loading from '@/components/Loading'
     import ConfirmModal from "@/components/ConfirmModal";
+    import {showSnackbar} from "@/utils";
 
     const {mapActions} = createNamespacedHelpers('courses')
     const {mapActions: mapLessonsActions} = createNamespacedHelpers('lessons')
@@ -171,6 +172,7 @@
                     courseId: this.course_id
                 })
                     .then(id => {
+                        showSnackbar('Lesson is successfully created', 'success')
                         this.$router.push({name: 'edit-lesson', params: {lesson_id: id}})
                     })
                 this.close()

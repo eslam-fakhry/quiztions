@@ -2,7 +2,7 @@ import Vue from 'vue'
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
 import router from "@/router";
-import {showSnackbar} from "@/utils";
+import {showError, showSnackbar} from "@/utils";
 
 export default {
     namespaced: true,
@@ -39,7 +39,7 @@ export default {
                 })
             } catch (err) {
                 // otherwise show 404 page
-                showSnackbar('Error fetching courses', 'error')
+                showError('CAN_NOT_FETCH_COURSES')
             }
         },
 
@@ -47,11 +47,7 @@ export default {
             return fb.createCourse({name})
             // otherwise show user-friendly error
                 .catch(err => {
-                    if (err.code === "PERMISSION_DENIED") {
-                        showSnackbar('You have no authentication to complete this process', 'error')
-                        return
-                    }
-                    showSnackbar('Something went wrong', 'error')
+                   showError(err.code)
                 })
         },
 

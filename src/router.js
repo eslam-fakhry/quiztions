@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Toolbar from "./layouts/TheToolbar";
 import fb from './services/firebase-facade'
-import {showSnackbar} from "@/utils";
+import {showError, showSnackbar} from "@/utils";
 
 
 Vue.use(Router)
@@ -162,7 +162,7 @@ router.beforeEach(async (to, from, next) => {
                 next('/')
             }
         } catch (e) {
-            showSnackbar("Something went wrong", "error")
+            showError()
             next('/')
         }
     }

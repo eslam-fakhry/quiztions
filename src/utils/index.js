@@ -17,16 +17,16 @@ function showSnackbar(message, color) {
     })
 }
 
-function showError(code = 'GENERIC') {
+function showError(code = 'GENERIC', msg = "Something went wrong") {
     switch (code) {
         case "PERMISSION_DENIED":
-            showSnackbar('You have no authentication to complete this process', 'error')
+            msg = 'You have no authentication to complete this process'
             break;
-        case "GENERIC":
-        default:
-            showSnackbar('Something went wrong', 'error')
+        case "CAN_NOT_FETCH_COURSES":
+            msg = 'Error fetching courses'
             break;
     }
+    showSnackbar(msg, 'error')
 }
 
 export {

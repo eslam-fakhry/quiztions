@@ -2,7 +2,6 @@ import fb from '@/services/firebase-facade'
 import Vue from 'vue'
 import mutations from '../mutation-types'
 import router from "../../router";
-import {showSnackbar} from "@/utils";
 
 export default {
     namespaced: true,

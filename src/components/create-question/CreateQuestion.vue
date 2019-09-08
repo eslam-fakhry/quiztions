@@ -105,7 +105,7 @@
 <script>
     import {createNamespacedHelpers} from 'vuex'
     import {required, minLength} from 'vuelidate/lib/validators'
-    import {showSnackbar} from "@/utils";
+    import {showError, showSnackbar} from "@/utils";
 
     import CreateCompletionQuestion from '@/components/create-question/CreateCompletionQuestion'
     import CreateInputQuestion from '@/components/create-question/CreateInputQuestion'
@@ -180,13 +180,8 @@
                     showSnackbar('Question is successfully created', 'success')
                     // noinspection JSCheckFunctionSignatures
                     this.$router.replace({name: 'edit-lesson', params: {lesson_id: this.lesson_id}})
-                } catch (e) {
-                    if (e.code === "PERMISSION_DENIED") {
-                        showSnackbar('You have no authentication to complete this process', 'error')
-                        return
-                    }
-                    showSnackbar('Something went wrong', 'error')
-
+                } catch (err) {
+                    showError(err.code)
                 }
             },
             cancel() {

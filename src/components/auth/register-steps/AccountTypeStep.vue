@@ -32,7 +32,7 @@
 
 <script>
     import {createNamespacedHelpers} from 'vuex'
-    import {showSnackbar} from "@/utils";
+    import {showError, showSnackbar} from "@/utils";
 
     const {mapActions} = createNamespacedHelpers('user')
 
@@ -56,7 +56,7 @@
                         showSnackbar('Account type is already set', 'warning')
                         this.$emit('continue')
                     } else {
-                        showSnackbar('Something went wrong', 'error')
+                        showError(e.code)
                     }
                 }
             },

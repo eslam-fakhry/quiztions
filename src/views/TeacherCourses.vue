@@ -94,6 +94,7 @@
     import Loading from '@/components/Loading'
     import CoursesMixin from '@/components/mixins/Courses'
     import ConfirmModal from "@/components/ConfirmModal";
+    import {showSnackbar} from "@/utils";
 
     const {mapState} = createNamespacedHelpers('user')
     const {mapActions: mapCoursesActions} = createNamespacedHelpers('courses')
@@ -149,6 +150,7 @@
             },
             save() {
                 this.createCourse({name: this.editedItem.name}).then((id) => {
+                    showSnackbar('Course is successfully created', 'success')
                     this.$router.push({name: 'edit-course', params: {course_id: id}})
                 })
                 this.close()

@@ -125,8 +125,8 @@
                     {text: 'Name', align: 'left', sortable: false, value: 'name',},
                     {text: 'Actions', align: 'end', sortable: false, value: 'action', width: 100},
                 ],
-                editedItem: {name: '', canNavigate: true, tolerance:3},
-                defaultItem: {name: '', canNavigate: true, tolerance:3},
+                editedItem: {name: '', canNavigate: true, tolerance: 3},
+                defaultItem: {name: '', canNavigate: true, tolerance: 3},
             }
         },
 
@@ -149,7 +149,7 @@
         methods: {
             ...mapActions(['fetchCourse']),
             ...mapLessonsActions(['createLesson', 'deleteLesson']),
-
+            // eslint-disable-next-line
             onRowClick(ev) {
                 // TODO: goto lesson stats
                 // console.log(ev)

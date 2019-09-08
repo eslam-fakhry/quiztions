@@ -136,6 +136,7 @@
 
         methods: {
             ...mapCoursesActions(['createCourse', 'deleteCourse']),
+            // eslint-disable-next-line
             onRowClick(ev) {
                 // TODO: goto course stats
             },

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
 import router from "@/router";
-import {showError, showSnackbar} from "@/utils";
+import {showError} from "@/utils";
 
 export default {
     namespaced: true,
@@ -43,7 +43,7 @@ export default {
             }
         },
 
-        async createCourse({commit, state, rootState}, {name}) {
+        async createCourse(_, {name}) {
             return fb.createCourse({name})
             // otherwise show user-friendly error
                 .catch(err => {
@@ -51,7 +51,7 @@ export default {
                 })
         },
 
-        async deleteCourse({commit, state, rootState}, {courseId}) {
+        async deleteCourse(_, {courseId}) {
            await fb.deleteCourse(courseId)
         },
     },

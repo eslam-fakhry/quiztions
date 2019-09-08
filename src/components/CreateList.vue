@@ -3,9 +3,8 @@
         <v-layout
                 v-for="(option, index) in items"
                 :key="`option--${option}--${index}`"
+                class="py-1 items-center"
                 data-jest="item"
-                items-center
-                class="py-1"
         >
             <v-flex grow>
                 <TheTextField
@@ -13,8 +12,7 @@
                         @change="update($event,index)"
                 />
             </v-flex>
-            <v-flex shrink class="px-2 d-flex justify-center items-center">
-
+            <v-flex shrink class="px-2">
                 <v-container class="fill-height">
                     <v-btn
                             icon
@@ -62,7 +60,6 @@
         data() {
             return {
                 items: this.value,
-
             }
         },
 

@@ -16,7 +16,7 @@ export default {
     },
     actions: {
 
-        async fetchQuestion({getters, state, commit}, {id}) {
+        async fetchQuestion({state, commit}, {id}) {
             let question = state.questions[id]
             if (question) return question;
             try {
@@ -32,13 +32,12 @@ export default {
             }
         },
 
-        createQuestion({commit, state, rootState}, {question, rightAnswer, lessonId}) {
+        createQuestion(_, {question, rightAnswer, lessonId}) {
             return fb.createQuestion({question, rightAnswer, lessonId})
         },
 
-        async deleteQuestion({commit, state, rootState}, {questionId, lessonId}) {
+        async deleteQuestion(_, {questionId, lessonId}) {
             await fb.deleteQuestion(questionId, lessonId)
-
         },
     },
 }

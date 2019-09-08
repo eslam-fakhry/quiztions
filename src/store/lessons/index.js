@@ -13,11 +13,10 @@ export default {
     mutations: {
         [mutations.APPEND_LESSON](state, payload) {
             Vue.set(state.lessons, payload.id, payload)
-
         },
     },
     actions: {
-        async fetchLesson({getters, state, commit}, {id}) {
+        async fetchLesson({state, commit}, {id}) {
             let lesson = state.lessons[id];
             if (lesson) return lesson
             commit(mutations.APPEND_LESSON, {questions: [], id})
@@ -29,7 +28,7 @@ export default {
                 commit(mutations.APPEND_LESSON, {...snap.val(), id})
             })
         },
-        async createLesson({commit, state, rootState}, {name, courseId,canNavigate,tolerance}) {
+        async createLesson({commit}, {name, courseId,canNavigate,tolerance}) {
             return fb.createLesson({name, courseId,canNavigate,tolerance})
                 .then(({key, lesson}) => {
                     commit(mutations.APPEND_LESSON, lesson)
@@ -41,7 +40,7 @@ export default {
                 })
         },
 
-        async deleteLesson({commit, state, rootState}, {lessonId}) {
+        async deleteLesson(_, {lessonId}) {
             await fb.deleteLesson(lessonId)
         },
     },

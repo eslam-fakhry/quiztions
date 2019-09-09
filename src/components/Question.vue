@@ -52,6 +52,7 @@
                 <v-btn
                         outlined
                         @click="answer"
+                        :ripple="false"
                         :disabled="uiState.NOT_ANSWERED"
                         :loading="validatingAnswer"
                         v-text="submitBtnText"

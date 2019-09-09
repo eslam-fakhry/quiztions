@@ -17,45 +17,7 @@
                                 vertical
                         />
                         <v-spacer/>
-                        <v-dialog v-model="dialog" max-width="500px">
-                            <template v-slot:activator="{ on }">
-                                <v-btn color="primary" dark class="mb-2" v-on="on">New Lesson</v-btn>
-                            </template>
-                            <v-card>
-                                <v-card-title>
-                                    <span class="headline">New Lesson</span>
-                                </v-card-title>
-                                <v-card-text>
-                                    <v-container grid-list-md>
-                                        <v-layout wrap>
-                                            <v-flex xs12 sm6 md4>
-                                                <v-text-field
-                                                        v-model="editedItem.name"
-                                                        label="Lesson name"
-                                                />
-                                            </v-flex>
-                                            <v-flex xs12 sm6 md4>
-                                                <v-text-field
-                                                        v-model="editedItem.tolerance"
-                                                        label="Tolerance"
-                                                />
-                                            </v-flex>
-                                            <v-flex xs12 sm6 md4>
-                                                <v-switch
-                                                        v-model="editedItem.canNavigate"
-                                                        :label="`can ${editedItem.canNavigate?'':'not'} navigate`"
-                                                />
-                                            </v-flex>
-                                        </v-layout>
-                                    </v-container>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-spacer/>
-                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
+                       <NewLesson :course_id="course_id"/>
                     </v-toolbar>
                 </template>
                 <template v-slot:item.action="{ item }">
@@ -100,7 +62,7 @@
     import {createNamespacedHelpers} from 'vuex'
     import Loading from '@/components/Loading'
     import ConfirmModal from "@/components/ConfirmModal";
-    import {showSnackbar} from "@/utils";
+    import NewLesson from "@/components/NewLesson";
 
     const {mapActions} = createNamespacedHelpers('courses')
     const {mapActions: mapLessonsActions} = createNamespacedHelpers('lessons')
@@ -113,6 +75,7 @@
         },
 
         components: {
+            NewLesson,
             ConfirmModal,
             Loading,
         },
@@ -120,13 +83,10 @@
         data() {
             return {
                 loading: false,
-                dialog: false,
                 headers: [
                     {text: 'Name', align: 'left', sortable: false, value: 'name',},
                     {text: 'Actions', align: 'end', sortable: false, value: 'action', width: 100},
                 ],
-                editedItem: {name: '', canNavigate: true, tolerance: 3},
-                defaultItem: {name: '', canNavigate: true, tolerance: 3},
             }
         },
 
@@ -154,28 +114,8 @@
                 // TODO: goto lesson stats
                 // console.log(ev)
             },
-
             async removeLesson(lesson) {
                 await this.deleteLesson({lessonId: lesson.id})
-            },
-
-            close() {
-                this.dialog = false
-                setTimeout(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem)
-                }, 300)
-            },
-
-            save() {
-                this.createLesson({
-                    ...this.editedItem,
-                    courseId: this.course_id
-                })
-                    .then(id => {
-                        showSnackbar('Lesson is successfully created', 'success')
-                        this.$router.push({name: 'edit-lesson', params: {lesson_id: id}})
-                    })
-                this.close()
             },
         },
 
@@ -188,10 +128,6 @@
                     if (this.course) this.loading = false
                 }
             },
-            dialog(val) {
-                val || this.close()
-            },
         },
-
     }
 </script>

@@ -14,7 +14,7 @@
                     <v-container class="fill-height">
                         <v-img
                                 :src="require('@/assets/logo.svg')"
-                                gradient="to top right, rgba(250,250,250,0), rgba(250,250,250,.8)"
+                                class="logo-cover"
                         />
                     </v-container>
                 </v-flex>

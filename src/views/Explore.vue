@@ -1,8 +1,17 @@
 <template xmlns:v-slot="http://www.w3.org/1999/XSL/Transform">
     <div class="page">
         <Loading v-if="loading"/>
-        <v-layout v-else wrap>
-            <v-flex xs12 sm6 md4 v-for="(course, id) in courses" :key="`course--${id}`">
+        <SlideUpTransition
+                v-else
+                appear
+                class="d-flex mt-3 flex-wrap"
+        >
+            <v-flex
+                    xs12 sm6 md4
+                    v-for="(course, id, index) in courses"
+                    :key="`course--${id}`"
+                    :data-index="index"
+            >
                 <v-card
                         class="mx-4 my-4 pt-6 pb-10 px-4"
                 >
@@ -33,13 +42,14 @@
                     </v-card-actions>
                 </v-card>
             </v-flex>
-        </v-layout>
+        </SlideUpTransition>
     </div>
 </template>
 <script>
     import {createNamespacedHelpers} from 'vuex'
     import Loading from '@/components/Loading'
     import ConfirmModal from "@/components/ConfirmModal";
+    import SlideUpTransition from "@/components/transitions/SlideUpTransition";
 
     const {mapActions: mapUserActions, mapGetters: mapUserGetters} = createNamespacedHelpers('user')
     const {mapActions: mapCoursesActions, mapState} = createNamespacedHelpers('courses')
@@ -50,11 +60,24 @@
         components: {
             Loading,
             ConfirmModal,
+            SlideUpTransition,
         },
 
         data: () => ({
             loading: false
         }),
+
+        computed: {
+            ...mapState(['courses']),
+            ...mapUserGetters(['isEnrolled'])
+        },
+
+        async created() {
+            this.loading = true
+            await this.fetchCourses()
+            await this.fetchUserCourses()
+            this.loading = false
+        },
 
         methods: {
             ...mapUserActions(['enrollInCourse', 'leaveCourse', 'fetchUserCourses']),
@@ -65,20 +88,6 @@
             leave(id) {
                 this.leaveCourse({id})
             },
-        },
-
-        computed: {
-            ...mapState({
-                courses: state => state.courses,
-            }),
-            ...mapUserGetters(['isEnrolled'])
-        },
-
-        async created() {
-            this.loading = true
-            await this.fetchCourses()
-            await this.fetchUserCourses()
-            this.loading = false
         },
     }
 </script>

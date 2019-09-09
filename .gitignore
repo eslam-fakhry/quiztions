@@ -24,3 +24,4 @@ yarn-error.log*
 /.env
 my.config.js
 desktop.ini
+/.firebaserc

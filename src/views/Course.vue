@@ -27,10 +27,9 @@
                         >
                             <v-avatar
                                     size="55"
-                                    class="orange
-                                     lighten-3"
+                                    class="primary lighten-3"
                             >
-                                <v-icon large>school</v-icon>
+                                <v-icon large>mdi-teach</v-icon>
                             </v-avatar>
                         </v-flex>
                         <v-flex class="d-flex">

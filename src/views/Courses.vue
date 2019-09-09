@@ -27,7 +27,7 @@
                             >
                                 <v-avatar
                                         size="55"
-                                        class="orange lighten-3"
+                                        class="primary lighten-3"
                                 >
                                     <v-icon large>school</v-icon>
                                 </v-avatar>

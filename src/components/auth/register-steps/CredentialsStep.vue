@@ -1,7 +1,7 @@
 <template>
     <div>
         <p class="mt-4 mb-2 text-center grey--text body-1"><span>Already registered? </span>
-            <router-link class="light-blue--text " :to="{name:'login'}">login</router-link>
+            <router-link class="link" :to="{name:'login'}">login</router-link>
         </p>
 
         <div class="form-group py-3">

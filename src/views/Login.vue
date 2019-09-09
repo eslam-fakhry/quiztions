@@ -24,7 +24,7 @@
                 >
                     <p class="mt-4 mb-2 text-center grey--text body-1">
                         <span>Not registered? </span>
-                        <router-link class="light-blue--text " :to="{name:'register'}">register</router-link>
+                        <router-link class="link" :to="{name:'register'}">register</router-link>
                     </p>
                     <v-card-text class="form-group">
                         <v-label>Email</v-label>
@@ -77,7 +77,7 @@
                             Login
                         </v-btn>
                         <v-spacer/>
-                        <router-link class="light-blue--text " :to="{name:'home'}">Forgot password?</router-link>
+                        <router-link class="link" :to="{name:'home'}">Forgot password?</router-link>
                     </v-card-actions>
                 </v-flex>
             </v-layout>

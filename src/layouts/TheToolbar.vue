@@ -3,7 +3,7 @@
         <v-app-bar
                 :clipped-left="$vuetify.breakpoint.lgAndUp"
                 app
-                color="orange darken-3"
+                color="deep-purple accent-4"
                 dark
         >
             <v-toolbar-title
@@ -13,11 +13,11 @@
                     @click="$router.push({name:'home'})"
             >
                 <v-img
-                        :src="require('@/assets/logo.svg')"
+                        :src="require('@/assets/logo-light.svg')"
                         :width="30"
                         class="d-inline-block mr-1"
                 />
-                <span class="hidden-sm-and-down black--text">Quiztions</span>
+                <span class="hidden-sm-and-down">Quiztions</span>
             </v-toolbar-title>
 
             <v-spacer/>
@@ -34,7 +34,7 @@
                 <span class="hidden-sm-and-down">explore</span>
             </v-btn>
 
-            <v-menu open-on-hover1 buttom offset-y>
+            <v-menu buttom offset-y>
                 <template v-slot:activator="{ on }">
                     <v-btn
                             icon

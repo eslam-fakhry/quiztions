@@ -21,8 +21,8 @@
             classes() {
                 return {
                     blue: this.uiState.ANSWER_NOT_CHECKED,
-                    green: this.uiState.ANSWERED_CORRECTLY,
-                    red: this.uiState.ANSWERED_WRONG,
+                    success: this.uiState.ANSWERED_CORRECTLY,
+                    error: this.uiState.ANSWERED_WRONG,
                 }
             }
         },

@@ -2,3 +2,17 @@
   height: 100%;
   width: 100%;
 }
+
+.link{
+  text-decoration: none;
+  color: #6200EA;
+  transition:color .4s ease-out,background-color .4s ease-out;
+  &:hover{
+    color:darken(#6200ea,30);
+    background-color:rgba(#6200ea,0.2);
+  }
+}
+
+.logo-cover{
+  opacity: 0.1;
+}

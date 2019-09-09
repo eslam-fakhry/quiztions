@@ -12,7 +12,7 @@
         >
             <router-link
                     v-if="showLink"
-                    class="light-blue--text "
+                    class="link"
                     :to="route"
                     v-text="linkText"
             />

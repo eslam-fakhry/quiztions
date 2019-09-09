@@ -104,7 +104,7 @@
             },
             getProfileRef: function (extension) {
                 const userId = fb.auth.currentUser.uid
-                return fb.storage.ref('profiles').child(userId + '.' + extension);
+                return fb.storage.ref('profiles').child(userId).child('profile.' + extension);
             },
             progress(snapshot) {
                 this.percentage = snapshot.bytesTransferred / snapshot.totalBytes * 100

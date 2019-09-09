@@ -196,7 +196,7 @@
         },
 
         async beforeRouteLeave(to, from, next) {
-            if (this.succeeded || this.failed) next()
+            if (this.succeeded || this.failed) return next()
             await this.confirm(next)
         },
 
@@ -237,7 +237,7 @@
                 this.exitCallback = null
                 this.currentIndex = 0
                 this.isConfirmationModalOpen = false
-                this.keyPrefix = Math.random()+'--'
+                this.keyPrefix = Math.random() + '--'
             },
         },
     }

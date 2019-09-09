@@ -17,35 +17,7 @@
                                 vertical
                         />
                         <v-spacer/>
-                        <v-dialog v-model="dialog" max-width="500px">
-                            <template v-slot:activator="{ on }">
-                                <v-btn color="primary" dark class="mb-2" v-on="on">New Course</v-btn>
-                            </template>
-                            <v-card>
-                                <v-card-title>
-                                    <span class="headline">New Course</span>
-                                </v-card-title>
-
-                                <v-card-text>
-                                    <v-container grid-list-md>
-                                        <v-layout wrap>
-                                            <v-flex xs12 sm6 md4>
-                                                <v-text-field
-                                                        v-model="editedItem.name"
-                                                        label="Course name"
-                                                />
-                                            </v-flex>
-                                        </v-layout>
-                                    </v-container>
-                                </v-card-text>
-
-                                <v-card-actions>
-                                    <v-spacer/>
-                                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
+                        <NewCourse/>
                     </v-toolbar>
                 </template>
 
@@ -94,7 +66,7 @@
     import Loading from '@/components/Loading'
     import CoursesMixin from '@/components/mixins/Courses'
     import ConfirmModal from "@/components/ConfirmModal";
-    import {showSnackbar} from "@/utils";
+    import NewCourse from "@/components/NewCourse";
 
     const {mapState} = createNamespacedHelpers('user')
     const {mapActions: mapCoursesActions} = createNamespacedHelpers('courses')
@@ -103,6 +75,7 @@
         name: "TeacherCourses",
 
         components: {
+            NewCourse,
             ConfirmModal,
             Loading,
         },
@@ -111,13 +84,10 @@
 
         data: () => ({
             loading: true,
-            dialog: false,
             headers: [
                 {text: 'Name', align: 'left', sortable: false, value: 'name',},
-                {text: 'Actions', align:'end',sortable: false, value: 'action', width:100},
+                {text: 'Actions', align: 'end', sortable: false, value: 'action', width: 100},
             ],
-            editedItem: {name: '',},
-            defaultItem: {name: '',},
         }),
 
         computed: {
@@ -128,33 +98,14 @@
             }),
         },
 
-        watch: {
-            dialog(val) {
-                val || this.close()
-            },
-        },
-
         methods: {
-            ...mapCoursesActions(['createCourse', 'deleteCourse']),
+            ...mapCoursesActions(['deleteCourse']),
             // eslint-disable-next-line
             onRowClick(ev) {
                 // TODO: goto course stats
             },
             async removeCourse(course) {
                 await this.deleteCourse({courseId: course.id})
-            },
-            close() {
-                this.dialog = false
-                setTimeout(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem)
-                }, 300)
-            },
-            save() {
-                this.createCourse({name: this.editedItem.name}).then((id) => {
-                    showSnackbar('Course is successfully created', 'success')
-                    this.$router.push({name: 'edit-course', params: {course_id: id}})
-                })
-                this.close()
             },
         },
     }

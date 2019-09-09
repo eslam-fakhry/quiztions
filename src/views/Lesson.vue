@@ -18,7 +18,7 @@
                     >
                         <v-icon>chevron_left</v-icon>
                     </v-btn>
-                    <v-progress-linear :value="progressPercentage"></v-progress-linear>
+                    <TheProgressBar :progress-percentage="progressPercentage"/>
                     <v-btn
                             icon small grey rounded
                             @click="nextQuestion"
@@ -81,6 +81,7 @@
     import ResultMessage from '@/components/ResultMessage'
     import Loading from '@/components/Loading'
     import FadeOut from '@/components/transitions/FadeOut'
+    import TheProgressBar from "@/components/TheProgressBar";
 
     const {mapActions} = createNamespacedHelpers('lessons')
 
@@ -89,6 +90,7 @@
         performance: true,
 
         components: {
+            TheProgressBar,
             Question,
             ResultMessage,
             Loading,

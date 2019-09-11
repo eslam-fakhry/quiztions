@@ -5,6 +5,15 @@
             <Loading
                     v-if="loading"
             />
+            <v-container
+                    class="fill-height justify-center"
+                    v-else-if="courses.length === 0"
+            >
+                <span class="text-center">
+                    You didn't enroll in any classes yet. <br>
+                    <router-link :to="{name:'explore'}">Explore</router-link>
+                </span>
+            </v-container>
             <SlideUpTransition
                     v-else
                     appear

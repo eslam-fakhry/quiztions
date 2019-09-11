@@ -31,7 +31,7 @@ firebase login
 * with the created firebase projectId 
 ```bash
 firebase use <projectId>
-firebase deploy --only storage,database, functions
+firebase deploy --only storage, database, functions
 ```
 ### Run locally
 ```bash
@@ -42,10 +42,6 @@ npm run serve
 npm test
 ```
 ### Deploy
-```bash
-firebase init hosting
-```
-* choose dist as public directory
 ```bash
 npm run build
 firebase deploy --only hosting

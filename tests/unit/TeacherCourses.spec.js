@@ -41,7 +41,12 @@ describe('TeacherCourses.vue', () => {
                 {
                     path: '/course/:course_id',
                     name: 'course',
-                }
+                },
+                {
+                    path: '/edit-course/:course_id',
+                    name: 'edit-course',
+                },
+
             ]
         })
     })

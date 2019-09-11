@@ -7,6 +7,8 @@
             :placeholder="placeholder"
             hide-details
             outlined
+            :on="$"
+            ref="TextField"
     />
 </template>
 
@@ -18,7 +20,14 @@
             value: {},
             label: {},
             placeholder: {}
-        }
+        },
+
+        methods: {
+            focus() {
+               this.$refs.TextField.focus()
+
+            }
+        },
     }
 </script>
 

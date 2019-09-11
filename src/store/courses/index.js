@@ -21,7 +21,6 @@ export default {
         async fetchCourse({commit, state}, {id}) {
             let course = state.courses[id]
             if (course) return course
-            commit(mutations.APPEND_COURSE, {lessons: [], id})
             // fetch from server
             await fb.fetchSyncedResource('courses', id, (snap) => {
                 if (!snap.val()) {
@@ -30,29 +29,28 @@ export default {
                 commit(mutations.APPEND_COURSE, {...snap.val(), id})
             })
         },
-        async fetchCourses({commit}) {
+        async fetchCourses({dispatch}) {
             try {
-                // fetch from server
-                const courses = await fb.fetchCourses()
-                Object.entries(courses).forEach((courseEntry) => {
-                    commit(mutations.APPEND_COURSE, {...courseEntry[1], id: courseEntry[0]})
-                })
+               await dispatch('fetchCoursesAndCommit');
             } catch (err) {
-                // otherwise show 404 page
                 showError('CAN_NOT_FETCH_COURSES')
             }
         },
-
-        async createCourse(_, {name}) {
-            return fb.createCourse({name})
-            // otherwise show user-friendly error
-                .catch(err => {
-                   showError(err.code)
-                })
+        async fetchCoursesAndCommit({commit}) {
+            const courses = await fb.fetchCourses()
+            Object.entries(courses).forEach((courseEntry) => {
+                commit(mutations.APPEND_COURSE, {...courseEntry[1], id: courseEntry[0]})
+            })
         },
-
+        async createCourse(_, {name}) {
+            try {
+                return await fb.createCourse({name})
+            } catch (err) {
+                showError(err.code)
+            }
+        },
         async deleteCourse(_, {courseId}) {
-           await fb.deleteCourse(courseId)
+            await fb.deleteCourse(courseId)
         },
     },
 }

@@ -66,7 +66,7 @@
 
         created(){
             const enterPressHandler = (event) => {
-                if (event.key === 'Enter') {
+                if (this.dialog && event.key === 'Enter') {
                     event.preventDefault()
                     this.save();
                 }

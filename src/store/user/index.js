@@ -68,7 +68,7 @@ export default {
         },
         async signOut() {
             await fb.auth.signOut()
-            router.replace({name:'login'})
+            router.replace({name: 'login'})
         },
         async fetchUserCourses({state, commit}) {
             // fetch from server
@@ -85,49 +85,65 @@ export default {
                 showError()
             }
         },
-        async setUserJob({state, commit}, {job}) {
+        async setUserJob({dispatch, commit}, {job}) {
+            try {
+                await dispatch('setJobInProfile', job)
+                commit(mutations.SET_JOB, job)
+                await dispatch('setEmailInDatabase')
+                await fb.auth.currentUser.getIdToken(true)
+            }catch (err) {
+               showError(err.code)
+            }
+        },
+        async setJobInProfile(_, job) {
             await fb.functions.httpsCallable('setJob')({job})
-            commit(mutations.SET_JOB, job)
-            await fb.db.ref(job + 's')
-                .child(state.uid)
+        },
+        async setEmailInDatabase({getters, state}) {
+            await fb.db.ref(getters.userDatabasePath)
                 .set({
                     email: state.email,
                     profileCompletion: 2,
                 })
-            await fb.auth.currentUser.getIdToken(true)
         },
-        async updateUserInfo({state, commit}, {fullName, gender, birthday}) {
-            await fb.auth.currentUser.updateProfile({
-                displayName: fullName,
-            })
-            await fb.db.ref(state.job + 's')
-                .child(state.uid)
+        async updateUserInfo({dispatch, state, commit}, payload) {
+            await dispatch('updateNameInProfile', payload.fullName)
+            await dispatch('updateUserInfoInDatabase', payload)
+            commit(mutations.SET_DISPLAY_NAME, payload.fullName)
+            commit(mutations.SET_GENDER, payload.gender)
+            commit(mutations.SET_BIRTHDAY, payload.birthday)
+        },
+        async updateNameInProfile(_, displayName) {
+            await fb.auth.currentUser.updateProfile({displayName,})
+        },
+        async updateUserInfoInDatabase({getters}, {fullName, gender, birthday}) {
+            await fb.db.ref(getters.userDatabasePath)
                 .update({
                     displayName: fullName,
                     gender,
                     birthday,
                     profileCompletion: 3,
                 })
-            commit(mutations.SET_DISPLAY_NAME, fullName)
-            commit(mutations.SET_GENDER, gender)
-            commit(mutations.SET_BIRTHDAY, birthday)
         },
-        async updatePhotoURL({state, commit}, url) {
+        async updatePhotoURL({dispatch, commit}, url) {
             try {
                 const photoURL = await fb.storage.ref(url).getDownloadURL()
-                await fb.auth.currentUser.updateProfile({
-                    photoURL,
-                })
-                await fb.db.ref(state.job + 's')
-                    .child(state.uid)
-                    .update({
-                        photoURL,
-                        profileCompletion: 4,
-                    })
+                await dispatch('updatePhotoURLInProfile', photoURL)
+                await dispatch('updatePhotoURLInDatabase', photoURL)
                 commit(mutations.SET_PHOTO_URL, photoURL)
             } catch (e) {
                 showError()
             }
+        },
+        async updatePhotoURLInProfile(_, photoURL) {
+            await fb.auth.currentUser.updateProfile({photoURL,})
+        },
+        async updatePhotoURLInDatabase({getters,state}, photoURL) {
+            // reference teachers or students records
+            await fb.db.ref(getters.userDatabasePath)
+                .update({
+                    photoURL,
+                    profileCompletion: 4,
+                })
         },
         async enrollInCourse({state}, {id, name}) {
             try {
@@ -150,6 +166,9 @@ export default {
             return courseId => {
                 return Object.keys(state.courses).includes(courseId)
             }
-        }
+        },
+        userDatabasePath(state){
+            return state.job + 's/' + state.uid
+        },
     },
 }

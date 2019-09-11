@@ -18,7 +18,7 @@ describe('CompletionRightAnswers.vue', () => {
         vuetify = new Vuetify()
 
     })
-    afterEach(()=>{
+    afterEach(() => {
         wrapper.destroy()
     })
 
@@ -30,9 +30,6 @@ describe('CompletionRightAnswers.vue', () => {
 
         expect(selectAll('blank', wrapper).length).toBe(2)
         expect(selectAll('text-part', wrapper).length).toBe(1)
-
-        // expect(wrapper.contains('.v-text-field input')).toBeTruthy()
-        // expect(wrapper.html()).toContain('is good')
     })
 
     it('shows a text field per blank', () => {
@@ -52,11 +49,13 @@ describe('CompletionRightAnswers.vue', () => {
         const blanks = selectAll('blank', wrapper)
         const textFields = selectAll('blank-text-field', wrapper)
 
-
-        expect(textFields.at(0).element).toBe(document.activeElement)
         blanks.at(1).vm.$emit('click')
         await flushPromises()
-        expect(textFields.at(1).element).toBe(document.activeElement)
+        expect(textFields.at(1).element.innerHTML).toContain(document.activeElement.innerHTML)
+
+        blanks.at(0).vm.$emit('click')
+        await flushPromises()
+        expect(textFields.at(0).element.innerHTML).toContain(document.activeElement.innerHTML)
     })
 
     it('emits the array of strings when updated', async () => {
@@ -64,7 +63,7 @@ describe('CompletionRightAnswers.vue', () => {
         const value = []
 
         wrapper = createWrapper(template, value)
-        selectAll('blank-text-field', wrapper).at(0).setValue( 'modified item')
+        selectAll('blank-text-field', wrapper).at(0).vm.$emit('input', 'modified item')
 
         expect(wrapper.emitted().input[0][0][0]).toBe('modified item')
     })
@@ -78,12 +77,11 @@ describe('CompletionRightAnswers.vue', () => {
     })
     it('decreases the length of value array to fit the blanks number', async () => {
         const template = '--blank-- is a good --blank--'
-        const value = ['item1','item2','item3']
+        const value = ['item1', 'item2', 'item3']
 
         wrapper = createWrapper(template, value)
         expect(wrapper.emitted().input[0][0].length).toBe(2)
     })
-
 
 
     function createWrapper(template, value) {

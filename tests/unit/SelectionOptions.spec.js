@@ -48,10 +48,11 @@ describe('SelectionOptions.vue', () => {
         const wrapper = createWrapper(value, uiState,disabled,question)
 
         wrapper.findAll(SingleSelectionOption).at(0).vm.$emit('click')
-        expect(wrapper.emitted().input[0]).toEqual(['Nile'])
+
+        expect(wrapper.emitted().input[0][0]).toEqual('Nile')
 
         wrapper.findAll(SingleSelectionOption).at(1).vm.$emit('click')
-        expect(wrapper.emitted().input[1]).toEqual(['Rhine'])
+        expect(wrapper.emitted().input[1][0]).toEqual('Rhine')
 
     })
 
@@ -78,11 +79,6 @@ describe('SelectionOptions.vue', () => {
 
 
     })
-
-
-
-
-
 
     function createWrapper(value, uiState,disabled,question) {
         return shallowMount(SelectionOptions, {

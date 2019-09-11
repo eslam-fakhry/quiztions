@@ -47,8 +47,8 @@ describe('SingleSelectionOption.vue', () => {
         const optionItem = helpers.select('option',wrapper)
 
         expect(optionItem.classes()).not.toContain('blue')
-        expect(optionItem.classes()).not.toContain('green')
-        expect(optionItem.classes()).not.toContain('red')
+        expect(optionItem.classes()).not.toContain('success')
+        expect(optionItem.classes()).not.toContain('error')
     })
 
     it('renders as marked when selected and not checked', () => {
@@ -66,7 +66,7 @@ describe('SingleSelectionOption.vue', () => {
         const selected = true
 
         const wrapper = createWrapper(option, uiState, selected)
-        expect(helpers.select('option',wrapper).classes()).toContain('green')
+        expect(helpers.select('option',wrapper).classes()).toContain('success')
     })
 
     it('renders as wrong when selected and answer is wrong', () => {
@@ -76,7 +76,7 @@ describe('SingleSelectionOption.vue', () => {
 
         const wrapper = createWrapper(option, uiState, selected)
 
-        expect(helpers.select('option',wrapper).classes()).toContain('red')
+        expect(helpers.select('option',wrapper).classes()).toContain('error')
     })
 
     function createWrapper(option, uiState, selected) {

@@ -36,7 +36,7 @@ describe('CreateInputQuestion.vue', () => {
 
         wrapper = createWrapper()
         wrapper.find({name:'v-text-field'}).vm.$emit('input','green')
-        expect(wrapper.emitted()[ 'update:rightAnswer' ][0][0]).toEqual([ 'green' ])
+        expect(wrapper.emitted()[ 'update:rightAnswer' ][0][0]).toEqual( 'green' )
         expect(wrapper.emitted()['update:questionPart'][0][0]).toEqual({type:'input'})
 
     })

@@ -85,7 +85,7 @@ describe('Lesson.vue', () => {
         expect(wrapper.find({name: "Loading"}).exists()).toBeTruthy()
     })
 
-    it('renders "Question" component with the first question id', async () => {
+    it('renders "Question" component after fetching lesson data', async () => {
         const lesson = {
             id: 'lesson1',
             name: 'basic html',
@@ -97,7 +97,7 @@ describe('Lesson.vue', () => {
         const wrapper = createWrapper(lesson_id)
         await flushPromises()
         expect(wrapper.find(Question).exists()).toBeTruthy()
-        expect(wrapper.find(Question).attributes('questionid')).toBe(lesson.questions[0])
+        expect(lesson.questions).toContain(wrapper.find(Question).attributes('questionid'))
     })
 
     function createWrapper(lesson_id) {

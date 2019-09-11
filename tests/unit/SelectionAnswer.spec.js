@@ -32,7 +32,7 @@ describe('SelectionAnswer.vue', () => {
     })
 
     it('renders SelectionOptions component', () => {
-        const value = ['']
+        const value = ''
         const uiState = {NOT_ANSWERED: true,};
 
         const wrapper = createWrapper(value, uiState)
@@ -41,14 +41,14 @@ describe('SelectionAnswer.vue', () => {
     })
 
     it('can validate answer', () => {
-        const value = []
+        const value = ''
         const uiState = {NOT_ANSWERED: true,};
 
-        actions.fetchRightAnswer.mockReturnValueOnce(Promise.resolve(['answer']))
+        actions.fetchRightAnswer.mockReturnValueOnce(Promise.resolve('answer'))
 
         const wrapper = createWrapper(value, uiState)
 
-        wrapper.find(SelectionOptions).vm.$emit('input', ['answer'])
+        wrapper.find(SelectionOptions).vm.$emit('input', 'answer')
 
         expect(wrapper.vm.validateAnswer('question1')).toBeTruthy()
         expect(actions.fetchRightAnswer).toHaveBeenCalled()

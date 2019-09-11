@@ -52,7 +52,7 @@ describe('CreateSelectionQuestion.vue', () => {
         })
         wrapper.find({name:'v-select'}).vm.$emit('input','option-one')
         await flushPromises()
-        expect(wrapper.emitted()[ 'update:rightAnswer' ][1][0]).toEqual([ 'option-one' ])
+        expect(wrapper.emitted()[ 'update:rightAnswer' ][1][0]).toEqual( 'option-one' )
 
     })
     it('emits validation state', async() => {

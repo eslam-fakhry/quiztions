@@ -115,6 +115,7 @@ describe('CreateQuestion.vue', () => {
         wrapper.find(CreateInputQuestion).vm.$emit('update:questionPart', {
             type: 'input',
         })
+
         wrapper.find(CreateInputQuestion).vm.$emit('update:rightAnswer', [ 'rightAnswer' ])
 
         await flushPromises()
@@ -143,12 +144,11 @@ describe('CreateQuestion.vue', () => {
         addBody('question body')
         await flushPromises()
         expect(wrapper.vm.$v.$invalid).toBeTruthy()
-
+        wrapper.find(CreateCompletionQuestion).vm.$emit('update:rightAnswer', ['completion'])
         wrapper.find(CreateCompletionQuestion).vm.$emit('update:questionPart', {
             type: 'completion',
             template,
         })
-        wrapper.find(CreateCompletionQuestion).vm.$emit('update:rightAnswer', ['completion'])
 
         await flushPromises()
         expect(wrapper.vm.$v.$invalid).toBeFalsy()
@@ -170,11 +170,12 @@ describe('CreateQuestion.vue', () => {
     })
 
     function chooseType(type) {
-        select('select-question-type', wrapper).setValue(type)
+        // console.log(select('select-question-type', wrapper));
+        select('select-question-type', wrapper).vm.$emit('input',type)
     }
 
     function addBody(text) {
-        select('question-body', wrapper).setValue(text || 'new body')
+        select('question-body', wrapper).vm.$emit('input',text || 'new body')
     }
 
     function createWrapper(lesson_id) {
@@ -188,7 +189,6 @@ describe('CreateQuestion.vue', () => {
                 'CreateSelectionQuestion',
                 'CreateCompletionQuestion'
             ]
-
         })
     }
 })

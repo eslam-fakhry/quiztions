@@ -121,6 +121,8 @@ const router = new Router({
     ]
 });
 
+
+
 router.beforeEach(async (to, from, next) => {
     const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
     const requiresToBeTeacher = to.matched.some(x => x.meta.requiresToBeTeacher)
@@ -131,7 +133,7 @@ router.beforeEach(async (to, from, next) => {
         return
     }
     if (requiresToBeStudent || requiresToBeTeacher) {
-        const job = (await fb.auth.currentUser.getIdTokenResult()).claims.job
+        const job = await fb.getUserJob()
         try {
             if ((requiresToBeTeacher && job !== 'teacher') || (requiresToBeStudent && job !== 'student')) {
                 showSnackbar("HEY! you're not supposed to go there", "warning")

@@ -232,10 +232,14 @@ async function isEmailUnique(email) {
 }
 
 
+async function getUserJob() {
+    return (await fb.auth.currentUser.getIdTokenResult()).claims.job;
+}
 
 export default {
     ...fb,
     isEmailUnique,
+    getUserJob,
     fetchResource,
     fetchSyncedResource,
     fetchCourses,

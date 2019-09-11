@@ -77,11 +77,10 @@ export default {
             })
         },
         async setUserProfile({state, commit}, user) {
-            commit(mutations.SET_USER, user)
-            if (!user) return;
             try {
-                const idTokenResult = await fb.auth.currentUser.getIdTokenResult()
-                commit(mutations.SET_JOB, idTokenResult.claims.job)
+                commit(mutations.SET_USER, user)
+                if (!user) return;
+                commit(mutations.SET_JOB, await fb.getUserJob())
             } catch (e) {
                 showError()
             }

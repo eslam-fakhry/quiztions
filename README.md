@@ -1,4 +1,4 @@
-# questions
+# Quiztions
 
 ## Project setup
 ```

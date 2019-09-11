@@ -14,7 +14,9 @@
 
     export default {
         name: "CreateInputQuestion",
+
         components: {TheTextField},
+
         props: {
             rightAnswer: {},
         },

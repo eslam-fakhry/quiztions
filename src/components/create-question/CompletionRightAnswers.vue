@@ -116,7 +116,7 @@
 
         methods: {
             focusTextField(index) {
-                this.$nextTick(this.$refs.blankTextField[index-1].focus)
+                this.$nextTick(this.$refs.blankTextField[index-1].focus())
             }
         },
     }

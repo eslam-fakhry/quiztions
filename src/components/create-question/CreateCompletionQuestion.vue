@@ -27,12 +27,13 @@
 
         props: {
             rightAnswer: {},
+            template:{},
         },
 
         data() {
             return {
                 answer: [],
-                questionTemplate:''
+                questionTemplate:this.template || '',
             }
         },
 

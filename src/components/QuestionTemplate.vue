@@ -32,17 +32,18 @@
     export default {
         name: 'QuestionTemplate',
 
-        inject:['question'],
+        inject: ['question'],
 
         props: {
             chosenOption: {},
-            value: { type: Array, required: true },
-            uiState: { type: Object, required: true },
+            value: {type: Array, required: true},
+            uiState: {type: Object, required: true},
         },
 
         computed: {
             templateParts() {
-                return this.question.template.split('--blank--');
+                const template = this.question.template;
+                return template ? template.split('--blank--') : [];
             },
             textInputWidth() {
                 return text => {
@@ -53,7 +54,7 @@
             textInputStyle() {
                 return text => {
                     return {
-                        width: `${this.textInputWidth(text) }px`,
+                        width: `${this.textInputWidth(text)}px`,
                         maxWidth: '300px'
                     }
                 }

@@ -1,6 +1,5 @@
 import fb from '@/services/firebase-facade'
 import mutations from '../mutation-types'
-import router from "../../router";
 
 export default {
     namespaced: true,
@@ -15,7 +14,7 @@ export default {
     },
     actions: {
 
-        async fetchRightAnswer({state, getters, commit}, {id}) {
+        async fetchRightAnswer({state, commit}, {id}) {
 
             let rightAnswer = state.answers[id];
             if (rightAnswer) return rightAnswer;

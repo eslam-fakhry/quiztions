@@ -32,7 +32,7 @@ describe('Lesson.vue', () => {
             },
         }
         actions = {
-            fetchLesson: jest.fn(cb => {
+            fetchLesson: jest.fn(() => {
                 state.lessons = {
                     'lesson1': {
                         name: 'Lesson1',

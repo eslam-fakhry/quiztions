@@ -13,7 +13,7 @@
 </template>
 
 <script>
-    import {required, minLength, maxLength} from 'vuelidate/lib/validators'
+    import {required} from 'vuelidate/lib/validators'
 
     import CompletionRightAnswers from '@/components/create-question/CompletionRightAnswers'
     import CreateCompletionTemplate from '@/components/create-question/CreateCompletionTemplate'

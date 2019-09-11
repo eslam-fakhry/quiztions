@@ -22,7 +22,7 @@ describe('Course.vue', () => {
             courses: {},
         }
         actions = {
-            fetchCourse: jest.fn(cb => {
+            fetchCourse: jest.fn(() => {
                 state.courses = {
                     'course1': {
                         name: 'course1',

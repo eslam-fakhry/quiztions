@@ -125,9 +125,11 @@
         methods: {
             ...mapActions(['fetchLesson']),
             ...mapQuestionsActions(['deleteQuestion']),
+            // eslint-disable-next-line
             onRowClick(ev) {
                 // TODO: show question stats
             },
+            // eslint-disable-next-line
             editItem(item) {
                 // TODO: add edit question functionality
             },

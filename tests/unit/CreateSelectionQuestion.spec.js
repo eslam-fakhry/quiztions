@@ -4,7 +4,6 @@ import Vuelidate from 'vuelidate'
 import flushPromises from 'flush-promises'
 import helpers from '../helpers'
 import CreateSelectionQuestion from "@/components/create-question/CreateSelectionQuestion.vue"
-import CreateList from '@/components/CreateList'
 
 const {select} = helpers;
 

@@ -4,7 +4,6 @@ import Vuex from 'vuex'
 import flushPromises from 'flush-promises'
 
 import Question from "@/components/Question.vue"
-import Loading from "@/components/Loading"
 
 const localVue = createLocalVue()
 localVue.use(Vuetify)

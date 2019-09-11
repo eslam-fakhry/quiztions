@@ -60,10 +60,10 @@ export default {
     },
 
     actions: {
-        signIn({commit}, {email, password}) {
+        signIn(_, {email, password}) {
             return fb.auth.signInWithEmailAndPassword(email, password)
         },
-        signUp({commit}, {email, password}) {
+        signUp(_, {email, password}) {
             return fb.auth.createUserWithEmailAndPassword(email, password)
         },
         async signOut() {
@@ -76,7 +76,7 @@ export default {
                 commit(mutations.SET_USER_COURSES, snap.val() || [])
             })
         },
-        async setUserProfile({state, commit}, user) {
+        async setUserProfile({commit}, user) {
             try {
                 commit(mutations.SET_USER, user)
                 if (!user) return;
@@ -105,7 +105,7 @@ export default {
                     profileCompletion: 2,
                 })
         },
-        async updateUserInfo({dispatch, state, commit}, payload) {
+        async updateUserInfo({dispatch, commit}, payload) {
             await dispatch('updateNameInProfile', payload.fullName)
             await dispatch('updateUserInfoInDatabase', payload)
             commit(mutations.SET_DISPLAY_NAME, payload.fullName)
@@ -137,7 +137,7 @@ export default {
         async updatePhotoURLInProfile(_, photoURL) {
             await fb.auth.currentUser.updateProfile({photoURL,})
         },
-        async updatePhotoURLInDatabase({getters,state}, photoURL) {
+        async updatePhotoURLInDatabase({getters}, photoURL) {
             // reference teachers or students records
             await fb.db.ref(getters.userDatabasePath)
                 .update({
@@ -145,14 +145,14 @@ export default {
                     profileCompletion: 4,
                 })
         },
-        async enrollInCourse({state}, {id, name}) {
+        async enrollInCourse(_, {id, name}) {
             try {
                 await fb.enrollInCourse({id, name})
             } catch (e) {
                 showError()
             }
         },
-        async leaveCourse({state}, {id}) {
+        async leaveCourse(_, {id}) {
             try {
                 await fb.leaveCourse({id})
             } catch (e) {

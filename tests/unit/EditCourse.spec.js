@@ -28,7 +28,7 @@ describe('EditCourse.vue', () => {
             courses: {},
         }
         actions = {
-            fetchCourse: jest.fn(cb => {
+            fetchCourse: jest.fn(() => {
                 state.courses = {
                     'course1': {
                         name: 'course1',
@@ -40,7 +40,6 @@ describe('EditCourse.vue', () => {
                                 name: 'Lesson2'
                             },
                         }
-
                     }
                 }
             }),

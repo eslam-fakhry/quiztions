@@ -4,8 +4,6 @@ import Vuelidate from 'vuelidate'
 import flushPromises from 'flush-promises'
 import helpers from '../helpers'
 import CreateCompletionQuestion from "@/components/create-question/CreateCompletionQuestion.vue"
-import CreateCompletionTemplate from "@/components/create-question/CreateCompletionTemplate.vue"
-import CompletionRightAnswers from "@/components/create-question/CompletionRightAnswers.vue"
 
 const {select} = helpers;
 

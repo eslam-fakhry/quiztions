@@ -47,6 +47,7 @@
                     <component
                             :is="answerComponentName"
                             :right-answer="rightAnswer"
+                            :bind="questionPart"
                             @update:questionPart="questionPart = $event"
                             @update:valid="questionTypeValid = $event"
                             @update:rightAnswer="rightAnswer = $event"

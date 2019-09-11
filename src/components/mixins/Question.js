@@ -60,13 +60,16 @@ export default {
         async validate() {
             this.validatingAnswer = true;
             this.correct = await this.$refs.Answer.validateAnswer(this.question.id)
+            this.emitResult();
+            this.answerChecked = true;
+            this.setFeedback();
+            this.validatingAnswer = false
+        },
+        emitResult: function () {
             this.$emit('result', {
                 question: this.question,
                 result: this.correct ? 'right' : 'wrong'
             });
-            this.answerChecked = true;
-            this.setFeedback();
-            this.validatingAnswer = false
         },
         setFeedback() {
             if (this.answerChecked) {

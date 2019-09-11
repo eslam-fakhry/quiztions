@@ -3,8 +3,9 @@
         <TheTextField
                 v-model="template"
                 @input="$emit('input',$event)"
+                ref="TextField"
         />
-        <v-btn>add blank</v-btn>
+        <v-btn @click="addBlank">add blank</v-btn>
     </div>
 </template>
 
@@ -29,6 +30,10 @@
             update(event, index) {
                 this.options[index] = event
                 // this.$emit('input', this.options)
+            },
+            addBlank(){
+                this.template += '--blank--'
+                this.$refs.TextField.focus()
             }
         },
     }

@@ -10,6 +10,13 @@ cd functions
 npm i 
 cd ..
 ```
+```mermaid
+  graph TD;
+      A-->B;
+      A-->C;
+      B-->D;
+      C-->D;
+```
 * install firebase tools
 ```bash
 npm i -g firebase-tools
